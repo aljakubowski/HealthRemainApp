@@ -1,6 +1,5 @@
 package com.alja.adminpanel;
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
