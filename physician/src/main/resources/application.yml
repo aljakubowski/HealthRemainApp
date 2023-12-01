@@ -1,0 +1,16 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: physician
+  data:
+    mongodb:
+      authentication-database: admin
+      username: user
+      password: pass
+      database: physician_db
+      host: localhost
+      port: 27017
+      auto-index-creation: true
+
+
