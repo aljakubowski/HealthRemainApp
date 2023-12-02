@@ -1,6 +1,6 @@
-package com.alja.physician.model.dto;
+package com.alja.physician.dto;
 
-import com.alja.physician.model.PhysicianSpecialization;
+import com.alja.enums.PhysicianSpecialization;
 import lombok.Data;
 
 @Data

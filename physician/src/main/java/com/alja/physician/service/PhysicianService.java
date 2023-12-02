@@ -1,10 +1,11 @@
 package com.alja.physician.service;
 
+import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.model.Address;
 import com.alja.physician.model.PhysicianEntity;
 import com.alja.physician.model.PhysicianRepository;
-import com.alja.physician.model.dto.NewPhysicianDTO;
-import com.alja.physician.model.dto.PhysicianResponseDTO;
+import com.alja.enums.PhysicianSpecialization;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

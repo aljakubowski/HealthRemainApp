@@ -1,11 +1,15 @@
-package com.alja.physician.model.dto;
+package com.alja.physician.dto;
 
-import com.alja.physician.model.PhysicianSpecialization;
+import com.alja.enums.PhysicianSpecialization;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PhysicianResponseDTO {
     private String id;
     private String firstName;

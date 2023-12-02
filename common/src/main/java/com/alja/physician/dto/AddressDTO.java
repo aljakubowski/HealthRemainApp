@@ -1,10 +1,11 @@
-package com.alja.physician.model.dto;
+package com.alja.physician.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
 public class AddressDTO {
     private String city;
     private String street;

@@ -1,17 +1,17 @@
-package com.alja.physician.controller_resources;
+package com.alja.adminpanel.controller_resources;
 
+import org.springframework.web.bind.annotation.*;
 import com.alja.physician.dto.NewPhysicianDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.alja.physician.controller_resources.PhysiciansResource.RESOURCE_PATH;
+import static com.alja.adminpanel.controller_resources.AdminPanelResource.RESOURCE_PATH;
 
 @RequestMapping(RESOURCE_PATH)
-public interface PhysiciansResource {
+public interface AdminPanelResource {
 
-    String RESOURCE_PATH = "/api/v1/physician";
+    String RESOURCE_PATH = "/api/v1/admin-panel";
     String PHYSICIAN_ID_PATH = "/{physicianId}";
 
     @GetMapping(PHYSICIAN_ID_PATH)
@@ -22,4 +22,6 @@ public interface PhysiciansResource {
 
     @PostMapping
     void registerNewPhysician(@RequestBody NewPhysicianDTO newPhysicianDTO);
+
+
 }

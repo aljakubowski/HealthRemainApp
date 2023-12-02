@@ -1,5 +1,6 @@
 package com.alja.physician.model;
 
+import com.alja.enums.PhysicianSpecialization;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
