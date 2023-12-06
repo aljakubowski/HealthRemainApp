@@ -2,23 +2,38 @@ package com.alja.physician.client;
 
 import com.alja.physician.dto.NewPhysicianDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
+import com.alja.physician.dto.PhysicianSpecializationDTO;
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@FeignClient(name = "com/alja/physician",
-//        url = "${common.physician.url}")
 @FeignClient("physician")
 public interface PhysicianClient {
-    //todo path to variable?
 
-    @GetMapping(path = "api/v1/physician")
+    String PHYSICIAN = "api/v1/physician";
+    String SPECIALIZATION = "api/v1/specialization";
+    String SPECIALIZATION_NAME_PATH = "/{specializationName}";
+
+    @GetMapping(PHYSICIAN)
     List<PhysicianResponseDTO> getAllPhysicians();
 
-    @PostMapping(path = "api/v1/physician")
+    @PostMapping(PHYSICIAN)
     void registerNewPhysician(@RequestBody NewPhysicianDTO newPhysicianDTO);
+
+
+    @GetMapping(SPECIALIZATION)
+    List<PhysicianSpecializationDTO> getAllSpecializations();
+
+    @PostMapping(SPECIALIZATION)
+    void addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
+
+    @PutMapping(SPECIALIZATION)
+    void updateSpecialization(@RequestParam("specializationName") String specializationName,
+                              @RequestParam("specializationNewName") String specializationNewName);
+
+    @DeleteMapping(SPECIALIZATION)
+    void deleteSpecialization(@RequestParam("specializationName") String specializationName);
 
 }

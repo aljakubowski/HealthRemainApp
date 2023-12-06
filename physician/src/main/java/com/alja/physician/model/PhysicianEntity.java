@@ -1,11 +1,12 @@
 package com.alja.physician.model;
 
-import com.alja.enums.PhysicianSpecialization;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -14,11 +15,12 @@ public class PhysicianEntity {
 
     @Id
     private String id;
+    private UUID employeeId;//String?
     private String firstName;
     private String lastName;
-    @Indexed(unique = true)
+    private String physicianSpecialization;
+    private String phoneNumber;
     private String email;
-    private PhysicianSpecialization physicianSpecialization;
     private Address address;
-    //registered when?
+    private LocalDateTime registrationDate;
 }

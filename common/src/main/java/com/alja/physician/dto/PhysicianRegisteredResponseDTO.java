@@ -5,13 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhysicianResponseDTO {
-    private String id;
+public class PhysicianRegisteredResponseDTO {
     private String firstName;
     private String lastName;
     private String physiciansSpecialization;
+    private LocalDateTime registrationDate;
 }

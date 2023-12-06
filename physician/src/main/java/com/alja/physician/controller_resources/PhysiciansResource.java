@@ -2,6 +2,7 @@ package com.alja.physician.controller_resources;
 
 import com.alja.physician.dto.NewPhysicianDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface PhysiciansResource {
     List<PhysicianResponseDTO> getAllPhysicians();
 
     @PostMapping
-    void registerNewPhysician(@RequestBody NewPhysicianDTO newPhysicianDTO);
+    void registerNewPhysician(@Valid @RequestBody NewPhysicianDTO newPhysicianDTO);
 }
