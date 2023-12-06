@@ -12,8 +12,6 @@ import static com.alja.physician.controller_resources.PhysiciansSpecializationRe
 public interface PhysiciansSpecializationResource {
 
     String RESOURCE_PATH = "/api/v1/specialization";
-    String SPECIALIZATION_NAME_PATH = "/{specializationName}";
-    String SPECIALIZATION_NEW_NAME_PATH = "/{specializationNewName}";
 
     @GetMapping
     List<PhysicianSpecializationDTO> getAllSpecializations();

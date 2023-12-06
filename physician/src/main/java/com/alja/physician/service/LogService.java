@@ -8,14 +8,15 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class LogService {
-    public void logOperation(String operation){
+    public void logOperation(String operation) {
         log.info(operation);
     }
-    public void logOperation(String operation, String arg1){
+
+    public void logOperation(String operation, String arg1) {
         log.info(operation, arg1);
     }
 
-    public void logOperation(String operation, String arg1, String arg2){
+    public void logOperation(String operation, String arg1, String arg2) {
         log.info(operation, arg1, arg2);
     }
 }

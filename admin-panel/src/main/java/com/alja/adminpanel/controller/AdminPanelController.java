@@ -2,6 +2,8 @@ package com.alja.adminpanel.controller;
 
 import com.alja.adminpanel.controller_resources.AdminPanelResource;
 import com.alja.adminpanel.service.AdminPanelService;
+import com.alja.errors.PhysicianError;
+import com.alja.exception.PhysicianException;
 import com.alja.physician.dto.NewPhysicianDTO;
 import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
@@ -39,7 +41,8 @@ public class AdminPanelController implements AdminPanelResource {
 
     @Override
     public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
-        adminPanelService.addNewSpecialization(physicianSpecializationDTO);
+        throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
+//        adminPanelService.addNewSpecialization(physicianSpecializationDTO);
     }
 
     @Override

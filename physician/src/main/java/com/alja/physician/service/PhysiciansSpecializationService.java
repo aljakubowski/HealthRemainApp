@@ -1,6 +1,8 @@
 package com.alja.physician.service;
 
 import com.alja.physician.dto.PhysicianSpecializationDTO;
+import com.alja.errors.PhysicianError;
+import com.alja.exception.PhysicianException;
 import com.alja.physician.model.PhysicianSpecializationEntity;
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper;
 import com.alja.physician.model.repository.PhysicianSpecializationRepository;
@@ -40,8 +42,8 @@ public class PhysiciansSpecializationService {
                     .specializationName(specializationName)
                     .build());
         } else {
-            //todo create exceptions
-            throw new RuntimeException();
+            //todo create exceptions            ERROR HERE
+            throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
         }
     }
 
