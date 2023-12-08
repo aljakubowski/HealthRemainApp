@@ -2,8 +2,6 @@ package com.alja.adminpanel.controller;
 
 import com.alja.adminpanel.controller_resources.AdminPanelResource;
 import com.alja.adminpanel.service.AdminPanelService;
-import com.alja.errors.PhysicianError;
-import com.alja.exception.PhysicianException;
 import com.alja.physician.dto.NewPhysicianDTO;
 import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
