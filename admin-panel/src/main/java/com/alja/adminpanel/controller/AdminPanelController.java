@@ -41,8 +41,7 @@ public class AdminPanelController implements AdminPanelResource {
 
     @Override
     public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
-        throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
-//        adminPanelService.addNewSpecialization(physicianSpecializationDTO);
+        adminPanelService.addNewSpecialization(physicianSpecializationDTO);
     }
 
     @Override

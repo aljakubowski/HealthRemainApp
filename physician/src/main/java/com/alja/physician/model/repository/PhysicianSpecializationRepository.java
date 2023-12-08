@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface PhysicianSpecializationRepository extends MongoRepository<PhysicianSpecializationEntity, String> {
 
-    Optional<PhysicianSpecializationEntity> findBySpecializationName(String specializationName);
+    PhysicianSpecializationEntity findBySpecializationName(String specializationName);
     boolean existsBySpecializationName(String specializationName);
     void deleteBySpecializationName(String specializationName);
 }

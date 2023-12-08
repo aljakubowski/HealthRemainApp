@@ -7,7 +7,6 @@ import com.alja.physician.model.PhysicianSpecializationEntity;
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper;
 import com.alja.physician.model.repository.PhysicianSpecializationRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 
 import static com.alja.physician.PhysicianLogs.*;
 
-@Slf4j
 @AllArgsConstructor
 @Service
 public class PhysiciansSpecializationService {
@@ -24,7 +22,6 @@ public class PhysiciansSpecializationService {
     private final PhysicianSpecializationMapper physicianSpecializationMapper;
     private final LogService logService;
 
-    //// TODO: 04/12/2023 ERRORS HANDLER
     //// TODO: 04/12/2023 TEST UNIT + INTEGRATION
 
     public List<PhysicianSpecializationDTO> getAllSpecializations() {
@@ -37,28 +34,23 @@ public class PhysiciansSpecializationService {
     public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
         String specializationName = physicianSpecializationDTO.getSpecializationName();
         logService.logOperation(ADD_SPECIALIZATION.logMessage, specializationName);
-        if (!specializationExists(specializationName)) {
-            physicianSpecializationRepository.save(PhysicianSpecializationEntity.builder()
-                    .specializationName(specializationName)
-                    .build());
-        } else {
-            //todo create exceptions            ERROR HERE
-            throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
-        }
+        validateIfEntityAlreadyExists(specializationName);
+        physicianSpecializationRepository.save(PhysicianSpecializationEntity.builder()
+                .specializationName(specializationName)
+                .build());
     }
 
     public void updateSpecialization(String specializationName, String newSpecializationName) {
         logService.logOperation(UPDATE_SPECIALIZATION.logMessage, specializationName, newSpecializationName);
-        physicianSpecializationRepository.findBySpecializationName(specializationName)
-                .ifPresentOrElse(entity -> updateSpecializationEntity(entity, newSpecializationName),
-                        () -> addNewSpecialization(PhysicianSpecializationDTO
-                                .builder()
-                                .specializationName(newSpecializationName)
-                                .build()));
+        validateIfEntityExists(specializationName);
+        validateIfEntityAlreadyExists(newSpecializationName);
+        updateSpecializationEntity(physicianSpecializationRepository.findBySpecializationName(specializationName),
+                newSpecializationName);
     }
 
     public void deleteSpecialization(String specializationName) {
         logService.logOperation(DELETE_SPECIALIZATION.logMessage, specializationName);
+        validateIfEntityExists(specializationName);
         physicianSpecializationRepository.deleteBySpecializationName(specializationName);
     }
 
@@ -68,8 +60,18 @@ public class PhysiciansSpecializationService {
         physicianSpecializationRepository.save(physicianSpecializationEntity);
     }
 
-    private boolean specializationExists(String specializationName){
-        return physicianSpecializationRepository.existsBySpecializationName(specializationName);
+
+    private void validateIfEntityExists(String specializationName){
+        //todo dlaczego tu nie rzuca bledem w physician app ?
+        if (!physicianSpecializationRepository.existsBySpecializationName(specializationName)){
+            throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
+        }
+    }
+
+    private void validateIfEntityAlreadyExists(String specializationName){
+        if (physicianSpecializationRepository.existsBySpecializationName(specializationName)){
+            throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR);
+        }
     }
 
 }
