@@ -18,8 +18,6 @@ public interface AdminPanelResource {
     String PHYSICIAN_PATH = "/physician";
     String PHYSICIAN_ID_PATH = "/{physicianId}";
     String SPECIALIZATION_PATH = "/specialization";
-    String SPECIALIZATION_NAME_PATH = "/{specializationName}";
-
 
     @GetMapping(PHYSICIAN_PATH + PHYSICIAN_ID_PATH)
     PhysicianResponseDTO getPhysicianById(@PathVariable String physicianId);

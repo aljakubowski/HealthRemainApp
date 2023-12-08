@@ -60,7 +60,6 @@ public class CustomErrorDecoder implements ErrorDecoder {
         try {
             return StreamUtils.copyToString(response.body().asInputStream(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            // Handle the exception (log it or throw a RuntimeException)
             throw new RuntimeException("Error reading response body", e);
         }
     }

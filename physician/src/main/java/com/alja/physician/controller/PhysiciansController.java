@@ -32,12 +32,4 @@ public class PhysiciansController implements PhysiciansResource {
         physicianService.registerNewPhysician(newPhysicianDTO);
     }
 
-
-//    @PostMapping
-//    public void registerNewDoctor(@RequestBody DoctorEntity newDoctorDTO){
-////    public void registerNewDoctor(@RequestBody NewDoctorDTO newDoctorDTO){
-//        log.info("new doctor registration {}", newDoctorDTO);
-//            adminPanelDoctorsService.registerNewDoctor(newDoctorDTO);
-//    }
-
 }

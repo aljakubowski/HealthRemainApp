@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PhysicianSpecializationDTO {
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "Physician Specialization name should be from 3 to 50 characters")
     private String specializationName;
 }

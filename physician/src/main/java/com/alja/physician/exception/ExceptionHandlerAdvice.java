@@ -19,9 +19,7 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(PhysicianException.class)
     public ResponseEntity<PhysicianException> onPhysicianSpecializationNotFound(PhysicianException exception) {
-        ////       todo  log error response?cep
         logService.logError(exception.getMessage());
-        log.error(exception.getMessage());
         return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
     }
 
