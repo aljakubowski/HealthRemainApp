@@ -7,6 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PhysicianSpecializationMapper {
 
-    PhysicianSpecializationDTO specializationEntityToDto(PhysicianSpecializationEntity physicianSpecializationEntity);
-
+    PhysicianSpecializationDTO specializationEntityToDto(PhysicianSpecializationEntity entity);
 }

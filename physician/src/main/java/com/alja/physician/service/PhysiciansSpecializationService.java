@@ -1,8 +1,8 @@
 package com.alja.physician.service;
 
-import com.alja.physician.dto.PhysicianSpecializationDTO;
 import com.alja.errors.PhysicianError;
 import com.alja.exception.PhysicianException;
+import com.alja.physician.dto.PhysicianSpecializationDTO;
 import com.alja.physician.model.PhysicianSpecializationEntity;
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper;
 import com.alja.physician.model.repository.PhysicianSpecializationRepository;
@@ -22,7 +22,7 @@ public class PhysiciansSpecializationService {
     private final PhysicianSpecializationMapper physicianSpecializationMapper;
     private final LogService logService;
 
-    //// TODO: 04/12/2023 TEST UNIT + INTEGRATION
+    //// TODO: 04/12/2023 TEST  INTEGRATION
 
     public List<PhysicianSpecializationDTO> getAllSpecializations() {
         logService.logOperation(GET_SPECIALIZATIONS.logMessage);
@@ -61,15 +61,14 @@ public class PhysiciansSpecializationService {
     }
 
 
-    private void validateIfEntityExists(String specializationName){
-        //todo dlaczego tu nie rzuca bledem w physician app ?
-        if (!physicianSpecializationRepository.existsBySpecializationName(specializationName)){
+    private void validateIfEntityExists(String specializationName) {
+        if (!physicianSpecializationRepository.existsBySpecializationName(specializationName)) {
             throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
         }
     }
 
-    private void validateIfEntityAlreadyExists(String specializationName){
-        if (physicianSpecializationRepository.existsBySpecializationName(specializationName)){
+    private void validateIfEntityAlreadyExists(String specializationName) {
+        if (physicianSpecializationRepository.existsBySpecializationName(specializationName)) {
             throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR);
         }
     }

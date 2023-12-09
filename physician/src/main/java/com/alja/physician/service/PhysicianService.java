@@ -4,7 +4,7 @@ import com.alja.physician.dto.NewPhysicianDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.model.Address;
 import com.alja.physician.model.PhysicianEntity;
-import com.alja.physician.model.mapper.PhysicianMapper;
+//import com.alja.physician.model.mapper.PhysicianMapper;
 import com.alja.physician.model.repository.PhysicianRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
