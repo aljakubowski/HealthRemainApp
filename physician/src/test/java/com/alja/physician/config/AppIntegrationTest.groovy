@@ -29,4 +29,5 @@ class AppIntegrationTest extends Specification{
         mongoDBContainer.start()
         registry.add("spring.data.mongodb.uri", () ->   mongoDBContainer.replicaSetUrl)
     }
+
 }
