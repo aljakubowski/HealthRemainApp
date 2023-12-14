@@ -22,8 +22,6 @@ public class PhysiciansSpecializationService {
     private final PhysicianSpecializationMapper physicianSpecializationMapper;
     private final LogService logService;
 
-    //// TODO: 04/12/2023 TEST  INTEGRATION
-
     public List<PhysicianSpecializationDTO> getAllSpecializations() {
         logService.logOperation(GET_SPECIALIZATIONS.logMessage);
         return physicianSpecializationRepository.findAll().stream()

@@ -5,11 +5,10 @@ import lombok.Getter;
 @Getter
 public enum PhysicianLogs {
 
-    PHYSICIAN("Physician: "),
-    GET_SPECIALIZATIONS(PHYSICIAN.logMessage + "getting list of all Specializations"),
-    ADD_SPECIALIZATION(PHYSICIAN.logMessage + "adding new Physician specialization: {}"),
-    UPDATE_SPECIALIZATION(PHYSICIAN.logMessage +"updating physician Specialization name from {} to {}"),
-    DELETE_SPECIALIZATION(PHYSICIAN.logMessage +"deleting specialization: {}");
+    GET_SPECIALIZATIONS("getting list of all Specializations"),
+    ADD_SPECIALIZATION("adding new Physician specialization: {}"),
+    UPDATE_SPECIALIZATION("updating physician Specialization name from {} to {}"),
+    DELETE_SPECIALIZATION("deleting specialization: {}");
 
     public final String logMessage;
 

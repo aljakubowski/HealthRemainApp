@@ -1,5 +1,6 @@
 package com.alja.adminpanel.exception;
 
+import com.alja.adminpanel.service.LogService;
 import com.alja.errors.ErrorResponseDto;
 import com.alja.exception.PhysicianException;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,11 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-//    private final LogService logService;
+    private final LogService logService;
 
     @ExceptionHandler(PhysicianException.class)
     public ResponseEntity<ErrorResponseDto> onPhysicianSpecializationNotFound(PhysicianException exception) {
-//        logService.logError(exception.getMessage());
+        logService.logError(exception.getMessage());
         ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
                 .message(exception.getMessage())
                 .localDateTime(exception.getLocalDateTime())
@@ -37,7 +38,7 @@ public class ExceptionHandlerAdvice {
                 .map(FieldError::getDefaultMessage)
                 .findFirst()
                 .get();
-//        logService.logError(errorMessage);
+        logService.logError(errorMessage);
         ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
                 .message(errorMessage)
                 .localDateTime(LocalDateTime.now())
