@@ -1,12 +1,16 @@
-package com.alja.physician.service
+package com.alja.physician.unit
 
 import com.alja.exception.PhysicianException
 import com.alja.physician.fixtures.PhysicianFixtures
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper
 import com.alja.physician.model.repository.PhysicianSpecializationRepository
+import com.alja.physician.service.LogService
+import com.alja.physician.service.PhysiciansSpecializationService
+import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
-class PhysiciansSpecializationServiceSpec extends Specification {
+@SpringBootTest
+class PhysiciansSpecializationServiceTest extends Specification {
 
     PhysiciansSpecializationService physiciansSpecializationService
     PhysicianSpecializationRepository physicianSpecializationRepository = Mock()
