@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 public enum PhysicianError {
 
     PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR(Descriptions.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND),
-    PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR(Descriptions.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST);
+    PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR(Descriptions.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST),
+    PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR(Descriptions.PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST),
+    PHYSICIAN_EMAIL_ALREADY_EXISTS_ERROR(Descriptions.PHYSICIAN_EMAIL_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;
@@ -19,9 +21,9 @@ public enum PhysicianError {
 
     public static class Descriptions {
         private static final String PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR = "Physician Specialization does not exist";
-        private static final String PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR = "Physician Specialization already exists";     //todo pass parameter
+        private static final String PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR = "Physician Specialization already exists";
+        private static final String PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR = "phone number already exists";
+        private static final String PHYSICIAN_EMAIL_ALREADY_EXISTS_ERROR = "email already exists";
     }
 
 }
-
-

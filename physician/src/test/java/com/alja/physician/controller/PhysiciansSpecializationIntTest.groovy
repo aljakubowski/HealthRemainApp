@@ -1,4 +1,4 @@
-package com.alja.physician.integration
+package com.alja.physician.controller
 
 import com.alja.physician.config.AppIntegrationTest
 import com.alja.physician.fixtures.PhysicianFixtures
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
-class PhysiciansSpecializationIT extends AppIntegrationTest {
+class PhysiciansSpecializationIntTest extends AppIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc

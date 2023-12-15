@@ -23,6 +23,10 @@ public class LogService {
         log.info(OPERATION + operation, arg1, arg2);
     }
 
+    public void logOperation(String operation, String arg1, String arg2, String arg3) {
+        log.info(OPERATION + operation, arg1, arg2);
+    }
+
     public void logError(String message) {
         log.error(ERROR + message);
     }

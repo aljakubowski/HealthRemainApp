@@ -1,6 +1,6 @@
 package com.alja.physician.client;
 
-import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public interface PhysicianClient {
     List<PhysicianResponseDTO> getAllPhysicians();
 
     @PostMapping(PHYSICIAN)
-    void registerNewPhysician(@RequestBody NewPhysicianDTO newPhysicianDTO);
+    void registerNewPhysician(@RequestBody PhysicianRegisterDTO newPhysicianDTO);
 
 
     @GetMapping(SPECIALIZATION)

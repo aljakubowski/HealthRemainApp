@@ -1,19 +1,18 @@
 package com.alja.physician.service;
 
-import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
-import com.alja.physician.model.Address;
 import com.alja.physician.model.PhysicianEntity;
-//import com.alja.physician.model.mapper.PhysicianMapper;
+import com.alja.physician.model.mapper.PhysicianMapper;
 import com.alja.physician.model.repository.PhysicianRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.alja.physician.PhysicianLogs.REGISTER_NEW_PHYSICIAN;
 
 
 @Slf4j
@@ -21,35 +20,29 @@ import java.util.List;
 @Service
 public class PhysicianService {
 
+    private final PhysicianDataValidationService physicianDataValidationService;
     private final PhysicianRepository physicianRepository;
-//    private final PhysicianMapper physicianMapper;
+    private final PhysicianMapper physicianMapper;
+    private final LogService logService;
 
-    public void registerNewPhysician(NewPhysicianDTO newPhysicianDTO) {
-        //// TODO: 29/11/2023 validation
-        // mapperservice, mapstruct?
-        // logs
-        log.info("DO ZROBIENIA");
+    // TODO: 15/12/2023 validation
+    // TODO: 15/12/2023 tests
+    // TODO: 15/12/2023 logs
 
-
-        // phoneNum, registrationDate, UUID employeeID
-
-        PhysicianEntity physicianEntity = PhysicianEntity.builder()
-                .firstName(newPhysicianDTO.getFirstName())
-                .lastName(newPhysicianDTO.getLastName())
-                .physicianSpecialization(newPhysicianDTO.getPhysicianSpecialization())
-                .email(newPhysicianDTO.getEmail())
-                .address(Address.builder()
-                        .city(newPhysicianDTO.getAddress().getCity())
-                        .street(newPhysicianDTO.getAddress().getStreet())
-                        .postCode(newPhysicianDTO.getAddress().getPostCode())
-                        .build())
-                .build();
-//        PhysicianEntity physicianEntity = physicianMapper.physicianEntityDtoToEntity(newPhysicianDTO);
+    public void registerNewPhysician(PhysicianRegisterDTO physicianRegisterDTO) {
+        //todo add Response not void
+        logService.logOperation(REGISTER_NEW_PHYSICIAN.logMessage,
+                physicianRegisterDTO.getFirstName(),
+                physicianRegisterDTO.getLastName(),
+                physicianRegisterDTO.getPhysicianSpecialization());
+        physicianDataValidationService.validateIfSpecializationExists(physicianRegisterDTO.getPhysicianSpecialization());
+        physicianDataValidationService.validateContactDetails(physicianRegisterDTO.getContactDetails());
+        PhysicianEntity physicianEntity = physicianMapper.toPhysicianEntity(physicianRegisterDTO);
         physicianRepository.save(physicianEntity);
     }
 
+
     public PhysicianResponseDTO getPhysicianById(String id) {
-        log.info("DO ZROBIENIA");
         PhysicianEntity physicianEntity = physicianRepository.findById(id).orElse(null);
         // response / full response format
         return getDoctorResponseDTO(physicianEntity);
@@ -64,7 +57,10 @@ public class PhysicianService {
         return physicianResponseDTOS;
     }
 
-    private PhysicianResponseDTO getDoctorResponseDTO(PhysicianEntity physicianEntity){
+    //                      fixme -   -   -   -   -   -   -   -   -   -   -   -
+
+
+    private PhysicianResponseDTO getDoctorResponseDTO(PhysicianEntity physicianEntity) {
         PhysicianResponseDTO.builder().build();
         return PhysicianResponseDTO.builder()
                 .id(physicianEntity.getId())

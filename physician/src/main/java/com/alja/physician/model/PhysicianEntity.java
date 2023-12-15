@@ -12,15 +12,13 @@ import java.util.UUID;
 @Builder
 @Document
 public class PhysicianEntity {
-
     @Id
     private String id;
-    private UUID employeeId;//String?
+    private UUID employeeId;
     private String firstName;
     private String lastName;
     private String physicianSpecialization;
-    private String phoneNumber;
-    private String email;
+    private ContactDetails contactDetails;
     private Address address;
     private LocalDateTime registrationDate;
 }

@@ -1,6 +1,6 @@
 package com.alja.adminpanel.controller_resources;
 
-import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
@@ -26,7 +26,7 @@ public interface AdminPanelResource {
     List<PhysicianResponseDTO> getAllPhysicians();
 
     @PostMapping(PHYSICIAN_PATH)
-    PhysicianRegisteredResponseDTO registerNewPhysician(@RequestBody NewPhysicianDTO newPhysicianDTO);
+    PhysicianRegisteredResponseDTO registerNewPhysician(@RequestBody PhysicianRegisterDTO newPhysicianDTO);
 
     @GetMapping(SPECIALIZATION_PATH)
     List<PhysicianSpecializationDTO> getAllSpecializations();

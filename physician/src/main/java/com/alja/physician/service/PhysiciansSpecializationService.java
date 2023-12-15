@@ -1,7 +1,5 @@
 package com.alja.physician.service;
 
-import com.alja.errors.PhysicianError;
-import com.alja.exception.PhysicianException;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
 import com.alja.physician.model.PhysicianSpecializationEntity;
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper;
@@ -20,6 +18,7 @@ public class PhysiciansSpecializationService {
 
     private final PhysicianSpecializationRepository physicianSpecializationRepository;
     private final PhysicianSpecializationMapper physicianSpecializationMapper;
+    private final PhysicianDataValidationService physicianDataValidationService;
     private final LogService logService;
 
     public List<PhysicianSpecializationDTO> getAllSpecializations() {
@@ -32,7 +31,7 @@ public class PhysiciansSpecializationService {
     public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
         String specializationName = physicianSpecializationDTO.getSpecializationName();
         logService.logOperation(ADD_SPECIALIZATION.logMessage, specializationName);
-        validateIfEntityAlreadyExists(specializationName);
+        physicianDataValidationService.validateIfSpecializationAlreadyExists(specializationName);
         physicianSpecializationRepository.save(PhysicianSpecializationEntity.builder()
                 .specializationName(specializationName)
                 .build());
@@ -40,15 +39,15 @@ public class PhysiciansSpecializationService {
 
     public void updateSpecialization(String specializationName, String newSpecializationName) {
         logService.logOperation(UPDATE_SPECIALIZATION.logMessage, specializationName, newSpecializationName);
-        validateIfEntityExists(specializationName);
-        validateIfEntityAlreadyExists(newSpecializationName);
+        physicianDataValidationService.validateIfSpecializationExists(specializationName);
+        physicianDataValidationService.validateIfSpecializationAlreadyExists(newSpecializationName);
         updateSpecializationEntity(physicianSpecializationRepository.findBySpecializationName(specializationName),
                 newSpecializationName);
     }
 
     public void deleteSpecialization(String specializationName) {
         logService.logOperation(DELETE_SPECIALIZATION.logMessage, specializationName);
-        validateIfEntityExists(specializationName);
+        physicianDataValidationService.validateIfSpecializationExists(specializationName);
         physicianSpecializationRepository.deleteBySpecializationName(specializationName);
     }
 
@@ -56,19 +55,6 @@ public class PhysiciansSpecializationService {
                                             String newSpecializationName) {
         physicianSpecializationEntity.updateSpecializationName(newSpecializationName);
         physicianSpecializationRepository.save(physicianSpecializationEntity);
-    }
-
-
-    private void validateIfEntityExists(String specializationName) {
-        if (!physicianSpecializationRepository.existsBySpecializationName(specializationName)) {
-            throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR);
-        }
-    }
-
-    private void validateIfEntityAlreadyExists(String specializationName) {
-        if (physicianSpecializationRepository.existsBySpecializationName(specializationName)) {
-            throw new PhysicianException(PhysicianError.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR);
-        }
     }
 
 }

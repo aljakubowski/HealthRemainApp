@@ -2,7 +2,7 @@ package com.alja.adminpanel.controller;
 
 import com.alja.adminpanel.controller_resources.AdminPanelResource;
 import com.alja.adminpanel.service.AdminPanelService;
-import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
@@ -28,7 +28,7 @@ public class AdminPanelController implements AdminPanelResource {
     }
 
     @Override
-    public PhysicianRegisteredResponseDTO registerNewPhysician(NewPhysicianDTO newPhysicianDTO) {
+    public PhysicianRegisteredResponseDTO registerNewPhysician(PhysicianRegisterDTO newPhysicianDTO) {
         return adminPanelService.registerNewPhysician(newPhysicianDTO);
     }
 

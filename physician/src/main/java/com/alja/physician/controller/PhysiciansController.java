@@ -1,7 +1,7 @@
 package com.alja.physician.controller;
 
 import com.alja.physician.controller_resources.PhysiciansResource;
-import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.service.PhysicianService;
 import lombok.AllArgsConstructor;
@@ -19,16 +19,19 @@ public class PhysiciansController implements PhysiciansResource {
 
     @Override
     public PhysicianResponseDTO getPhysicianById(String doctorId) {
+        //// TODO: 15/12/2023
         return physicianService.getPhysicianById(doctorId);
     }
 
     @Override
     public List<PhysicianResponseDTO> getAllPhysicians() {
+        // TODO: 15/12/2023 define DTO response / format? 
         return physicianService.getAllPhysicians();
     }
 
     @Override
-    public void registerNewPhysician(NewPhysicianDTO newPhysicianDTO) {
+    public void registerNewPhysician(PhysicianRegisterDTO newPhysicianDTO) {
+        //// TODO: 15/12/2023 define DTO response / format?
         physicianService.registerNewPhysician(newPhysicianDTO);
     }
 

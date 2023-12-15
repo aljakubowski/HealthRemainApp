@@ -1,7 +1,7 @@
 package com.alja.adminpanel.service;
 
 import com.alja.physician.client.PhysicianClient;
-import com.alja.physician.dto.NewPhysicianDTO;
+import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
@@ -26,7 +26,7 @@ public class AdminPanelService {
         return physicianClient.getAllPhysicians();
     }
 
-    public PhysicianRegisteredResponseDTO registerNewPhysician(NewPhysicianDTO newPhysicianDTO){
+    public PhysicianRegisteredResponseDTO registerNewPhysician(PhysicianRegisterDTO newPhysicianDTO){
         LocalDateTime registrationDate = LocalDateTime.now();
         physicianClient.registerNewPhysician(newPhysicianDTO);
         return PhysicianRegisteredResponseDTO.builder()

@@ -1,11 +1,9 @@
-package com.alja.physician.unit
+package com.alja.physician.service
 
-import com.alja.exception.PhysicianException
+
 import com.alja.physician.fixtures.PhysicianFixtures
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper
 import com.alja.physician.model.repository.PhysicianSpecializationRepository
-import com.alja.physician.service.LogService
-import com.alja.physician.service.PhysiciansSpecializationService
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
@@ -15,13 +13,17 @@ class PhysiciansSpecializationServiceTest extends Specification {
     PhysiciansSpecializationService physiciansSpecializationService
     PhysicianSpecializationRepository physicianSpecializationRepository = Mock()
     PhysicianSpecializationMapper physicianSpecializationMapper = Mock()
+    PhysicianDataValidationService physicianDataValidationService = Mock()
     LogService logService = Mock()
     def specializationName = "radiologist"
     def newSpecializationName = "neurologist"
 
     def setup() {
-        physiciansSpecializationService = new PhysiciansSpecializationService(physicianSpecializationRepository,
-                physicianSpecializationMapper, logService)
+        physiciansSpecializationService = new PhysiciansSpecializationService(
+                physicianSpecializationRepository,
+                physicianSpecializationMapper,
+                physicianDataValidationService,
+                logService)
     }
 
     def "should return a list of specializations"() {
@@ -54,8 +56,6 @@ class PhysiciansSpecializationServiceTest extends Specification {
 
     def "should update an existing specialization"() {
         given:
-            1 * physicianSpecializationRepository.existsBySpecializationName(specializationName) >> true
-            1 * physicianSpecializationRepository.existsBySpecializationName(newSpecializationName) >> false
             1 * physicianSpecializationRepository.findBySpecializationName(specializationName) >>
                     PhysicianFixtures.createSpecialization(specializationName)
 
@@ -69,8 +69,6 @@ class PhysiciansSpecializationServiceTest extends Specification {
 
     def "should delete an existing specialization"() {
         given:
-            1 * physicianSpecializationRepository.existsBySpecializationName(specializationName) >> true
-
         when:
             physiciansSpecializationService.deleteSpecialization(specializationName)
 
@@ -79,20 +77,4 @@ class PhysiciansSpecializationServiceTest extends Specification {
             1 * physicianSpecializationRepository.deleteBySpecializationName(specializationName)
     }
 
-    def "should throw an exception for non-existing specialization"() {
-        given:
-            def nonExistingSpecializationName = "NonExistingSpecialization"
-            1 * physicianSpecializationRepository.existsBySpecializationName(nonExistingSpecializationName) >> false
-
-        when:
-            def actual = physiciansSpecializationService.validateIfEntityExists(nonExistingSpecializationName)
-
-        then:
-            actual = thrown(PhysicianException)
-
-        expect:
-            actual != null
-            actual instanceof PhysicianException
-            actual.message == "Physician Specialization does not exist"
-    }
 }
