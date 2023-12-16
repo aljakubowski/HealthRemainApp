@@ -65,7 +65,7 @@ class PhysiciansSpecializationIntTest extends AppIntegrationTest {
                     .content(objectMapper.writeValueAsString(specializationDTO)))
 
         then:
-            result.andExpect(status().isOk())
+            result.andExpect(status().isAccepted())
             physicianSpecializationRepository.findAll().size() == 1
     }
 

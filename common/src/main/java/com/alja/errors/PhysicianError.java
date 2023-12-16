@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum PhysicianError {
 
+    PHYSICIAN_NOT_FOUND_ERROR(Descriptions.PHYSICIAN_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND),
+
     PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR(Descriptions.PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR, HttpStatus.NOT_FOUND),
     PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR(Descriptions.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST),
     PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR(Descriptions.PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST),
@@ -20,6 +22,8 @@ public enum PhysicianError {
     }
 
     public static class Descriptions {
+        private static final String PHYSICIAN_NOT_FOUND_ERROR = "Physician does not exist";
+
         private static final String PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR = "Physician Specialization does not exist";
         private static final String PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR = "Physician Specialization already exists";
         private static final String PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR = "phone number already exists";

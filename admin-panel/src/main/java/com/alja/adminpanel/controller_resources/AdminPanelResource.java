@@ -5,6 +5,7 @@ import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public interface AdminPanelResource {
     List<PhysicianSpecializationDTO> getAllSpecializations();
 
     @PostMapping(SPECIALIZATION_PATH)
-    void addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
+    ResponseEntity<PhysicianSpecializationDTO> addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
 
     @PutMapping(SPECIALIZATION_PATH)
     void updateSpecialization(@RequestParam("specializationName") String specializationName,

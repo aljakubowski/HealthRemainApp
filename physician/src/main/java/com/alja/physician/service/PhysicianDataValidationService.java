@@ -3,6 +3,7 @@ package com.alja.physician.service;
 import com.alja.errors.PhysicianError;
 import com.alja.exception.PhysicianException;
 import com.alja.physician.dto.ContactDetailsDTO;
+import com.alja.physician.model.PhysicianEntity;
 import com.alja.physician.model.repository.PhysicianRepository;
 import com.alja.physician.model.repository.PhysicianSpecializationRepository;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,12 @@ public class PhysicianDataValidationService {
 
     private final PhysicianRepository physicianRepository;
     private final PhysicianSpecializationRepository physicianSpecializationRepository;
+
+    // TODO: 16/12/2023 test this method
+    public PhysicianEntity findPhysicianIfPresent(String physicianId){
+        return physicianRepository.findPhysicianEntityByPhysicianId(physicianId)
+                .orElseThrow(() -> new PhysicianException(PhysicianError.PHYSICIAN_NOT_FOUND_ERROR));
+    }
 
     public void validateIfSpecializationExists(String specialization) {
         if (!physicianSpecializationRepository.existsBySpecializationName(specialization)) {
@@ -32,7 +39,7 @@ public class PhysicianDataValidationService {
         validateEmail(contactDetails.getEmail());
     }
 
-    private void validatePhoneNumber(String phoneNumber) {
+    public void validatePhoneNumber(String phoneNumber) {
         physicianRepository.findAllByContactDetailsPhoneNumber(
                         phoneNumber).stream()
                 .filter(s -> s != null && !s.isEmpty())
@@ -42,7 +49,7 @@ public class PhysicianDataValidationService {
                 });
     }
 
-    private void validateEmail(String email) {
+    public void validateEmail(String email) {
         physicianRepository.findAllByContactDetailsEmail(
                         email).stream()
                 .filter(s -> s != null && !s.isEmpty())

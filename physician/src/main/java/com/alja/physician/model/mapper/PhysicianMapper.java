@@ -1,8 +1,6 @@
 package com.alja.physician.model.mapper;
 
-import com.alja.physician.dto.AddressDTO;
-import com.alja.physician.dto.ContactDetailsDTO;
-import com.alja.physician.dto.PhysicianRegisterDTO;
+import com.alja.physician.dto.*;
 import com.alja.physician.model.Address;
 import com.alja.physician.model.ContactDetails;
 import com.alja.physician.model.PhysicianEntity;
@@ -14,7 +12,7 @@ public interface PhysicianMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "registrationDate", expression = "java(LocalDateTime.now())")
-    @Mapping(target = "employeeId", expression = "java(UUID.randomUUID())")
+    @Mapping(target = "physicianId", expression = "java(UUID.randomUUID())")
     @Mapping(target = "physicianSpecialization", source = "physicianRegisterDTO.physicianSpecialization")
     @Mapping(target = "firstName", source = "physicianRegisterDTO.firstName")
     @Mapping(target = "lastName", source = "physicianRegisterDTO.lastName")
@@ -33,4 +31,7 @@ public interface PhysicianMapper {
     @Mapping(target = "country", source = "addressDTO.country")
     Address toAddress(AddressDTO addressDTO);
 
+    ContactDetailsDTO contactDetailsToDto(ContactDetails contactDetails);
+
+    AddressDTO addressToDto(Address address);
 }

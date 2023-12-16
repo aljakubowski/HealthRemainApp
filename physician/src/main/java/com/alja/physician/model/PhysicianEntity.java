@@ -14,7 +14,7 @@ import java.util.UUID;
 public class PhysicianEntity {
     @Id
     private String id;
-    private UUID employeeId;
+    private UUID physicianId;
     private String firstName;
     private String lastName;
     private String physicianSpecialization;

@@ -1,16 +1,12 @@
 package com.alja.physician.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class PhysicianResponseDTO {
-    private String id;
+@Getter
+@SuperBuilder
+public class PhysicianResponseDTO{
+    private String physicianId;
     private String firstName;
     private String lastName;
     private String physiciansSpecialization;

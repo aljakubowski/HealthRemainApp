@@ -7,6 +7,8 @@ import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class AdminPanelController implements AdminPanelResource {
 
     private final AdminPanelService adminPanelService;
+    //todo return ResponseEntity as responses
 
     @Override
     public PhysicianResponseDTO getPhysicianById(String physicianId) {
@@ -38,8 +41,10 @@ public class AdminPanelController implements AdminPanelResource {
     }
 
     @Override
-    public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
+    public ResponseEntity<PhysicianSpecializationDTO> addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
         adminPanelService.addNewSpecialization(physicianSpecializationDTO);
+        //fixme return of response entity? ResponseEntity<PhysicianSpecializationDTO> - response from service
+        return new ResponseEntity<>(physicianSpecializationDTO, HttpStatus.CREATED);
     }
 
     @Override

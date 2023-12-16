@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PhysicianRegisteredResponseDTO {
+    //fixme to delete?
     private String firstName;
     private String lastName;
     private String physiciansSpecialization;

@@ -21,7 +21,7 @@ public class AdminPanelService {
 
     private final PhysicianClient physicianClient;
     private final LogService logService;
-
+    //fixme handle responses?
     public List<PhysicianResponseDTO> getAllPhysicians() {
         return physicianClient.getAllPhysicians();
     }
@@ -29,6 +29,7 @@ public class AdminPanelService {
     public PhysicianRegisteredResponseDTO registerNewPhysician(PhysicianRegisterDTO newPhysicianDTO){
         LocalDateTime registrationDate = LocalDateTime.now();
         physicianClient.registerNewPhysician(newPhysicianDTO);
+        //fixme from client response
         return PhysicianRegisteredResponseDTO.builder()
                 .firstName(newPhysicianDTO.getFirstName())
                 .lastName(newPhysicianDTO.getLastName())
