@@ -1,5 +1,6 @@
 package com.alja.physician.controller
 
+
 import com.alja.physician.config.AppIntegrationTest
 import com.alja.physician.fixtures.PhysicianFixtures
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper
@@ -7,20 +8,15 @@ import com.alja.physician.model.repository.PhysicianSpecializationRepository
 import com.alja.physician.service.PhysiciansSpecializationService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 
 import static com.alja.physician.controller_resources.PhysiciansSpecializationResource.RESOURCE_PATH
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
-class PhysiciansSpecializationIntTest extends AppIntegrationTest {
+class PhysiciansSpecializationITest extends AppIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc
@@ -65,7 +61,7 @@ class PhysiciansSpecializationIntTest extends AppIntegrationTest {
                     .content(objectMapper.writeValueAsString(specializationDTO)))
 
         then:
-            result.andExpect(status().isAccepted())
+            result.andExpect(status().isOk())
             physicianSpecializationRepository.findAll().size() == 1
     }
 

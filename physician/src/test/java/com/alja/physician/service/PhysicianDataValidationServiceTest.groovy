@@ -2,6 +2,7 @@ package com.alja.physician.service
 
 import com.alja.errors.PhysicianError
 import com.alja.exception.PhysicianException
+import com.alja.physician.model.PhysicianEntity
 import com.alja.physician.model.repository.PhysicianRepository
 import com.alja.physician.model.repository.PhysicianSpecializationRepository
 import spock.lang.Specification
@@ -17,11 +18,11 @@ class PhysicianDataValidationServiceTest extends Specification {
                 physicianRepository,
                 physicianSpecializationRepository)
     }
-    
+
     def 'should throw exception when physician does not exist'() {
         given:
             def id = "id"
-            physicianRepository.findPhysicianEntityByPhysicianId(id) >> [_ as String]
+            physicianRepository.findPhysicianEntityByPhysicianId(id) >> Optional.empty()
 
         when:
             def actual = physicianDataValidationService.findPhysicianIfPresent(id)
@@ -33,6 +34,18 @@ class PhysicianDataValidationServiceTest extends Specification {
             actual != null
             actual instanceof PhysicianException
             actual.message == PhysicianError.PHYSICIAN_NOT_FOUND_ERROR.getMessage()
+    }
+
+    def 'should not throw exception when physician exist'() {
+        given:
+            def id = "id"
+            physicianRepository.findPhysicianEntityByPhysicianId(id) >> Optional.of(PhysicianEntity.builder().build())
+
+        when:
+            def actual = physicianDataValidationService.findPhysicianIfPresent(id)
+
+        then:
+            noExceptionThrown()
     }
 
     def 'should not throw exception when phone number does not exist'() {

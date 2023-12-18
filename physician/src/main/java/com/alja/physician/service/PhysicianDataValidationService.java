@@ -16,7 +16,6 @@ public class PhysicianDataValidationService {
     private final PhysicianRepository physicianRepository;
     private final PhysicianSpecializationRepository physicianSpecializationRepository;
 
-    // TODO: 16/12/2023 test this method
     public PhysicianEntity findPhysicianIfPresent(String physicianId){
         return physicianRepository.findPhysicianEntityByPhysicianId(physicianId)
                 .orElseThrow(() -> new PhysicianException(PhysicianError.PHYSICIAN_NOT_FOUND_ERROR));
