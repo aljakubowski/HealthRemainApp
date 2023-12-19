@@ -20,17 +20,17 @@ public class PhysiciansSpecializationController implements PhysiciansSpecializat
     }
 
     @Override
-    public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
-        physiciansSpecializationService.addNewSpecialization(physicianSpecializationDTO);
+    public PhysicianSpecializationDTO addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
+        return physiciansSpecializationService.addNewSpecialization(physicianSpecializationDTO);
     }
 
     @Override
-    public void updateSpecialization(String specializationName, String specializationNewName) {
-        physiciansSpecializationService.updateSpecialization(specializationName, specializationNewName);
+    public PhysicianSpecializationDTO updateSpecialization(String specializationName, String specializationNewName) {
+        return physiciansSpecializationService.updateSpecialization(specializationName, specializationNewName);
     }
 
     @Override
-    public void deleteSpecialization(String specializationName) {
-        physiciansSpecializationService.deleteSpecialization(specializationName);
+    public PhysicianSpecializationDTO deleteSpecialization(String specializationName) {
+        return physiciansSpecializationService.deleteSpecialization(specializationName);
     }
 }

@@ -34,15 +34,17 @@ class PhysicianMapperTest extends Specification {
         when:
             def result = physicianMapper.toPhysicianEntity(physicianDTO)
         then:
+            result.physicianId != null
             result.firstName == firstName
-            lastName == result.lastName
-            physicianSpecialization == result.physicianSpecialization
-            phoneNumber == result.contactDetails.phoneNumber
-            email == result.contactDetails.email
-            street == result.address.street
-            houseNumber == result.address.houseNumber
-            postCode == result.address.postCode
-            city == result.address.city
-            country == result.address.country
+            result.lastName == lastName
+            result.physicianSpecialization == physicianSpecialization
+            result.contactDetails.phoneNumber == phoneNumber
+            result.contactDetails.email == email
+            result.address.street == street
+            result.address.houseNumber == houseNumber
+            result.address.postCode == postCode
+            result.address.city == city
+            result.address.country == country
+
     }
 }

@@ -2,14 +2,14 @@ package com.alja.adminpanel.service;
 
 import com.alja.physician.client.PhysicianClient;
 import com.alja.physician.dto.PhysicianRegisterDTO;
-import com.alja.physician.dto.PhysicianRegisteredResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
+import com.alja.physician.dto.PhysicianUpdateDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.alja.physician.PhysicianLogs.*;
@@ -21,21 +21,33 @@ public class AdminPanelService {
 
     private final PhysicianClient physicianClient;
     private final LogService logService;
-    //fixme handle responses?
+
+    public PhysicianResponseDTO registerNewPhysician(PhysicianRegisterDTO newPhysicianDTO) {
+        logService.logOperation(REGISTER_NEW_PHYSICIAN.logMessage,
+                newPhysicianDTO.getFirstName(),
+                newPhysicianDTO.getLastName(),
+                newPhysicianDTO.getPhysicianSpecialization());
+        return physicianClient.registerNewPhysician(newPhysicianDTO);
+    }
+
     public List<PhysicianResponseDTO> getAllPhysicians() {
+        logService.logOperation(GET_ALL_PHYSICIANS.logMessage);
         return physicianClient.getAllPhysicians();
     }
 
-    public PhysicianRegisteredResponseDTO registerNewPhysician(PhysicianRegisterDTO newPhysicianDTO){
-        LocalDateTime registrationDate = LocalDateTime.now();
-        physicianClient.registerNewPhysician(newPhysicianDTO);
-        //fixme from client response
-        return PhysicianRegisteredResponseDTO.builder()
-                .firstName(newPhysicianDTO.getFirstName())
-                .lastName(newPhysicianDTO.getLastName())
-                .physiciansSpecialization(newPhysicianDTO.getPhysicianSpecialization())
-                .registrationDate(registrationDate)
-                .build();
+    public PhysicianResponseDTO getPhysicianById(String physicianId, boolean details) {
+        logService.logOperation(GET_PHYSICIAN_BY_ID.logMessage, physicianId);
+        return physicianClient.getPhysicianById(physicianId, details);
+    }
+
+    public PhysicianResponseDTO updatePhysician(String physicianId, PhysicianUpdateDTO physicianUpdateDTO) {
+        logService.logOperation(UPDATE_PHYSICIAN.logMessage, physicianId);
+        return physicianClient.updatePhysician(physicianId, physicianUpdateDTO);
+    }
+
+    public PhysicianResponseDTO deletePhysicianById(@PathVariable String physicianId) {
+        logService.logOperation(DELETE_PHYSICIAN_BY_ID.logMessage, physicianId);
+        return physicianClient.deletePhysicianById(physicianId);
     }
 
 
@@ -44,18 +56,18 @@ public class AdminPanelService {
         return physicianClient.getAllSpecializations();
     }
 
-    public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
+    public PhysicianSpecializationDTO addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
         logService.logOperation(ADD_SPECIALIZATION.logMessage, physicianSpecializationDTO.getSpecializationName());
-        physicianClient.addNewSpecialization(physicianSpecializationDTO);
+        return physicianClient.addNewSpecialization(physicianSpecializationDTO);
     }
 
-    public void updateSpecialization(String specializationName, String specializationNewName) {
+    public PhysicianSpecializationDTO updateSpecialization(String specializationName, String specializationNewName) {
         logService.logOperation(UPDATE_SPECIALIZATION.logMessage, specializationName, specializationNewName);
-        physicianClient.updateSpecialization(specializationName, specializationNewName);
+        return physicianClient.updateSpecialization(specializationName, specializationNewName);
     }
 
-    public void deleteSpecialization(String specializationName) {
+    public PhysicianSpecializationDTO deleteSpecialization(String specializationName) {
         logService.logOperation(DELETE_SPECIALIZATION.logMessage, specializationName);
-        physicianClient.deleteSpecialization(specializationName);
+        return physicianClient.deleteSpecialization(specializationName);
     }
 }

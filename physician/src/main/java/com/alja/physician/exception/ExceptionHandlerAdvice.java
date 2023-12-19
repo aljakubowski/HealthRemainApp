@@ -20,7 +20,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(PhysicianException.class)
     public ResponseEntity<PhysicianException> onPhysicianSpecializationNotFound(PhysicianException exception) {
         logService.logError(exception.getMessage());
-        return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exception, exception.getHttpStatus());
     }
 
 }

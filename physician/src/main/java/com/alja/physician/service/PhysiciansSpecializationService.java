@@ -28,33 +28,37 @@ public class PhysiciansSpecializationService {
                 .collect(Collectors.toList());
     }
 
-    public void addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
+    public PhysicianSpecializationDTO addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
         String specializationName = physicianSpecializationDTO.getSpecializationName();
         logService.logOperation(ADD_SPECIALIZATION.logMessage, specializationName);
         physicianDataValidationService.validateIfSpecializationAlreadyExists(specializationName);
-        physicianSpecializationRepository.save(PhysicianSpecializationEntity.builder()
+        PhysicianSpecializationEntity physicianSpecialization = PhysicianSpecializationEntity.builder()
                 .specializationName(specializationName)
-                .build());
+                .build();
+        physicianSpecializationRepository.save(physicianSpecialization);
+        return physicianSpecializationMapper.specializationEntityToDto(physicianSpecialization);
     }
 
-    public void updateSpecialization(String specializationName, String newSpecializationName) {
+    public PhysicianSpecializationDTO updateSpecialization(String specializationName, String newSpecializationName) {
         logService.logOperation(UPDATE_SPECIALIZATION.logMessage, specializationName, newSpecializationName);
         physicianDataValidationService.validateIfSpecializationExists(specializationName);
         physicianDataValidationService.validateIfSpecializationAlreadyExists(newSpecializationName);
-        updateSpecializationEntity(physicianSpecializationRepository.findBySpecializationName(specializationName),
+        PhysicianSpecializationEntity physicianSpecialization = updateSpecializationEntity(physicianSpecializationRepository.findBySpecializationName(specializationName),
                 newSpecializationName);
+        return physicianSpecializationMapper.specializationEntityToDto(physicianSpecialization);
     }
 
-    public void deleteSpecialization(String specializationName) {
+    public PhysicianSpecializationDTO deleteSpecialization(String specializationName) {
         logService.logOperation(DELETE_SPECIALIZATION.logMessage, specializationName);
         physicianDataValidationService.validateIfSpecializationExists(specializationName);
         physicianSpecializationRepository.deleteBySpecializationName(specializationName);
+        return PhysicianSpecializationDTO.builder().specializationName(specializationName).build();
     }
 
-    private void updateSpecializationEntity(PhysicianSpecializationEntity physicianSpecializationEntity,
+    private PhysicianSpecializationEntity updateSpecializationEntity(PhysicianSpecializationEntity physicianSpecializationEntity,
                                             String newSpecializationName) {
         physicianSpecializationEntity.updateSpecializationName(newSpecializationName);
-        physicianSpecializationRepository.save(physicianSpecializationEntity);
+        return physicianSpecializationRepository.save(physicianSpecializationEntity);
     }
 
 }

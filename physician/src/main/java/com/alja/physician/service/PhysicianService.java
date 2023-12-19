@@ -28,9 +28,6 @@ public class PhysicianService {
     private final PhysicianMapper physicianMapper;
     private final LogService logService;
 
-    // TODO: 15/12/2023 tests
-    // TODO: 16/12/2023 create client for admin
-
     public PhysicianResponseDTO registerNewPhysician(PhysicianRegisterDTO physicianRegisterDTO) {
         logService.logOperation(REGISTER_NEW_PHYSICIAN.logMessage,
                 physicianRegisterDTO.getFirstName(),
@@ -79,7 +76,7 @@ public class PhysicianService {
 
     private PhysicianResponseDTO getPhysicianResponseSimple(PhysicianEntity physicianEntity) {
         return PhysicianResponseDTO.builder()
-                .physicianId(physicianEntity.getId())
+                .physicianId(physicianEntity.getPhysicianId().toString())
                 .firstName(physicianEntity.getFirstName())
                 .lastName(physicianEntity.getLastName())
                 .physiciansSpecialization(physicianEntity.getPhysicianSpecialization())

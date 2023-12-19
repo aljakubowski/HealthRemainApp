@@ -16,7 +16,6 @@ import java.util.Objects;
 public class PhysicianUpdateService {
 
     private final PhysicianDataValidationService physicianDataValidationService;
-    // TODO: 16/12/2023 tests 
 
     public PhysicianEntity updatePhysician(PhysicianEntity entityToUpdate, PhysicianUpdateDTO physicianUpdateDTO) {
         updatePhysicianFields(entityToUpdate, physicianUpdateDTO);
@@ -38,7 +37,7 @@ public class PhysicianUpdateService {
         }
         if (Objects.nonNull(physicianUpdateDTO.getPhysicianSpecialization())) {
             physicianDataValidationService.validateIfSpecializationExists(physicianUpdateDTO.getPhysicianSpecialization());
-            entityToUpdate.setPhysicianSpecialization(physicianUpdateDTO.getFirstName());
+            entityToUpdate.setPhysicianSpecialization(physicianUpdateDTO.getPhysicianSpecialization());
         }
     }
 

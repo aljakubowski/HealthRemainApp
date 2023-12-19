@@ -12,7 +12,7 @@ public interface PhysicianMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "registrationDate", expression = "java(LocalDateTime.now())")
-    @Mapping(target = "physicianId", expression = "java(UUID.randomUUID())")
+    @Mapping(target = "physicianId", expression = "java(UUID.randomUUID().toString())")
     @Mapping(target = "physicianSpecialization", source = "physicianRegisterDTO.physicianSpecialization")
     @Mapping(target = "firstName", source = "physicianRegisterDTO.firstName")
     @Mapping(target = "lastName", source = "physicianRegisterDTO.lastName")

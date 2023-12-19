@@ -17,12 +17,12 @@ public interface PhysiciansSpecializationResource {
     List<PhysicianSpecializationDTO> getAllSpecializations();
 
     @PostMapping
-    void addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
+    PhysicianSpecializationDTO addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
 
     @PutMapping()
-    void updateSpecialization(@RequestParam("specializationName") String specializationName,
+    PhysicianSpecializationDTO updateSpecialization(@RequestParam("specializationName") String specializationName,
                               @RequestParam("specializationNewName") String specializationNewName);
 
     @DeleteMapping()
-    void deleteSpecialization(@RequestParam("specializationName") String specializationName);
+    PhysicianSpecializationDTO deleteSpecialization(@RequestParam("specializationName") String specializationName);
 }
