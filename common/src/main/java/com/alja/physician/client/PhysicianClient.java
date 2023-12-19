@@ -20,21 +20,21 @@ public interface PhysicianClient {
 
 
     @PostMapping(PHYSICIAN)
-    PhysicianResponseDTO registerNewPhysician(@RequestBody PhysicianRegisterDTO newPhysicianDTO);
+    PhysicianResponseDTO registerNewPhysician(@Valid @RequestBody PhysicianRegisterDTO newPhysicianDTO);
 
     @GetMapping(PHYSICIAN)
     List<PhysicianResponseDTO> getAllPhysicians();
 
     @GetMapping(PHYSICIAN + PHYSICIAN_ID_PATH + PHYSICIAN_DETAILS)
-    PhysicianResponseDTO getPhysicianById(@PathVariable String physicianId,
-                                          @PathVariable boolean details);
+    PhysicianResponseDTO getPhysicianById(@PathVariable("physicianId") String physicianId,
+                                          @PathVariable("details") boolean details);
 
     @PutMapping(PHYSICIAN + PHYSICIAN_ID_PATH)
-    PhysicianResponseDTO updatePhysician(@PathVariable String physicianId,
+    PhysicianResponseDTO updatePhysician(@PathVariable("physicianId") String physicianId,
                                          @Valid @RequestBody PhysicianUpdateDTO physicianUpdateDTO);
 
     @DeleteMapping(PHYSICIAN + PHYSICIAN_ID_PATH)
-    PhysicianResponseDTO deletePhysicianById(@PathVariable String physicianId);
+    PhysicianResponseDTO deletePhysicianById(@PathVariable("physicianId") String physicianId);
 
 
     @GetMapping(SPECIALIZATION)

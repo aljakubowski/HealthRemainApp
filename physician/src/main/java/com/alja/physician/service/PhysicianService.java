@@ -83,7 +83,7 @@ public class PhysicianService {
                 .build();
     }
 
-    private PhysicianResponseDTO getPhysicianResponseDetailed(PhysicianEntity physicianEntity) {
+    private PhysicianResponseDetailedDTO getPhysicianResponseDetailed(PhysicianEntity physicianEntity) {
         return PhysicianResponseDetailedDTO.builder()
                 .physicianId(physicianEntity.getId())
                 .firstName(physicianEntity.getFirstName())

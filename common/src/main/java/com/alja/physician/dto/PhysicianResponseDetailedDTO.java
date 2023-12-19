@@ -1,13 +1,17 @@
 package com.alja.physician.dto;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
+@NoArgsConstructor
 @SuperBuilder
-public class PhysicianResponseDetailedDTO extends PhysicianResponseDTO{
+@AllArgsConstructor
+public class PhysicianResponseDetailedDTO extends PhysicianResponseDTO {
     private ContactDetailsDTO contactDetailsDTO;
     private AddressDTO addressDTO;
     private LocalDateTime registrationDate;

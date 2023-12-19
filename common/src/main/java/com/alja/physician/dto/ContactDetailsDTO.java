@@ -17,6 +17,6 @@ public class ContactDetailsDTO {
     @Pattern(regexp = "^\\d{9}$", message = "required format: 9 digit number")
     private String phoneNumber;
     @NotNull(message = "Physician email should not be empty")
-    @Email
+    @Email(message = "email should have the correct format")
     private String email;
 }
