@@ -49,6 +49,9 @@ public class PhysicianService {
 
     public PhysicianResponseDTO getPhysicianById(String physicianId, boolean details) {
         logService.logOperation(GET_PHYSICIAN_BY_ID.logMessage, physicianId);
+        //fixme fix response
+        // alternatives: return Object / generic / return PhysicianResponseDetailedDTO and filter in AdminPanel
+        // split EP in Physician
         PhysicianEntity physicianEntity = physicianDataValidationService.findPhysicianIfPresent(physicianId);
         if (details) {
             return getPhysicianResponseDetailed(physicianEntity);
@@ -76,7 +79,7 @@ public class PhysicianService {
 
     private PhysicianResponseDTO getPhysicianResponseSimple(PhysicianEntity physicianEntity) {
         return PhysicianResponseDTO.builder()
-                .physicianId(physicianEntity.getPhysicianId().toString())
+                .physicianId(physicianEntity.getPhysicianId())
                 .firstName(physicianEntity.getFirstName())
                 .lastName(physicianEntity.getLastName())
                 .physiciansSpecialization(physicianEntity.getPhysicianSpecialization())

@@ -1,42 +1,35 @@
-package com.alja.physician.fixtures;
+package com.alja.patient.fixtures;
 
 import com.alja.common.AddressDTO;
 import com.alja.common.ContactDetailsDTO;
 import com.alja.common.ContactDetailsUpdateDTO;
-import com.alja.physician.dto.*;
-import com.alja.physician.model.Address;
-import com.alja.physician.model.ContactDetails;
-import com.alja.physician.model.PhysicianEntity;
-import com.alja.physician.model.PhysicianSpecializationEntity;
+import com.alja.patient.dto.PatientRegisterDTO;
+import com.alja.patient.dto.PatientUpdateDTO;
+import com.alja.patient.model.Address;
+import com.alja.patient.model.ContactDetails;
+import com.alja.patient.model.PatientEntity;
 
-public class PhysicianFixtures {
+import java.time.LocalDate;
+import java.util.UUID;
 
-    public static PhysicianSpecializationEntity createSpecialization(String specializationName) {
-        return PhysicianSpecializationEntity.builder()
-                .specializationName(specializationName)
-                .build();
-    }
+public class PatientFixtures {
 
-    public static PhysicianSpecializationDTO createSpecializationDto(String specializationName) {
-        return PhysicianSpecializationDTO.builder()
-                .specializationName(specializationName)
-                .build();
-    }
+    //todo refactor class: delete not used
 
-    public static PhysicianRegisterDTO createPhysicianRegisterDTO() {
-        return PhysicianRegisterDTO.builder()
+    public static PatientRegisterDTO createPatientRegisterDTO() {
+        return PatientRegisterDTO.builder()
                 .firstName("Jan")
                 .lastName("Dobry")
-                .physicianSpecialization("ORTHOPEDIST")
                 .contactDetails(createContactDetailsDTO())
                 .address(createAddressDTO())
                 .build();
     }
 
-    public static PhysicianRegisterDTO createPhysicianRegisterDTOCustom(
+    public static PatientRegisterDTO createPatientRegisterDTOCustom(
             String firstName,
             String lastName,
-            String physicianSpecialization,
+            String birthDate,
+            String socialSecurityNumber,
             String phoneNumber,
             String email,
             String street,
@@ -44,23 +37,26 @@ public class PhysicianFixtures {
             String postCode,
             String city,
             String country) {
-        return PhysicianRegisterDTO.builder()
+        return PatientRegisterDTO.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .physicianSpecialization(physicianSpecialization)
+                .birthDate(birthDate)
+                .socialSecurityNumber(socialSecurityNumber)
                 .contactDetails(createContactDetailsDTOCustom(phoneNumber, email))
                 .address(createAddressDTOCustom(street, houseNumber, postCode, city, country))
                 .build();
     }
 
-    public static PhysicianRegisterDTO createPhysicianRegisterDTOCustomWithFields(
+    public static PatientRegisterDTO createPatientRegisterDTOCustomWithFields(
             String firstName,
             String lastName,
-            String physicianSpecialization) {
-        return PhysicianRegisterDTO.builder()
+            String birthDate,
+            String socialSecNum) {
+        return PatientRegisterDTO.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .physicianSpecialization(physicianSpecialization)
+                .birthDate(birthDate)
+                .socialSecurityNumber(socialSecNum)
                 .build();
     }
 
@@ -80,6 +76,15 @@ public class PhysicianFixtures {
                 .build();
     }
 
+    public static ContactDetails createContactDetailsCustom(
+            String phoneNumber,
+            String email) {
+        return ContactDetails.builder()
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .build();
+    }
+
     private static AddressDTO createAddressDTO() {
         return AddressDTO.builder()
                 .street("Wilcza")
@@ -90,7 +95,7 @@ public class PhysicianFixtures {
                 .build();
     }
 
-    private static AddressDTO createAddressDTOCustom(
+    public static AddressDTO createAddressDTOCustom(
             String street,
             String houseNumber,
             String postCode,
@@ -105,29 +110,31 @@ public class PhysicianFixtures {
                 .build();
     }
 
-    public static PhysicianUpdateDTO createPhysicianUpdateWithFields(
+    public static PatientUpdateDTO createPatientUpdateWithFields(
             String firstName,
             String lastName,
-            String physicianSpecialization) {
-        return PhysicianUpdateDTO.builder()
+            String birthDate,
+            String socialSecNum) {
+        return PatientUpdateDTO.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .physicianSpecialization(physicianSpecialization)
+                .birthDate(birthDate)
+                .socialSecurityNumber(socialSecNum)
                 .build();
     }
 
-    public static PhysicianUpdateDTO createPhysicianUpdateWithContactDetailsUpdate(
+    public static PatientUpdateDTO createPatientUpdateWithContactDetailsUpdate(
             String phoneNumber,
             String email) {
         ContactDetailsUpdateDTO contact = ContactDetailsUpdateDTO.builder()
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .build();
-        return PhysicianUpdateDTO.builder()
+        return PatientUpdateDTO.builder()
                 .contactDetails(contact)
                 .build();
     }
-    public static PhysicianUpdateDTO createPhysicianUpdateWithAddress(
+    public static PatientUpdateDTO createPatientUpdateWithAddress(
             String street,
             String houseNumber,
             String postCode,
@@ -135,48 +142,52 @@ public class PhysicianFixtures {
             String country){
         AddressDTO address = createAddressDTOCustom(
                 street, houseNumber, postCode, city, country);
-        return PhysicianUpdateDTO.builder()
+        return PatientUpdateDTO.builder()
                 .address(address)
                 .build();
     }
 
-    public static PhysicianEntity createPhysicianWithFields(
+    public static PatientEntity createPatientWithFields(
             String firstName,
             String lastName,
-            String physicianSpecialization) {
-        return PhysicianEntity.builder()
+            String birthDate,
+            String socialSecNum) {
+        return PatientEntity.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .physicianSpecialization(physicianSpecialization)
+                .birthDate(LocalDate.parse(birthDate))
+                .socialSecurityNumber(socialSecNum)
                 .build();
     }
 
-    public static PhysicianEntity createPhysicianWithFieldsAndUuid(
+    public static PatientEntity createPatientWithFieldsAndUuid(
             String firstName,
             String lastName,
-            String physicianSpecialization,
+            String birthDate,
+            String socialSecNum,
             String uuid) {
-        return PhysicianEntity.builder()
+        return PatientEntity.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .physicianSpecialization(physicianSpecialization)
-                .physicianId(uuid)
+                .birthDate(LocalDate.parse(birthDate))
+                .socialSecurityNumber(socialSecNum)
+                .patientId(uuid)
                 .build();
     }
 
-    public static PhysicianEntity createPhysicianWithContactDetails(
+    public static PatientEntity createPatientWithContactDetails(
             String phoneNumber,
             String email) {
         ContactDetails contact = ContactDetails.builder()
                 .phoneNumber(phoneNumber)
                 .email(email)
                 .build();
-        return PhysicianEntity.builder()
+        return PatientEntity.builder()
                 .contactDetails(contact)
                 .build();
     }
 
-    public static PhysicianEntity createPhysicianWithAddress(
+    public static PatientEntity createPatientWithAddress(
             String street,
             String houseNumber,
             String postCode,
@@ -189,15 +200,16 @@ public class PhysicianFixtures {
                 .city(city)
                 .country(country)
                 .build();
-        return PhysicianEntity.builder()
+        return PatientEntity.builder()
                 .address(address)
                 .build();
     }
 
-    public static PhysicianEntity createPhysicianWithAllFieldsCustom(
+    public static PatientEntity createPatientWithAllFieldsCustom(
             String firstName,
             String lastName,
-            String physicianSpecialization,
+            String birthDate,
+            String socialSecurityNum,
             String uuid,
             String phoneNumber,
             String email,
@@ -217,17 +229,18 @@ public class PhysicianFixtures {
                 .city(city)
                 .country(country)
                 .build();
-        return PhysicianEntity.builder()
+        return PatientEntity.builder()
                 .firstName(firstName)
                 .lastName(lastName)
-                .physicianSpecialization(physicianSpecialization)
-                .physicianId(uuid)
+                .birthDate(LocalDate.parse(birthDate))
+                .socialSecurityNumber(socialSecurityNum)
+                .patientId(uuid)
                 .contactDetails(contact)
                 .address(address)
                 .build();
     }
 
-    public static PhysicianEntity createPhysicianWithAllFields(){
+    public static PatientEntity createPatientWithAllFields(){
         ContactDetails contact = ContactDetails.builder()
                 .phoneNumber("123456789")
                 .email("mail@mail.com")
@@ -239,10 +252,9 @@ public class PhysicianFixtures {
                 .city("city")
                 .country("country")
                 .build();
-        return PhysicianEntity.builder()
+        return PatientEntity.builder()
                 .firstName("Jan")
                 .lastName("Dobry")
-                .physicianSpecialization("ORTHOPEDIST")
                 .contactDetails(contact)
                 .address(address)
                 .build();

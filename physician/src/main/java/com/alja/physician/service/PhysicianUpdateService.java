@@ -1,7 +1,7 @@
 package com.alja.physician.service;
 
-import com.alja.physician.dto.AddressDTO;
-import com.alja.physician.dto.ContactDetailsUpdateDTO;
+import com.alja.common.AddressDTO;
+import com.alja.common.ContactDetailsUpdateDTO;
 import com.alja.physician.dto.PhysicianUpdateDTO;
 import com.alja.physician.model.Address;
 import com.alja.physician.model.ContactDetails;

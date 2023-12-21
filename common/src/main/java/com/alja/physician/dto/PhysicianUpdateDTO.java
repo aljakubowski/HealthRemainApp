@@ -1,5 +1,7 @@
 package com.alja.physician.dto;
 
+import com.alja.common.AddressDTO;
+import com.alja.common.ContactDetailsUpdateDTO;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;

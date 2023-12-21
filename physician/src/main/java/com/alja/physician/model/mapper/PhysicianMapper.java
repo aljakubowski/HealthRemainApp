@@ -1,5 +1,7 @@
 package com.alja.physician.model.mapper;
 
+import com.alja.common.AddressDTO;
+import com.alja.common.ContactDetailsDTO;
 import com.alja.physician.dto.*;
 import com.alja.physician.model.Address;
 import com.alja.physician.model.ContactDetails;

@@ -1,6 +1,5 @@
 package com.alja.physician.model.mapper
 
-
 import com.alja.physician.fixtures.PhysicianFixtures
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification

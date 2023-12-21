@@ -2,7 +2,7 @@ package com.alja.physician.service;
 
 import com.alja.errors.PhysicianError;
 import com.alja.exception.PhysicianException;
-import com.alja.physician.dto.ContactDetailsDTO;
+import com.alja.common.ContactDetailsDTO;
 import com.alja.physician.model.PhysicianEntity;
 import com.alja.physician.model.repository.PhysicianRepository;
 import com.alja.physician.model.repository.PhysicianSpecializationRepository;
