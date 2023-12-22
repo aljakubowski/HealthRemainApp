@@ -22,6 +22,7 @@ public interface PatientMapper {
     @Mapping(target = "contactDetails", source = "patientRegisterDTO.contactDetails")
     @Mapping(target = "address", source = "patientRegisterDTO.address")
     @Mapping(target = "registrationDate", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "visitsId", ignore = true)
     PatientEntity toPatientEntity(PatientRegisterDTO patientRegisterDTO);
 
     @Mapping(target = "phoneNumber", source = "contactDetailsDTO.phoneNumber")

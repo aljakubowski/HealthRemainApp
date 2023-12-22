@@ -6,7 +6,6 @@ import com.alja.common.annotation.FirstName;
 import com.alja.common.annotation.LastName;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +24,6 @@ public class PatientRegisterDTO {
     @LastName
     private String lastName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past
     @NotNull(message = "Patient birth date should not be empty")
     private String birthDate;
     @NotNull(message = "Patient social security number should not be empty")

@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
@@ -17,10 +16,10 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @AllArgsConstructor
 public class PatientResponseDetailedDTO extends PatientResponseDTO {
-    private LocalDate birthDate;
+    private String birthDate;
     private int age;
     private String socialSecurityNumber;
-    private ContactDetailsDTO contactDetailsDTO;
-    private AddressDTO addressDTO;
+    private ContactDetailsDTO contactDetails;
+    private AddressDTO address;
     private LocalDateTime registrationDate;
 }

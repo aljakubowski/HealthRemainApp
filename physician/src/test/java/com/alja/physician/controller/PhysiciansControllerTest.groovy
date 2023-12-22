@@ -221,7 +221,6 @@ class PhysiciansControllerTest extends AppIntegrationTest {
         given:
             def physicianId = UUID.randomUUID().toString()
 
-            def details = false
             def PHYSICIAN_ID_PATH = "/" + physicianId
 
         when:

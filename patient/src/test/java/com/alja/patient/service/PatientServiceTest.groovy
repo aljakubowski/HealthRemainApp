@@ -109,13 +109,13 @@ class PatientServiceTest extends Specification {
             result.birthDate == LocalDate.parse(birthDate)
             result.socialSecurityNumber == socialSecurityNum
             result.age == age
-            result.addressDTO.street == street
-            result.addressDTO.houseNumber == houseNumber
-            result.addressDTO.postCode == postCode
-            result.addressDTO.city == city
-            result.addressDTO.country == country
-            result.contactDetailsDTO.phoneNumber == phoneNumber
-            result.contactDetailsDTO.email == email
+            result.address.street == street
+            result.address.houseNumber == houseNumber
+            result.address.postCode == postCode
+            result.address.city == city
+            result.address.country == country
+            result.contactDetails.phoneNumber == phoneNumber
+            result.contactDetails.email == email
     }
 
     def 'should get patient by id with visits'() {

@@ -16,6 +16,15 @@ public class PatientFixtures {
 
     //todo refactor class: delete not used
 
+    public static PatientRegisterDTO createPatientRegisterDTOWithName(
+            String firstName,
+            String lastName) {
+        return PatientRegisterDTO.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .build();
+    }
+
     public static PatientRegisterDTO createPatientRegisterDTO() {
         return PatientRegisterDTO.builder()
                 .firstName("Jan")
@@ -144,6 +153,17 @@ public class PatientFixtures {
                 street, houseNumber, postCode, city, country);
         return PatientUpdateDTO.builder()
                 .address(address)
+                .build();
+    }
+
+    public static PatientEntity createPatientWithNameAndId(
+            String firstName,
+            String lastName,
+            String uuid) {
+        return PatientEntity.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .patientId(uuid)
                 .build();
     }
 

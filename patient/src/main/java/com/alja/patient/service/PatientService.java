@@ -71,13 +71,14 @@ public class PatientService {
     }
 
     private PatientResponseDTO returnAppropriateResponse(PatientEntity patientEntity, String dataFormat) {
+        if (dataFormat == null) {
+            return getPatientResponseSimple(patientEntity);
+        }
         if (dataFormat.equalsIgnoreCase(PatientDataFormat.DETAILS.name())) {
             return getPatientResponseDetailed(patientEntity);
-        }
-        if (dataFormat.equalsIgnoreCase(PatientDataFormat.VISITS.name())) {
+        } else {
             return getPatientResponseWithVisits(patientEntity);
         }
-        return getPatientResponseSimple(patientEntity);
     }
 
 
@@ -94,11 +95,11 @@ public class PatientService {
                 .patientId(patientEntity.getPatientId())
                 .firstName(patientEntity.getFirstName())
                 .lastName(patientEntity.getLastName())
-                .birthDate(patientEntity.getBirthDate())
+                .birthDate(patientEntity.getBirthDate().toString())
                 .age(patientDataValidationService.calculateAge(patientEntity.getBirthDate().toString()))
                 .socialSecurityNumber(patientEntity.getSocialSecurityNumber())
-                .contactDetailsDTO(patientMapper.contactDetailsToDto(patientEntity.getContactDetails()))
-                .addressDTO(patientMapper.addressToDto(patientEntity.getAddress()))
+                .contactDetails(patientMapper.contactDetailsToDto(patientEntity.getContactDetails()))
+                .address(patientMapper.addressToDto(patientEntity.getAddress()))
                 .registrationDate(patientEntity.getRegistrationDate())
                 .build();
     }

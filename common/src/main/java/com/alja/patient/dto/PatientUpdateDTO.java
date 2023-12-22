@@ -24,13 +24,11 @@ public class PatientUpdateDTO {
     @Size(min = 2, max = 50, message = "Last name should have 2 to 50 characters")
     private String lastName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past
     @Nullable
     private String birthDate;
     @Nullable
     @Pattern(regexp = "^\\d{11}$", message = "required format: 11 digit number")
     private String socialSecurityNumber;
-    @NotNull(message = "Patient contact details should not be empty")
     @Valid
     @Nullable
     private ContactDetailsUpdateDTO contactDetails;

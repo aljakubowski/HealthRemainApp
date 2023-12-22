@@ -3,7 +3,7 @@ services:
     admin-panel     localhost:8080
     physician       localhost:8083
     visit           localhost:8084
-    patient         localhost:8085
+    patient         localhost:8086
 
     mongo-express   localhost:8081
     eureka          localhost:8761
