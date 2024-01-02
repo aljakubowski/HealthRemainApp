@@ -16,8 +16,8 @@ public interface VisitMapper {
     @Mapping(target = "physicianSpecialization", source = "physicianSpecialization")
     @Mapping(target = "patientId", ignore = true)
     @Mapping(target = "visitStatus", expression = "java(VisitStatus.AVAILABLE)")
-    @Mapping(target = "visitDateStart", source = "visitNewDTO.visitDate")
-    @Mapping(target = "visitDateEnd", source = "visitEndDate")
+    @Mapping(target = "visitStartDate", source = "visitNewDTO.visitDate")
+    @Mapping(target = "visitEndDate", source = "visitEndDate")
     @Mapping(target = "physicianRecommendations", ignore = true)
     VisitEntity toVisitEntity(VisitNewDTO visitNewDTO, String physicianSpecialization, LocalDateTime visitEndDate);
 }
