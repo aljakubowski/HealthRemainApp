@@ -1,11 +1,13 @@
 package com.alja.visit.model;
 
+import com.alja.common.enums.VisitStatus;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +19,8 @@ public class VisitEntity {
     private String physicianId;
     private String physicianSpecialization;
     private String patientId;
-    private LocalDateTime visitDate;
-    private int durationMinutes;
-    private LocalDateTime registrationDate;
+    private VisitStatus visitStatus;
+    private LocalDateTime visitStartDate;
+    private LocalDateTime visitEndDate;
+    private List<String> physicianRecommendations;
 }

@@ -26,8 +26,6 @@ public class PatientService {
     private final PatientMapper patientMapper;
     private final LogService logService;
 
-    // TODO: 20/12/2023 int  TESTS
-
     public PatientResponseDTO registerNewPatient(PatientRegisterDTO patientRegisterDTO) {
         logService.logOperation(REGISTER_NEW_PATIENT.logMessage,
                 patientRegisterDTO.getFirstName(),

@@ -1,6 +1,6 @@
 package com.alja.visit.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VisitNewDTO {
-    @NotNull(message = "Physician id should not be empty")
+public class VisitUpdateDTO {
+    @Nullable
     private String physicianId;
-    @NotNull(message = "Visit date should not be empty")
+    @Nullable
+    private String patientId;
+    @Nullable
     private LocalDateTime visitDate;
 }

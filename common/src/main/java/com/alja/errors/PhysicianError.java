@@ -23,7 +23,6 @@ public enum PhysicianError {
 
     public static class Descriptions {
         private static final String PHYSICIAN_NOT_FOUND_ERROR = "Physician does not exist";
-
         private static final String PHYSICIAN_SPECIALIZATION_NOT_FOUND_ERROR = "Physician Specialization does not exist";
         private static final String PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR = "Physician Specialization already exists";
         private static final String PHYSICIAN_PHONE_NUMBER_ALREADY_EXISTS_ERROR = "phone number already exists";

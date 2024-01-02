@@ -1,7 +1,6 @@
 package com.alja.visit.dto;
 
 import com.alja.common.enums.VisitStatus;
-import com.alja.patient.dto.PatientResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,9 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
-public class VisitResponseDTO {
+public class VisitCreatedResponseDTO {
     private PhysicianResponseDTO physicianResponseDTO;
-    private PatientResponseDTO patientResponseDTO;
-    private LocalDateTime visitDate;
+    private LocalDateTime visitStartDate;
+    private LocalDateTime visitEndDate;
     private VisitStatus visitStatus;
 }
