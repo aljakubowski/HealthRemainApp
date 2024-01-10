@@ -33,7 +33,7 @@ class PatientDataValidationServiceTest extends Specification {
         given:
             def existingSocialSecurityNumber = '12345678910'
             patientRepository.findAllBySocialSecurityNumber(existingSocialSecurityNumber) >> [_ as String]
-
+            patientRepository.findPatientEntityByPatientId("if") >> Optional.empty()
         when:
             def actual = patientDataValidationService.validateSocialSecurityNumber(existingSocialSecurityNumber)
 

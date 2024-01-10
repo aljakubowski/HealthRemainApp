@@ -1,13 +1,10 @@
 package com.alja.physician.service
 
-
 import com.alja.physician.fixtures.PhysicianFixtures
 import com.alja.physician.model.mapper.PhysicianSpecializationMapper
 import com.alja.physician.model.repository.PhysicianSpecializationRepository
-import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
-@SpringBootTest
 class PhysiciansSpecializationServiceTest extends Specification {
 
     PhysiciansSpecializationService physiciansSpecializationService
@@ -56,7 +53,7 @@ class PhysiciansSpecializationServiceTest extends Specification {
 
     def "should update an existing specialization"() {
         given:
-            1 * physicianSpecializationRepository.findBySpecializationName(specializationName) >>
+            physicianSpecializationRepository.findBySpecializationName(specializationName) >>
                     PhysicianFixtures.createSpecialization(specializationName)
 
         when:
@@ -68,7 +65,6 @@ class PhysiciansSpecializationServiceTest extends Specification {
     }
 
     def "should delete an existing specialization"() {
-        given:
         when:
             physiciansSpecializationService.deleteSpecialization(specializationName)
 

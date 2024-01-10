@@ -10,15 +10,27 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
 public class PatientDataValidationService {
 
     private final PatientRepository patientRepository;
-    private final int ADULT_AGE = 18;
+    private final static Integer ADULT_AGE = 18;
 
     public void validateSocialSecurityNumber(String socialSecurityNumber) {
+//fixme CLEAR !!!!!!
+        List<String> p = patientRepository.findAllBySocialSecurityNumber(socialSecurityNumber);
+
+
+        Optional<PatientEntity> a = patientRepository.findPatientEntityByPatientId("if");
+
+//        List<Optional> pe = patientRepository.findPatientEntityByPatientId("ig");
+
+
+
         patientRepository.findAllBySocialSecurityNumber(
                         socialSecurityNumber).stream()
                 .filter(s -> s != null && !s.isEmpty())

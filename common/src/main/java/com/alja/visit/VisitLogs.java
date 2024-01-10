@@ -4,14 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum VisitLogs {
-
     ADD_VISIT("adding new Visit of id: {}"),
+    GET_VISIT("getting Visit with id: {}"),
     GET_ALL_VISITS("getting list of all Visits"),
-
-//    GET_VISIT("getting list of all Specializations"),
-//    UPDATE_SPECIALIZATION("updating physician Specialization name from {} to {}"),
-    DELETE_VISIT("deleting specialization: {}");
-
+    GET_VISITS_FILTERED("getting list of filtered Visits"),
+    UPDATE_VISIT("updating Visit with id: {}"),
+    DELETE_VISIT("deleting Visit with id: {}");
 
     public final String logMessage;
 

@@ -1,4 +1,4 @@
-package com.alja.physician.client;
+package com.alja.common.client;
 
 import com.alja.errors.PhysicianError;
 import com.alja.exception.PhysicianException;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CustomErrorDecoder implements ErrorDecoder {
-
+//fixme FIX ERROR HANDLING!
     private static final String ERROR_NAME = "errorName";
     private static final String EXCEPTION_NAME = "exceptionName";
 

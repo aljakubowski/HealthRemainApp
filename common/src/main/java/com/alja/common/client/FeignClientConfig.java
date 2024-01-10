@@ -1,4 +1,4 @@
-package com.alja.physician.client;
+package com.alja.common.client;
 
 import feign.Logger;
 import feign.codec.ErrorDecoder;

@@ -35,6 +35,8 @@
         <groovy.version>4.0.16</groovy.version>
         <testcontainers.version>1.19.0</testcontainers.version>
         <docker-java.version>3.3.0</docker-java.version>
+        <apache.commons.version>3.12.0</apache.commons.version>
+        <apache.commons.collections.version>4.4</apache.commons.collections.version>
     </properties>
 
 
@@ -131,6 +133,16 @@
             <artifactId>junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${apache.commons.collections.version}</version>
         </dependency>
     </dependencies>
 

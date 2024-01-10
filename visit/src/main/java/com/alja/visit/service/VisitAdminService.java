@@ -1,23 +1,23 @@
 package com.alja.visit.service;
 
-import com.alja.physician.client.PhysicianClient;
+import com.alja.common.enums.VisitStatus;
+import com.alja.patient.dto.PatientResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
-import com.alja.visit.dto.VisitCreatedResponseDTO;
-import com.alja.visit.dto.VisitFilterDTO;
-import com.alja.visit.dto.VisitNewDTO;
-import com.alja.visit.dto.VisitResponseDTO;
+import com.alja.visit.dto.*;
 import com.alja.visit.model.VisitEntity;
 import com.alja.visit.model.mapper.VisitMapper;
 import com.alja.visit.model.repository.VisitRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.alja.visit.VisitLogs.ADD_VISIT;
-import static com.alja.visit.VisitLogs.GET_ALL_VISITS;
+import static com.alja.visit.VisitLogs.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -25,58 +25,109 @@ import static com.alja.visit.VisitLogs.GET_ALL_VISITS;
 public class VisitAdminService {
 
     private final VisitValidationService visitValidationService;
-    private final PhysicianClient physicianClient;
+    private final VisitQueryPredicateService visitQueryPredicateService;
+    private final VisitUpdateService visitUpdateService;
+    private final ClientsService clientsService;
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
     private final LogService logService;
-    private final static Integer VISIT_STANDARD_LENGTH = 30;
+
 
     //todo unit int test
+    //todo handle errors
 
-    public VisitCreatedResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
+    public VisitSimpleResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
         logService.logOperation(ADD_VISIT.logMessage, visitNewDTO.getVisitDate().toString());
-        PhysicianResponseDTO physicianResponseDTO = getAndValidatePhysician(visitNewDTO);
-        VisitEntity visitEntity = visitMapper.toVisitEntity(visitNewDTO,
-                physicianResponseDTO.getPhysiciansSpecialization(),
-                getVisitEndDate(visitNewDTO.getVisitDate()));
+
+        LocalDateTime visitEndDate = visitValidationService.getVisitEndDate(visitNewDTO.getVisitDate());
+        visitValidationService.validateDateWithStatus(VisitStatus.AVAILABLE, visitNewDTO.getVisitDate(), visitEndDate);
+        visitValidationService.validatePhysicianAvailability(visitNewDTO.getPhysicianId(), visitNewDTO.getVisitDate());
+
+        String physicianSpecialization = getPhysicianSpecialization(visitNewDTO.getPhysicianId());
+        VisitEntity visitEntity = visitMapper.toVisitEntity(visitNewDTO, physicianSpecialization, visitEndDate);
+
         visitRepository.save(visitEntity);
+        return getVisitSimpleResponse(visitEntity);
+    }
+
+    public VisitResponseDTO getVisitById(String visitId) {
+        logService.logOperation(GET_VISIT.logMessage, visitId);
+        VisitEntity visitEntity = visitValidationService.findVisitIfPresent(visitId);
         return getVisitResponse(visitEntity);
     }
 
+    public List<VisitSimpleResponseDTO> getVisitsWithFilter(VisitFilterDTO visitFilter) {
+        logService.logOperation(GET_VISITS_FILTERED.logMessage);
+        if (visitFilter == null){
+            return getAllVisit();
+        }
+        visitValidationService.validateStatus(visitFilter.getVisitStatus());
+        visitValidationService.validateDates(visitFilter);
 
-    public List<VisitCreatedResponseDTO> getAllAvailableVisit() {
+        Predicate predicate = visitQueryPredicateService.getPredicateVisits(visitFilter);
+        List<VisitEntity> visits = IterableUtils.toList(visitRepository.findAll(predicate));
+        //todo sort date asc
+        return visits.stream().map(this::getVisitSimpleResponse).toList();
+    }
+
+    public VisitSimpleResponseDTO updateVisit(String visitId, VisitUpdateDTO visitUpdateDTO) {
+        logService.logOperation(UPDATE_VISIT.logMessage, visitId);
+
+        VisitEntity existingVisitEntity = visitValidationService.findVisitIfPresent(visitId);
+        visitValidationService.validateStatus(visitUpdateDTO.getVisitStatus());
+        VisitEntity updatedVisitEntity = visitUpdateService.updateVisit(existingVisitEntity, visitUpdateDTO);
+
+        visitRepository.save(updatedVisitEntity);
+        return getVisitSimpleResponse(updatedVisitEntity);
+    }
+
+    public VisitSimpleResponseDTO deleteVisitById(String visitId) {
+        logService.logOperation(DELETE_VISIT.logMessage, visitId);
+
+        VisitEntity visitEntity = visitValidationService.findVisitIfPresent(visitId);
+
+        visitRepository.delete(visitEntity);
+        return getVisitSimpleResponse(visitEntity);
+    }
+
+    private List<VisitSimpleResponseDTO> getAllVisit() {
         logService.logOperation(GET_ALL_VISITS.logMessage);
         List<VisitEntity> visits = visitRepository.findAll();
-        return visits.stream().map(this::getVisitResponse).toList();
+        //todo sort date asc
+        return visits.stream().map(this::getVisitSimpleResponse).toList();
     }
 
-    public List<VisitResponseDTO> getVisitsWithFilter(VisitFilterDTO visitFilter) {
-
-        visitRepository.findAll();
-        return null;
+    private String getPhysicianSpecialization(String physicianId) {
+        PhysicianResponseDTO physicianResponseDTO = clientsService.getPhysicianResponseDTO(physicianId);
+        return physicianResponseDTO.getPhysiciansSpecialization();
     }
 
-    private PhysicianResponseDTO getAndValidatePhysician(VisitNewDTO visitNewDTO){
-        String physicianId = visitNewDTO.getPhysicianId();
-        PhysicianResponseDTO physicianResponseDTO = getPhysicianResponseDTO(physicianId);
-        visitValidationService.validatePhysicianAvailability(physicianId, visitNewDTO.getVisitDate());
-        return physicianResponseDTO;
-    }
-
-    private LocalDateTime getVisitEndDate(LocalDateTime visitStartDate) {
-        return visitStartDate.plusMinutes(VISIT_STANDARD_LENGTH);
-    }
-
-    private VisitCreatedResponseDTO getVisitResponse(VisitEntity visitEntity) {
-        return VisitCreatedResponseDTO.builder()
-                .physicianResponseDTO(getPhysicianResponseDTO(visitEntity.getPhysicianId()))
+    private VisitSimpleResponseDTO getVisitSimpleResponse(VisitEntity visitEntity) {
+        return VisitSimpleResponseDTO.builder()
+                .visitId(visitEntity.getVisitId())
+                .physicianResponseDTO(clientsService.getPhysicianResponseDTO(visitEntity.getPhysicianId()))
                 .visitStartDate(visitEntity.getVisitStartDate())
                 .visitEndDate(visitEntity.getVisitEndDate())
                 .visitStatus(visitEntity.getVisitStatus())
                 .build();
     }
 
-    private PhysicianResponseDTO getPhysicianResponseDTO(String physicianId){
-        return physicianClient.getPhysicianById(physicianId, false);
+    private VisitResponseDTO getVisitResponse(VisitEntity visitEntity) {
+        return VisitResponseDTO.builder()
+                .visitId(visitEntity.getVisitId())
+                .physicianResponseDTO(clientsService.getPhysicianResponseDTO(visitEntity.getPhysicianId()))
+                .patientResponseDTO(getPatientResponseIfRegisteredVisit(visitEntity.getPatientId()))
+                .visitStartDate(visitEntity.getVisitStartDate())
+                .visitEndDate(visitEntity.getVisitEndDate())
+                .visitStatus(visitEntity.getVisitStatus())
+                .physicianRecommendations(visitEntity.getPhysicianRecommendations())
+                .build();
+    }
+
+    private PatientResponseDTO getPatientResponseIfRegisteredVisit(String patientId){
+        if (StringUtils.isBlank(patientId)){
+            return null;
+        }
+        return clientsService.getPatientResponseDTO(patientId);
     }
 }

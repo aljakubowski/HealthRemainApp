@@ -17,7 +17,7 @@ public class ExceptionHandlerAdvice {
     private final LogService logService;
 
     @ExceptionHandler(PatientException.class)
-    public ResponseEntity<PatientException> onPhysicianSpecializationNotFound(PatientException exception) {
+    public ResponseEntity<PatientException> onPatientNotFound(PatientException exception) {
         logService.logError(exception.getMessage());
         return new ResponseEntity<>(exception, exception.getHttpStatus());
     }

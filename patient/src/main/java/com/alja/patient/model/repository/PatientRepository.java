@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PatientRepository extends MongoRepository<PatientEntity, String> {
-
     List<String> findAllBySocialSecurityNumber(String socialSecurityNumber);
     List<String> findAllByContactDetailsPhoneNumber(String phoneNumber);
     List<String> findAllByContactDetailsEmail(String email);

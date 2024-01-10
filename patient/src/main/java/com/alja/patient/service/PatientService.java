@@ -55,8 +55,7 @@ public class PatientService {
         //todo response depend on update ??
         logService.logOperation(UPDATE_PATIENT.logMessage, PatientId);
         PatientEntity existingPatientEntity = patientDataValidationService.findPatientIfPresent(PatientId);
-        PatientEntity updatedPatientEntity
-                = patientUpdateService.updatePatient(existingPatientEntity, patientUpdateDTO);
+        PatientEntity updatedPatientEntity = patientUpdateService.updatePatient(existingPatientEntity, patientUpdateDTO);
         patientRepository.save(updatedPatientEntity);
         return getPatientResponseSimple(updatedPatientEntity);
     }

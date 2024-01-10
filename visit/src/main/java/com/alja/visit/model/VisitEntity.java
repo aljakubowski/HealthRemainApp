@@ -23,4 +23,29 @@ public class VisitEntity {
     private LocalDateTime visitStartDate;
     private LocalDateTime visitEndDate;
     private List<String> physicianRecommendations;
+
+    public void updatePhysicianId(String physicianId){
+        this.physicianId = physicianId;
+    }
+
+    public void updatePhysicianSpecialization(String physicianSpecialization){
+        this.physicianSpecialization = physicianSpecialization;
+    }
+
+    public void updatePatientId(String patientId){
+        this.patientId = patientId;
+    }
+
+    public void updateVisitStatus(VisitStatus visitStatus){
+        this.visitStatus = visitStatus;
+    }
+
+    public void updateVisitDates(LocalDateTime visitStartDate, LocalDateTime visitEndDate){
+        this.visitStartDate = visitStartDate;
+        this.visitEndDate = visitEndDate;
+    }
+
+    public void updatePhysicianRecommendations(List<String> physicianRecommendations){
+        this.physicianRecommendations = physicianRecommendations;
+    }
 }

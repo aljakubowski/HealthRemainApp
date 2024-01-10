@@ -1,7 +1,7 @@
-package com.alja.physician.exception;
+package com.alja.visit.exception;
 
-import com.alja.exception.PhysicianException;
-import com.alja.physician.service.LogService;
+import com.alja.exception.VisitException;
+import com.alja.visit.service.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ public class ExceptionHandlerAdvice {
 
     private final LogService logService;
 
-    @ExceptionHandler(PhysicianException.class)
-    public ResponseEntity<PhysicianException> onPhysicianException(PhysicianException exception) {
+    @ExceptionHandler(VisitException.class)
+    public ResponseEntity<VisitException> onVisitException(VisitException exception) {
         logService.logError(exception.getMessage());
         return new ResponseEntity<>(exception, exception.getHttpStatus());
     }

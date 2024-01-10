@@ -1,6 +1,6 @@
 package com.alja.adminpanel.service;
 
-import com.alja.physician.client.PhysicianClient;
+import com.alja.common.client.PhysicianClient;
 import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.physician.dto.PhysicianSpecializationDTO;

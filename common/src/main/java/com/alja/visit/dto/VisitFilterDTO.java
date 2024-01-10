@@ -1,7 +1,7 @@
 package com.alja.visit.dto;
 
-import com.alja.common.enums.VisitStatus;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +20,8 @@ public class VisitFilterDTO {
     private String physicianSpecialization;
     @Nullable
     private String patientId;
-    @Nullable
-    private VisitStatus visitStatus;
+    @NotNull(message = "Visit status should not be empty")
+    private String visitStatus;
     @Nullable
     private LocalDateTime visitDateFrom;
     @Nullable

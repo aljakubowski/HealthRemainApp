@@ -15,24 +15,25 @@ public interface VisitAdminResource {
     String VISIT_ID_PATH = "/{visitId}";
 
     @PostMapping
-    VisitCreatedResponseDTO addNewVisit(@Valid @RequestBody VisitNewDTO visitNewDTO);
+    VisitSimpleResponseDTO addNewVisit(@Valid @RequestBody VisitNewDTO visitNewDTO);
 
-    //fixme is needed?
+    @GetMapping(VISIT_ID_PATH)
+    VisitResponseDTO getVisitById(@PathVariable String visitId);
+
+
+    //todo visits GET filter with sort?     order, sort, pageable  ???
     @GetMapping
-    List<VisitCreatedResponseDTO> getAllVisits();
+    List<VisitSimpleResponseDTO> getVisitsWithFilter(@Valid @RequestBody(required = false) VisitFilterDTO visitFilter);
 
-    @GetMapping
-    List<VisitResponseDTO> getVisitsWithFilter(@Valid @RequestBody(required = false) VisitFilterDTO visitFilter);
+//    @GetMapping
+//    List<VisitSimpleResponseDTO> getAllVisits();
 
-
-//todo visits GET filter with sort?
-//                                  order, sort, pageable
 
     @PutMapping(VISIT_ID_PATH)
-    VisitResponseDTO updateVisit(@PathVariable String visitId,
+    VisitSimpleResponseDTO updateVisit(@PathVariable String visitId,
                                  @Valid @RequestBody VisitUpdateDTO visitUpdateDTO);
 
     @DeleteMapping(VISIT_ID_PATH)
-    VisitResponseDTO deleteVisitById(@PathVariable String visitId);
+    VisitSimpleResponseDTO deleteVisitById(@PathVariable String visitId);
 
 }

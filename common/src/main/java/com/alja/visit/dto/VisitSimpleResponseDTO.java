@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
-public class VisitCreatedResponseDTO {
+public class VisitSimpleResponseDTO {
+    private String visitId;
     private PhysicianResponseDTO physicianResponseDTO;
     private LocalDateTime visitStartDate;
     private LocalDateTime visitEndDate;

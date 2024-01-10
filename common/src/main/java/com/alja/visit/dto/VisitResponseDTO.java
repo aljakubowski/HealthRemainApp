@@ -9,14 +9,18 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor
 public class VisitResponseDTO {
+    private String visitId;
     private PhysicianResponseDTO physicianResponseDTO;
     private PatientResponseDTO patientResponseDTO;
-    private LocalDateTime visitDate;
+    private LocalDateTime visitStartDate;
+    private LocalDateTime visitEndDate;
     private VisitStatus visitStatus;
+    private List<String> physicianRecommendations;
 }
