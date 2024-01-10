@@ -10,29 +10,8 @@ import com.alja.patient.model.ContactDetails;
 import com.alja.patient.model.PatientEntity;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 public class PatientFixtures {
-
-    //todo refactor class: delete not used
-
-    public static PatientRegisterDTO createPatientRegisterDTOWithName(
-            String firstName,
-            String lastName) {
-        return PatientRegisterDTO.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .build();
-    }
-
-    public static PatientRegisterDTO createPatientRegisterDTO() {
-        return PatientRegisterDTO.builder()
-                .firstName("Jan")
-                .lastName("Dobry")
-                .contactDetails(createContactDetailsDTO())
-                .address(createAddressDTO())
-                .build();
-    }
 
     public static PatientRegisterDTO createPatientRegisterDTOCustom(
             String firstName,
@@ -69,13 +48,6 @@ public class PatientFixtures {
                 .build();
     }
 
-    public static ContactDetailsDTO createContactDetailsDTO() {
-        return ContactDetailsDTO.builder()
-                .phoneNumber("123456789")
-                .email("jand@mymail.com")
-                .build();
-    }
-
     public static ContactDetailsDTO createContactDetailsDTOCustom(
             String phoneNumber,
             String email) {
@@ -91,16 +63,6 @@ public class PatientFixtures {
         return ContactDetails.builder()
                 .phoneNumber(phoneNumber)
                 .email(email)
-                .build();
-    }
-
-    private static AddressDTO createAddressDTO() {
-        return AddressDTO.builder()
-                .street("Wilcza")
-                .houseNumber("12")
-                .postCode("98-765")
-                .city("Warsaw")
-                .country("Poland")
                 .build();
     }
 
@@ -143,12 +105,13 @@ public class PatientFixtures {
                 .contactDetails(contact)
                 .build();
     }
+
     public static PatientUpdateDTO createPatientUpdateWithAddress(
             String street,
             String houseNumber,
             String postCode,
             String city,
-            String country){
+            String country) {
         AddressDTO address = createAddressDTOCustom(
                 street, houseNumber, postCode, city, country);
         return PatientUpdateDTO.builder()
@@ -212,7 +175,7 @@ public class PatientFixtures {
             String houseNumber,
             String postCode,
             String city,
-            String country){
+            String country) {
         Address address = Address.builder()
                 .street(street)
                 .houseNumber(houseNumber)
@@ -237,7 +200,7 @@ public class PatientFixtures {
             String houseNumber,
             String postCode,
             String city,
-            String country){
+            String country) {
         ContactDetails contact = ContactDetails.builder()
                 .phoneNumber(phoneNumber)
                 .email(email)
@@ -255,26 +218,6 @@ public class PatientFixtures {
                 .birthDate(LocalDate.parse(birthDate))
                 .socialSecurityNumber(socialSecurityNum)
                 .patientId(uuid)
-                .contactDetails(contact)
-                .address(address)
-                .build();
-    }
-
-    public static PatientEntity createPatientWithAllFields(){
-        ContactDetails contact = ContactDetails.builder()
-                .phoneNumber("123456789")
-                .email("mail@mail.com")
-                .build();
-        Address address = Address.builder()
-                .street("street")
-                .houseNumber("houseNumber")
-                .postCode("postCode")
-                .city("city")
-                .country("country")
-                .build();
-        return PatientEntity.builder()
-                .firstName("Jan")
-                .lastName("Dobry")
                 .contactDetails(contact)
                 .address(address)
                 .build();

@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,11 +31,10 @@ public class VisitAdminService {
     private final ClientsService clientsService;
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
+    private final VisitSorter visitSorter;
     private final LogService logService;
 
-
-    //todo unit int test
-    //todo handle errors
+    //todo int test
 
     public VisitSimpleResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
         logService.logOperation(ADD_VISIT.logMessage, visitNewDTO.getVisitDate().toString());
@@ -58,15 +58,15 @@ public class VisitAdminService {
 
     public List<VisitSimpleResponseDTO> getVisitsWithFilter(VisitFilterDTO visitFilter) {
         logService.logOperation(GET_VISITS_FILTERED.logMessage);
-        if (visitFilter == null){
+        if (visitFilter == null) {
             return getAllVisit();
         }
         visitValidationService.validateStatus(visitFilter.getVisitStatus());
         visitValidationService.validateDates(visitFilter);
 
         Predicate predicate = visitQueryPredicateService.getPredicateVisits(visitFilter);
-        List<VisitEntity> visits = IterableUtils.toList(visitRepository.findAll(predicate));
-        //todo sort date asc
+        Sort sort = visitSorter.getDefaultSort();
+        List<VisitEntity> visits = IterableUtils.toList(visitRepository.findAll(predicate, sort));
         return visits.stream().map(this::getVisitSimpleResponse).toList();
     }
 
@@ -92,8 +92,9 @@ public class VisitAdminService {
 
     private List<VisitSimpleResponseDTO> getAllVisit() {
         logService.logOperation(GET_ALL_VISITS.logMessage);
-        List<VisitEntity> visits = visitRepository.findAll();
-        //todo sort date asc
+
+        Sort sort = visitSorter.getDefaultSort();
+        List<VisitEntity> visits = visitRepository.findAll(sort);
         return visits.stream().map(this::getVisitSimpleResponse).toList();
     }
 
@@ -124,8 +125,8 @@ public class VisitAdminService {
                 .build();
     }
 
-    private PatientResponseDTO getPatientResponseIfRegisteredVisit(String patientId){
-        if (StringUtils.isBlank(patientId)){
+    private PatientResponseDTO getPatientResponseIfRegisteredVisit(String patientId) {
+        if (StringUtils.isBlank(patientId)) {
             return null;
         }
         return clientsService.getPatientResponseDTO(patientId);

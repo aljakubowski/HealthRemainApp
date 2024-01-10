@@ -8,12 +8,12 @@ import spock.lang.Specification
 
 class PhysicianServiceTest extends Specification {
 
-    PhysicianService physicianService
-    PhysicianDataValidationService physicianDataValidationService = Mock()
-    PhysicianUpdateService physicianUpdateService = Mock()
-    PhysicianRepository physicianRepository = Mock()
-    PhysicianMapper physicianMapper = Mock()
-    LogService logService = Mock()
+    private PhysicianService physicianService
+    private PhysicianDataValidationService physicianDataValidationService = Mock()
+    private PhysicianUpdateService physicianUpdateService = Mock()
+    private PhysicianRepository physicianRepository = Mock()
+    private PhysicianMapper physicianMapper = Mock()
+    private LogService logService = Mock()
 
     def setup() {
         physicianService = new PhysicianService(

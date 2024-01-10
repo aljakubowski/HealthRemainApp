@@ -1,6 +1,8 @@
 package com.alja.visit.fixtures;
 
 import com.alja.common.enums.VisitStatus;
+import com.alja.patient.dto.PatientRegisterDTO;
+import com.alja.patient.dto.PatientResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.visit.dto.VisitFilterDTO;
 import com.alja.visit.dto.VisitNewDTO;
@@ -97,6 +99,19 @@ public class VisitFixtures {
                 .build();
     }
 
+    public static VisitUpdateDTO createVisitUpdateDtoWithAllFields(
+            String physicianId,
+            String patientId,
+            String visitStatus,
+            LocalDateTime visitDate) {
+        return VisitUpdateDTO.builder()
+                .physicianId(physicianId)
+                .patientId(patientId)
+                .visitStatus(visitStatus)
+                .visitDate(visitDate)
+                .build();
+    }
+
     public static VisitUpdateDTO createVisitUpdateDtoWithDate(LocalDateTime visitDateFrom) {
         return VisitUpdateDTO.builder()
                 .patientId("paId")
@@ -131,6 +146,36 @@ public class VisitFixtures {
         return PhysicianResponseDTO.builder()
                 .physicianId(id)
                 .physiciansSpecialization(spec)
+                .build();
+    }
+
+    public static PhysicianResponseDTO createPhysicianResponseDtoWithCustomFields(
+            String id,
+            String firstName,
+            String lastName,
+            String physicianSpecialization) {
+        return PhysicianResponseDTO.builder()
+                .physicianId(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .physiciansSpecialization(physicianSpecialization)
+                .build();
+    }
+
+    public static PhysicianResponseDTO createPhysicianResponseDtoWithSpecialization(String physicianSpecialization) {
+        return PhysicianResponseDTO.builder()
+                .physiciansSpecialization(physicianSpecialization)
+                .build();
+    }
+
+    public static PatientResponseDTO createPatientResponseDTO(
+            String patientId,
+            String firstName,
+            String lastName) {
+        return PatientResponseDTO.builder()
+                .patientId(patientId)
+                .firstName(firstName)
+                .lastName(lastName)
                 .build();
     }
 }
