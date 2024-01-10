@@ -1,7 +1,7 @@
 package com.alja.visit.service;
 
-import com.alja.common.client.PatientClient;
-import com.alja.common.client.PhysicianClient;
+import com.alja.patient.client.PatientClient;
+import com.alja.physician.client.PhysicianClient;
 import com.alja.patient.dto.PatientResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
 import lombok.AllArgsConstructor;

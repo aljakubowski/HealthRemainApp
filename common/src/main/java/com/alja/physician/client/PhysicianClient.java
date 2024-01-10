@@ -1,4 +1,4 @@
-package com.alja.common.client;
+package com.alja.physician.client;
 
 import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;

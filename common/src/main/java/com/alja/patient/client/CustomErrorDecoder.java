@@ -1,4 +1,4 @@
-package com.alja.common.client;
+package com.alja.patient.client;
 
 import com.alja.errors.PhysicianError;
 import com.alja.exception.PhysicianException;

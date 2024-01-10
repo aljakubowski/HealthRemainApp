@@ -2,6 +2,7 @@ package com.alja.visit.controller_resource;
 
 import com.alja.visit.dto.*;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import static com.alja.visit.controller_resource.VisitAdminResource.RESOURCE_PAT
 
 @RequestMapping(RESOURCE_PATH)
 public interface VisitAdminResource {
-
+//todo refactor
     String RESOURCE_PATH = "/api/v1/visit";
     String VISIT_ID_PATH = "/{visitId}";
 
@@ -19,6 +20,7 @@ public interface VisitAdminResource {
 
     @GetMapping(VISIT_ID_PATH)
     VisitResponseDTO getVisitById(@PathVariable String visitId);
+//    ResponseEntity<VisitResponseDTO> getVisitById(@PathVariable String visitId);
 
 
     //todo visits GET filter with sort?     order, sort, pageable  ???
