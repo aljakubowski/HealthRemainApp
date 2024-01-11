@@ -12,7 +12,8 @@ import static com.alja.visit.controller_resource.VisitAdminResource.RESOURCE_PAT
 @RequestMapping(RESOURCE_PATH)
 public interface VisitAdminResource {
 //todo refactor
-    String RESOURCE_PATH = "/api/v1/visit";
+    //todo ARCH: admin=panle, patient panel do not needed?
+    String RESOURCE_PATH = "/api/v1/visit/admin";
     String VISIT_ID_PATH = "/{visitId}";
 
     @PostMapping
@@ -23,7 +24,7 @@ public interface VisitAdminResource {
 //    ResponseEntity<VisitResponseDTO> getVisitById(@PathVariable String visitId);
 
 
-    //todo visits GET filter with sort?     order, sort, pageable  ???
+    //todo visits GET filter with pageable  ???
     @GetMapping
     List<VisitSimpleResponseDTO> getVisitsWithFilter(@Valid @RequestBody(required = false) VisitFilterDTO visitFilter);
 

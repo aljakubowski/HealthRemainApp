@@ -32,7 +32,7 @@ public class VisitAdminController implements VisitAdminResource {
 //        return new ResponseEntity<>(visitResponseDTO, HttpStatus.OK);
 //    }
 
-    //fixme refactor - not needed
+    //fixme refactor - method not needed
 //    @Override
 //    public List<VisitSimpleResponseDTO> getAllVisits() {
 //        return visitAdminService.getAllVisit();

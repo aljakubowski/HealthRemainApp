@@ -62,6 +62,28 @@ class VisitQueryPredicateServiceTest extends Specification {
 
     }
 
+    def 'should create query predicate with common filter dto'() {
+        given:
+            def physicianSpecialization = 'Radiologist'
+            def visitStatus = 'AVAILABLE'
+            def visitDateFromString = '2024-08-01T10:00'
+            def visitDateFrom = LocalDateTime.parse(visitDateFromString)
+            def visitDateToString = '2024-10-01T10:00'
+            def visitDateTo = LocalDateTime.parse(visitDateToString)
+
+            def visitFilterDto = VisitFixtures.createVisitCommonFilter(physicianSpecialization,
+                    visitDateFrom, visitDateTo)
+
+        when:
+            def result = visitQueryPredicateService.getPredicatePatientVisits(visitFilterDto)
+        then:
+            result.toString() ==
+                    "visit.visitStatus = " + visitStatus +
+                    " && visit.physicianSpecialization = " + physicianSpecialization +
+                    " && visit.visitStartDate >= " + visitDateFromString +
+                    " && visit.visitEndDate <= " + visitDateToString
+    }
+
     def 'should return appropriate boolean when validating field value'(String fieldValue) {
         expect:
             visitQueryPredicateService.validFieldValue(fieldValue) == result

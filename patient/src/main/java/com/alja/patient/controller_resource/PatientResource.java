@@ -26,7 +26,7 @@ public interface PatientResource {
 
     @GetMapping(PATIENT_ID_PATH + PATIENT_DATA_FORMAT)
     PatientResponseDTO getPatientById(@PathVariable("patientId") String patientId,
-                                      @RequestParam(required = false) @PatientData String dataFormat);
+                                      @RequestParam(name = "dataFormat", required = false) @PatientData String dataFormat);
 
     @PutMapping(PATIENT_ID_PATH)
     PatientResponseDTO updatePatient(@PathVariable String patientId,

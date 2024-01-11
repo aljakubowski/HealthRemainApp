@@ -18,6 +18,34 @@ class VisitUpdateServiceTest extends Specification {
         visitUpdateService = new VisitUpdateService(clientsService, visitValidationService)
     }
 
+    def 'should appoint visit and update fields'() {
+        given:
+        def patientId = 'patientId'
+        def emptyPatientId = ''
+
+        def visitEntity
+                = VisitFixtures.createVisitEntityWithPatientAndStatus(emptyPatientId, VisitStatus.AVAILABLE)
+        when:
+            visitUpdateService.appointVisit(visitEntity, patientId)
+        then:
+            visitEntity.patientId == patientId
+            visitEntity.visitStatus == VisitStatus.RESERVED
+    }
+
+    def 'should cancel visit and update fields'() {
+        given:
+            def patientId = 'patientId'
+            def emptyPatientId = ''
+
+            def visitEntity
+                    = VisitFixtures.createVisitEntityWithPatientAndStatus(patientId, VisitStatus.RESERVED)
+        when:
+            visitUpdateService.cancelVisit(visitEntity)
+        then:
+            visitEntity.patientId == null
+            visitEntity.visitStatus == VisitStatus.AVAILABLE
+    }
+
     def 'should validate and update visit date'() {
         given:
             def visitStatus = VisitStatus.AVAILABLE

@@ -3,6 +3,7 @@ package com.alja.visit.service
 import com.alja.common.enums.VisitStatus
 import com.alja.errors.VisitError
 import com.alja.exception.VisitException
+import com.alja.patient.dto.PatientResponseDTO
 import com.alja.visit.fixtures.VisitFixtures
 import com.alja.visit.model.VisitEntity
 import com.alja.visit.model.repository.VisitRepository
@@ -14,9 +15,10 @@ class VisitValidationServiceTest extends Specification {
 
     private VisitValidationService visitValidationService
     private VisitRepository visitRepository = Mock(VisitRepository)
+    private ClientsService clientsService = Mock()
 
     def setup() {
-        visitValidationService = new VisitValidationService(visitRepository)
+        visitValidationService = new VisitValidationService(visitRepository, clientsService)
     }
 
     def 'should return visit end date'() {
@@ -101,7 +103,6 @@ class VisitValidationServiceTest extends Specification {
 
     def 'should return if both dates are null'() {
         given:
-            visitValidationService = Spy()
             def visitDateFrom = null
             def visitDateTo = null
             def visitStatus = VisitStatus.AVAILABLE.name()
@@ -113,23 +114,6 @@ class VisitValidationServiceTest extends Specification {
 
         then:
             0 * visitValidationService.validateDateRange(visitDateFrom, visitDateTo)
-    }
-
-    def 'should invoke validate range when both dates are not null'() {
-        given:
-            visitValidationService = Spy()
-            def visitDateFrom = LocalDateTime.of(2020, 1, 1, 12, 0)
-            def visitDateTo = LocalDateTime.of(2020, 1, 1, 13, 0)
-
-            def visitStatus = VisitStatus.AVAILABLE.name()
-            def visitFilter
-                    = VisitFixtures.createVisitFilterWithStatusAndDates(visitStatus, visitDateFrom, visitDateTo)
-
-        when:
-            visitValidationService.validateDates(visitFilter)
-
-        then:
-            1 * visitValidationService.validateDateRange(visitDateFrom, visitDateTo)
     }
 
     def 'should throw exception when dateFrom is after dateBefore'() {
@@ -156,6 +140,51 @@ class VisitValidationServiceTest extends Specification {
 
         when:
             def actual = visitValidationService.validateDateRange(dateBefore, dateAfter)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should throw exception when searching with physician id and physician specialization'() {
+        given:
+            def physicianId = 'physicianId'
+            def physicianSpecialization = 'Radiologist'
+            def visitFilter
+                    = VisitFixtures.createVisitFilterWithPhysicianIdAndSpecialization(physicianId, physicianSpecialization)
+
+        when:
+            def actual = visitValidationService.validatePhysicianIdAndSpecialization(visitFilter)
+
+        then:
+            actual = thrown(VisitException)
+
+        expect:
+            actual != null
+            actual instanceof VisitException
+            actual.message == VisitError.VISIT_INVALID_SEARCH_ERROR.getMessage()
+    }
+
+    def 'should not throw exception when searching with physician id or physician specialization'() {
+        given:
+            def physicianId = null
+            def physicianSpecialization = 'Radiologist'
+            def visitFilter
+                    = VisitFixtures.createVisitFilterWithPhysicianIdAndSpecialization(physicianId, physicianSpecialization)
+
+        when:
+            def actual = visitValidationService.validatePhysicianIdAndSpecialization(visitFilter)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should not throw exception when searching with existing patient id'() {
+        given:
+            def patientId = 'patientId'
+            clientsService.getPatientResponseDTO(patientId) >> PatientResponseDTO.builder().build()
+
+        when:
+            def actual = visitValidationService.findPatientIfPresent(patientId)
 
         then:
             noExceptionThrown()

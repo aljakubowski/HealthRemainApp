@@ -12,7 +12,9 @@ public enum VisitError {
     VISIT_PAST_DATE_INVALID_ERROR(Descriptions.VISIT_PAST_DATE_INVALID_ERROR, HttpStatus.NOT_FOUND),
     VISIT_FUTURE_DATE_INVALID_ERROR(Descriptions.VISIT_FUTURE_DATE_INVALID_ERROR, HttpStatus.NOT_FOUND),
     VISIT_INVALID_STATUS_ERROR(Descriptions.VISIT_INVALID_STATUS_ERROR, HttpStatus.NOT_FOUND),
-    VISIT_INVALID_AVAILABLE_STATUS_ERROR(Descriptions.VISIT_INVALID_AVAILABLE_STATUS_ERROR, HttpStatus.NOT_FOUND);
+    VISIT_INVALID_AVAILABLE_STATUS_ERROR(Descriptions.VISIT_INVALID_AVAILABLE_STATUS_ERROR, HttpStatus.NOT_FOUND),
+    VISIT_INVALID_SEARCH_ERROR(Descriptions.VISIT_INVALID_SEARCH_ERROR, HttpStatus.NOT_FOUND),
+    VISIT_INVALID_PATIENT_ERROR(Descriptions.VISIT_INVALID_PATIENT_ERROR, HttpStatus.NOT_FOUND);
 
     private final String message;
     private final HttpStatus httpStatus;
@@ -30,6 +32,8 @@ public enum VisitError {
         private static final String VISIT_FUTURE_DATE_INVALID_ERROR = "Completed and Unrealized Visits cannot take place in the future";
         private static final String VISIT_INVALID_STATUS_ERROR = "Visit status invalid. Valid statuses: AVAILABLE, RESERVED, COMPLETED, UNREALIZED";
         private static final String VISIT_INVALID_AVAILABLE_STATUS_ERROR = "Visit status cannot be changed to Available when Patient is enrolled";
+        private static final String VISIT_INVALID_SEARCH_ERROR = "It is not allowed to search by Physician Id and Physician Specialization";
+        private static final String VISIT_INVALID_PATIENT_ERROR = "Patient does not exist";
     }
 
 }

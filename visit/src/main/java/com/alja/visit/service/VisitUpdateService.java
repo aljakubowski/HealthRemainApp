@@ -20,6 +20,14 @@ public class VisitUpdateService {
     private final ClientsService clientsService;
     private final VisitValidationService visitValidationService;
 
+    public void appointVisit(VisitEntity visitToAppoint, String patientId) {
+        visitToAppoint.appointVisit(patientId);
+    }
+
+    public void cancelVisit(VisitEntity visitToAppoint) {
+        visitToAppoint.cancelVisit();
+    }
+
     public VisitEntity updateVisit(VisitEntity visitToUpdate, VisitUpdateDTO visitUpdateDTO) {
 
         if (Objects.nonNull(visitUpdateDTO.getVisitDate())
@@ -42,7 +50,7 @@ public class VisitUpdateService {
         }
 
         if (StringUtils.isNotBlank(visitUpdateDTO.getVisitStatus())
-        && !visitToUpdate.getVisitStatus().name().equalsIgnoreCase(visitUpdateDTO.getVisitStatus())) {
+                && !visitToUpdate.getVisitStatus().name().equalsIgnoreCase(visitUpdateDTO.getVisitStatus())) {
             updateVisitStatus(visitToUpdate, getStatus(visitUpdateDTO.getVisitStatus()));
         }
 

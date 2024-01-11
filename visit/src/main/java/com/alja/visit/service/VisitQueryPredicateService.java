@@ -1,6 +1,7 @@
 package com.alja.visit.service;
 
 import com.alja.common.enums.VisitStatus;
+import com.alja.visit.dto.VisitCommonFilterDTO;
 import com.alja.visit.dto.VisitFilterDTO;
 import com.alja.visit.model.QVisitEntity;
 import com.querydsl.core.BooleanBuilder;
@@ -33,6 +34,32 @@ public class VisitQueryPredicateService {
         if (validFieldValue(visitFilter.getPatientId())) {
             predicate.and(qVisitEntity.patientId.eq(visitFilter.getPatientId()));
         }
+        if (validDateFieldValue(visitFilter.getVisitDateFrom())) {
+            predicate.and(qVisitEntity.visitStartDate.goe(visitFilter.getVisitDateFrom()));
+        }
+
+        if (validDateFieldValue(visitFilter.getVisitDateTo())) {
+            predicate.and(qVisitEntity.visitEndDate.loe(visitFilter.getVisitDateTo()));
+        }
+
+        return predicate;
+    }
+
+    public Predicate getPredicatePatientVisits(VisitCommonFilterDTO visitFilter) {
+
+        QVisitEntity qVisitEntity = new QVisitEntity("visit");
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        predicate.and(qVisitEntity.visitStatus.eq(VisitStatus.AVAILABLE));
+
+        if (validFieldValue(visitFilter.getPhysicianId())) {
+            predicate.and(qVisitEntity.physicianId.eq(visitFilter.getPhysicianId()));
+        }
+
+        if (validFieldValue(visitFilter.getPhysicianSpecialization())) {
+            predicate.and(qVisitEntity.physicianSpecialization.eq(visitFilter.getPhysicianSpecialization()));
+        }
+
         if (validDateFieldValue(visitFilter.getVisitDateFrom())) {
             predicate.and(qVisitEntity.visitStartDate.goe(visitFilter.getVisitDateFrom()));
         }

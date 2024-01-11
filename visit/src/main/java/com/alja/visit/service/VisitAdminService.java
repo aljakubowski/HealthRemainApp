@@ -11,7 +11,6 @@ import com.querydsl.core.types.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.IterableUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +27,14 @@ public class VisitAdminService {
     private final VisitValidationService visitValidationService;
     private final VisitQueryPredicateService visitQueryPredicateService;
     private final VisitUpdateService visitUpdateService;
-    private final ClientsService clientsService;
+    private final VisitResponseService visitResponseService;
     private final VisitRepository visitRepository;
     private final VisitMapper visitMapper;
     private final VisitSorter visitSorter;
     private final LogService logService;
 
     //todo int test
+    // todo access from admin-panel app
 
     public VisitSimpleResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
         logService.logOperation(ADD_VISIT.logMessage, visitNewDTO.getVisitDate().toString());
@@ -63,6 +63,7 @@ public class VisitAdminService {
         }
         visitValidationService.validateStatus(visitFilter.getVisitStatus());
         visitValidationService.validateDates(visitFilter);
+        visitValidationService.validatePhysicianIdAndSpecialization(visitFilter);
 
         Predicate predicate = visitQueryPredicateService.getPredicateVisits(visitFilter);
         Sort sort = visitSorter.getDefaultSort();
@@ -99,36 +100,16 @@ public class VisitAdminService {
     }
 
     private String getPhysicianSpecialization(String physicianId) {
-        PhysicianResponseDTO physicianResponseDTO = clientsService.getPhysicianResponseDTO(physicianId);
+        PhysicianResponseDTO physicianResponseDTO = visitResponseService.getPhysicianResponse(physicianId);
         return physicianResponseDTO.getPhysiciansSpecialization();
     }
 
     private VisitSimpleResponseDTO getVisitSimpleResponse(VisitEntity visitEntity) {
-        return VisitSimpleResponseDTO.builder()
-                .visitId(visitEntity.getVisitId())
-                .physicianResponseDTO(clientsService.getPhysicianResponseDTO(visitEntity.getPhysicianId()))
-                .visitStartDate(visitEntity.getVisitStartDate())
-                .visitEndDate(visitEntity.getVisitEndDate())
-                .visitStatus(visitEntity.getVisitStatus())
-                .build();
+        return visitResponseService.getVisitSimpleResponse(visitEntity);
     }
 
     private VisitResponseDTO getVisitResponse(VisitEntity visitEntity) {
-        return VisitResponseDTO.builder()
-                .visitId(visitEntity.getVisitId())
-                .physicianResponseDTO(clientsService.getPhysicianResponseDTO(visitEntity.getPhysicianId()))
-                .patientResponseDTO(getPatientResponseIfRegisteredVisit(visitEntity.getPatientId()))
-                .visitStartDate(visitEntity.getVisitStartDate())
-                .visitEndDate(visitEntity.getVisitEndDate())
-                .visitStatus(visitEntity.getVisitStatus())
-                .physicianRecommendations(visitEntity.getPhysicianRecommendations())
-                .build();
+        return visitResponseService.getVisitResponse(visitEntity);
     }
 
-    private PatientResponseDTO getPatientResponseIfRegisteredVisit(String patientId) {
-        if (StringUtils.isBlank(patientId)) {
-            return null;
-        }
-        return clientsService.getPatientResponseDTO(patientId);
-    }
 }

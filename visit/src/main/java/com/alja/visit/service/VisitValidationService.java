@@ -3,10 +3,13 @@ package com.alja.visit.service;
 import com.alja.common.enums.VisitStatus;
 import com.alja.errors.VisitError;
 import com.alja.exception.VisitException;
-import com.alja.visit.dto.VisitFilterDTO;
+import com.alja.patient.dto.PatientResponseDTO;
+import com.alja.visit.dto.VisitCommonFilterDTO;
 import com.alja.visit.model.VisitEntity;
 import com.alja.visit.model.repository.VisitRepository;
+import feign.FeignException;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ import java.time.LocalDateTime;
 public class VisitValidationService {
 
     private final VisitRepository visitRepository;
+    private final ClientsService clientsService;
 
     private final static Integer VISIT_STANDARD_LENGTH = 30;
 
@@ -43,7 +47,6 @@ public class VisitValidationService {
     }
 
     public void validatePatientAvailability(String patientId, LocalDateTime visitDate) {
-        System.out.println();
         visitRepository.findVisitEntitiesByPatientId(patientId)
                 .forEach(visitEntity -> checkIfVisitCoincide(visitDate,
                         visitEntity.getVisitStartDate(),
@@ -64,7 +67,7 @@ public class VisitValidationService {
         }
     }
 
-    public void validateDates(VisitFilterDTO visitFilter) {
+    public void validateDates(VisitCommonFilterDTO visitFilter) {
         LocalDateTime visitDateFrom = visitFilter.getVisitDateFrom();
         LocalDateTime visitDateTo = visitFilter.getVisitDateTo();
 
@@ -79,6 +82,21 @@ public class VisitValidationService {
     public void validateDateRange(LocalDateTime visitDateFrom, LocalDateTime visitDateTo) {
         if (visitDateFrom.isAfter(visitDateTo)) {
             throw new VisitException(VisitError.VISIT_DATE_INVALID_RANGE_ERROR);
+        }
+    }
+
+    public void validatePhysicianIdAndSpecialization(VisitCommonFilterDTO visitFilter) {
+        if (StringUtils.isNotBlank(visitFilter.getPhysicianId())
+                && StringUtils.isNotBlank(visitFilter.getPhysicianSpecialization())) {
+            throw new VisitException(VisitError.VISIT_INVALID_SEARCH_ERROR);
+        }
+    }
+
+    public void findPatientIfPresent(String patientId) {
+        try {
+            PatientResponseDTO p = clientsService.getPatientResponseDTO(patientId);
+        } catch (FeignException e) {
+            throw new VisitException(VisitError.VISIT_INVALID_PATIENT_ERROR);
         }
     }
 

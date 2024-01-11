@@ -48,4 +48,14 @@ public class VisitEntity {
     public void updatePhysicianRecommendations(List<String> physicianRecommendations){
         this.physicianRecommendations = physicianRecommendations;
     }
+
+    public void appointVisit(String patientId){
+        this.patientId = patientId;
+        this.visitStatus = VisitStatus.RESERVED;
+    }
+
+    public void cancelVisit(){
+        this.patientId = null;
+        this.visitStatus = VisitStatus.AVAILABLE;
+    }
 }

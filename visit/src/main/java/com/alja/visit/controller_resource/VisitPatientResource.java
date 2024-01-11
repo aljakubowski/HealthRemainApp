@@ -1,51 +1,35 @@
 package com.alja.visit.controller_resource;
 
-import com.alja.visit.dto.*;
+import com.alja.visit.dto.VisitCommonFilterDTO;
+import com.alja.visit.dto.VisitResponseDTO;
+import com.alja.visit.dto.VisitSimpleResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.alja.visit.controller_resource.VisitAdminResource.RESOURCE_PATH;
+import static com.alja.visit.controller_resource.VisitPatientResource.RESOURCE_PATH;
 
 @RequestMapping(RESOURCE_PATH)
 public interface VisitPatientResource {
 
     String RESOURCE_PATH = "/api/v1/visit/patient";
+    String PATIENT_ID_PATH = "/{patientId}";
     String VISIT_ID_PATH = "/{visitId}";
 
-    //todo create Patient module ? to register, update data, manage visits ?
+    @GetMapping(PATIENT_ID_PATH)
+    List<VisitSimpleResponseDTO> getAllPatientVisits(@PathVariable("patientId") String patientId);
 
+    @GetMapping()
+    List<VisitSimpleResponseDTO> searchAvailableVisitsWithFilter(@Valid @RequestBody VisitCommonFilterDTO visitCommonFilterDTO);
 
-    //todo implement methods
-    //  appoint visit, cancel visit
-    //  get visit by id
-    //  get all patient visits
-    //      get all RESERVED vs COMPLETED visits?
-    //  get (search) all visists by physician / specialization ?
-    // get all physicianRecommendations for all visits?
+    @GetMapping(PATIENT_ID_PATH + VISIT_ID_PATH)
+    VisitResponseDTO getVisitById(@PathVariable String patientId, @PathVariable String visitId);
 
-//    @PostMapping
-//    VisitSimpleResponseDTO addNewVisit(@Valid @RequestBody VisitNewDTO visitNewDTO);
-//
-//    @GetMapping(VISIT_ID_PATH)
-//    VisitResponseDTO getVisitById(@PathVariable String visitId);
-//
-//
-//    //todo visits GET filter with sort?     order, sort, pageable  ???
-//    @GetMapping
-//    List<VisitSimpleResponseDTO> getVisitsWithFilter(@Valid @RequestBody(required = false) VisitFilterDTO visitFilter);
-//    //fixme is needed?
-//
-//    @GetMapping
-//    List<VisitSimpleResponseDTO> getAllVisits();
-//
-//
-//    @PutMapping(VISIT_ID_PATH)
-//    VisitResponseDTO updateVisit(@PathVariable String visitId,
-//                                 @Valid @RequestBody VisitUpdateDTO visitUpdateDTO);
-//
-//    @DeleteMapping(VISIT_ID_PATH)
-//    VisitResponseDTO deleteVisitById(@PathVariable String visitId);
+    @PostMapping(PATIENT_ID_PATH + VISIT_ID_PATH)
+    VisitSimpleResponseDTO makeVisitAppointment(@PathVariable("patientId") String patientId, @PathVariable("visitId") String visitId);
+
+    @PutMapping(PATIENT_ID_PATH + VISIT_ID_PATH)
+    VisitSimpleResponseDTO cancelVisitAppointment(@PathVariable("patientId") String patientId, @PathVariable("visitId") String visitId);
 
 }

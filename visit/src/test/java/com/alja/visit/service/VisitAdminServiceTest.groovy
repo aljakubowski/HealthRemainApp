@@ -16,7 +16,7 @@ class VisitAdminServiceTest extends Specification {
     private VisitValidationService visitValidationService = Mock()
     private VisitQueryPredicateService visitQueryPredicateService = Mock()
     private VisitUpdateService visitUpdateService = Mock()
-    private ClientsService clientsService = Mock()
+    private VisitResponseService visitResponseService = Mock()
     private VisitRepository visitRepository = Mock()
     private VisitMapper visitMapper = Mock()
     private VisitSorter visitSorter = Mock()
@@ -27,7 +27,7 @@ class VisitAdminServiceTest extends Specification {
                 visitValidationService,
                 visitQueryPredicateService,
                 visitUpdateService,
-                clientsService,
+                visitResponseService,
                 visitRepository,
                 visitMapper,
                 visitSorter,
@@ -53,9 +53,14 @@ class VisitAdminServiceTest extends Specification {
             def visitEntity = VisitFixtures.createVisitEntityWithDatesAndStatusAndPhysician(
                     visitDate, visitEndDate, visitStatus, physicianId)
 
+            def visitSimpleResponse
+                    = VisitFixtures.createVisitSimpleResponseDTO(physicianResponse, visitEntity)
+
+            visitAdminService.getPhysicianSpecialization(physicianId) >> physicianSpecialization
             visitMapper.toVisitEntity(visitNewDTO, physicianSpecialization, visitEndDate) >> visitEntity
             visitValidationService.getVisitEndDate(visitNewDTO.visitDate) >> visitEndDate
-            clientsService.getPhysicianResponseDTO(_ as String) >> physicianResponse
+            visitResponseService.getPhysicianResponse(physicianId) >> physicianResponse
+            visitResponseService.getVisitSimpleResponse(visitEntity) >> visitSimpleResponse
 
         when:
             def result = visitAdminService.addNewVisit(visitNewDTO)
@@ -90,10 +95,13 @@ class VisitAdminServiceTest extends Specification {
             def visitEntity = VisitFixtures.createVisitEntityWithDatesAndStatusAndPhysician(
                     visitDate, visitEndDate, visitStatus, physicianId)
 
+            def visitResponse
+                    = VisitFixtures.createVisitResponseDTO(physicianResponse, visitEntity)
+
             visitMapper.toVisitEntity(visitNewDTO, physicianSpecialization, visitEndDate) >> visitEntity
             visitValidationService.getVisitEndDate(visitNewDTO.visitDate) >> visitEndDate
-            clientsService.getPhysicianResponseDTO(_ as String) >> physicianResponse
             visitValidationService.findVisitIfPresent(visitId) >> visitEntity
+            visitResponseService.getVisitResponse(visitEntity) >> visitResponse
 
         when:
             def result = visitAdminService.getVisitById(visitId)
@@ -107,7 +115,7 @@ class VisitAdminServiceTest extends Specification {
             result.visitStartDate == visitDate
             result.visitEndDate == visitEndDate
             result.visitStatus == visitStatus
-            result.physicianRecommendations == null
+            result.physicianRecommendations.size() == 0
     }
 
     def 'should get visits with filter'() {
@@ -133,9 +141,12 @@ class VisitAdminServiceTest extends Specification {
             def visitFilter = VisitFixtures.createVisitFilterWithAllFields(
                     physicianId, physicianSpecialization, patientId, visitStatus.name(), visitDateFilter, visitEndDateFilter)
 
+            def visitSimpleResponse
+                    = VisitFixtures.createVisitSimpleResponseDTO(physicianResponse, visitEntity)
+
             visitMapper.toVisitEntity(visitNewDTO, physicianSpecialization, visitEndDate) >> visitEntity
             visitValidationService.getVisitEndDate(visitNewDTO.visitDate) >> visitEndDate
-            clientsService.getPhysicianResponseDTO(_ as String) >> physicianResponse
+            visitResponseService.getVisitSimpleResponse(visitEntity) >> visitSimpleResponse
             visitQueryPredicateService.getPredicateVisits(visitFilter) >> _
             visitSorter.getDefaultSort() >> _
             visitRepository.findAll(_ as Predicate, _ as Sort) >> [visitEntity]
@@ -185,9 +196,12 @@ class VisitAdminServiceTest extends Specification {
             def physicianResponse = VisitFixtures.createPhysicianResponseDtoWithCustomFields(
                     physicianIdUpdated, firstNameUpdated, lastNameUpdated, physicianSpecializationUpdated)
 
+            def visitSimpleResponse
+                    = VisitFixtures.createVisitSimpleResponseDTO(physicianResponse, visitEntityUpdated)
+
             visitValidationService.findVisitIfPresent(visitId) >> visitEntity
             visitUpdateService.updateVisit(visitEntity, visitUpdateDTO) >> visitEntityUpdated
-            clientsService.getPhysicianResponseDTO(_ as String) >> physicianResponse
+            visitResponseService.getVisitSimpleResponse(visitEntityUpdated) >> visitSimpleResponse
 
         when:
             def result = visitAdminService.updateVisit(visitId, visitUpdateDTO)
@@ -220,8 +234,11 @@ class VisitAdminServiceTest extends Specification {
             def physicianResponse = VisitFixtures.createPhysicianResponseDtoWithCustomFields(
                     physicianId, firstName, lastName, physicianSpecialization)
 
+            def visitSimpleResponse
+                    = VisitFixtures.createVisitSimpleResponseDTO(physicianResponse, visitEntity)
+
             visitValidationService.findVisitIfPresent(visitId) >> visitEntity
-            clientsService.getPhysicianResponseDTO(_ as String) >> physicianResponse
+            visitResponseService.getVisitSimpleResponse(visitEntity) >> visitSimpleResponse
 
         when:
             def result = visitAdminService.deleteVisitById(visitId)
@@ -253,9 +270,12 @@ class VisitAdminServiceTest extends Specification {
             def visitEntity = VisitFixtures.createVisitEntityWithDatesAndStatusAndPhysician(
                     visitDate, visitEndDate, visitStatus, physicianId)
 
+            def visitSimpleResponse
+                    = VisitFixtures.createVisitSimpleResponseDTO(physicianResponse, visitEntity)
+
             visitSorter.getDefaultSort() >> _
             visitRepository.findAll(_) >> [visitEntity]
-            clientsService.getPhysicianResponseDTO(_ as String) >> physicianResponse
+            visitResponseService.getVisitSimpleResponse(visitEntity) >> visitSimpleResponse
 
         when:
             def result = visitAdminService.getAllVisit()
@@ -280,43 +300,13 @@ class VisitAdminServiceTest extends Specification {
             def physicianResponse
                     = VisitFixtures.createPhysicianResponseDtoWithSpecialization(physicianSpecialization)
 
-            clientsService.getPhysicianResponseDTO(physicianId) >> physicianResponse
+            visitResponseService.getPhysicianResponse(physicianId) >> physicianResponse
 
         when:
             def result = visitAdminService.getPhysicianSpecialization(physicianId)
 
         then:
             result == physicianSpecialization
-    }
-
-    def 'should get patient response if registered visit'() {
-        given:
-            def patientId = "patientId"
-            def firstName = 'Jan'
-            def lastName = 'Dobry'
-            def patientResponse = VisitFixtures.createPatientResponseDTO(patientId, firstName, lastName)
-
-            clientsService.getPatientResponseDTO(patientId) >> patientResponse
-
-        when:
-            def result = visitAdminService.getPatientResponseIfRegisteredVisit(patientId)
-
-        then:
-            result != null
-            result.patientId == patientId
-            result.firstName == firstName
-            result.lastName == lastName
-    }
-
-    def 'should return null for patient response if patient id is blank'(String patientId) {
-        expect:
-            visitAdminService.getPatientResponseIfRegisteredVisit(patientId) == result
-
-        where:
-            patientId | result
-            ''        | null
-            ' '       | null
-            null      | null
     }
 
 }
