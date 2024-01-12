@@ -3,6 +3,7 @@ package com.alja.visit.fixtures;
 import com.alja.common.enums.VisitStatus;
 import com.alja.patient.dto.PatientResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
+import com.alja.physician.dto.PhysicianSpecializationDTO;
 import com.alja.visit.dto.*;
 import com.alja.visit.model.VisitEntity;
 
@@ -230,6 +231,12 @@ public class VisitFixtures {
                 .build();
     }
 
+    public static PatientResponseDTO createPatientResponseDTOWithId(String patientId) {
+        return PatientResponseDTO.builder()
+                .patientId(patientId)
+                .build();
+    }
+
     public static VisitSimpleResponseDTO createVisitSimpleResponseDTO(
             PhysicianResponseDTO physicianResponseDTO, VisitEntity visitEntity) {
         return VisitSimpleResponseDTO.builder()
@@ -249,6 +256,10 @@ public class VisitFixtures {
                 .visitStatus(visitEntity.getVisitStatus())
                 .physicianRecommendations(List.of())
                 .build();
+    }
+
+    public static PhysicianSpecializationDTO getPhysicianSpecializationDtoWithName(String name){
+        return PhysicianSpecializationDTO.builder().specializationName(name).build();
     }
 
 }

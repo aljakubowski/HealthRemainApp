@@ -4,6 +4,7 @@ import com.alja.common.enums.VisitStatus;
 import com.alja.errors.VisitError;
 import com.alja.exception.VisitException;
 import com.alja.patient.dto.PatientResponseDTO;
+import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.visit.dto.VisitCommonFilterDTO;
 import com.alja.visit.model.VisitEntity;
 import com.alja.visit.model.repository.VisitRepository;
@@ -13,6 +14,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -40,6 +44,7 @@ public class VisitValidationService {
     }
 
     public void validatePhysicianAvailability(String physicianId, LocalDateTime visitDateToCheck) {
+        validateIfPhysicianPresent(physicianId);
         visitRepository.findVisitEntitiesByPhysicianId(physicianId)
                 .forEach(visitEntity -> checkIfVisitCoincide(visitDateToCheck,
                         visitEntity.getVisitStartDate(),
@@ -63,9 +68,11 @@ public class VisitValidationService {
             return;
         }
         if (!VisitStatus.isValid(visitStatus)) {
-            throw new VisitException(VisitError.VISIT_INVALID_STATUS_ERROR);
+            List<String> availableStatuses = getVisitStatusList();
+            throw new VisitException(VisitError.VISIT_INVALID_STATUS_ERROR, availableStatuses.toString());
         }
     }
+
 
     public void validateDates(VisitCommonFilterDTO visitFilter) {
         LocalDateTime visitDateFrom = visitFilter.getVisitDateFrom();
@@ -90,13 +97,56 @@ public class VisitValidationService {
                 && StringUtils.isNotBlank(visitFilter.getPhysicianSpecialization())) {
             throw new VisitException(VisitError.VISIT_INVALID_SEARCH_ERROR);
         }
+        if (StringUtils.isNotBlank(visitFilter.getPhysicianSpecialization())) {
+            validateAvailablePhysicianSpecializations(visitFilter.getPhysicianSpecialization());
+        }
     }
 
-    public void findPatientIfPresent(String patientId) {
+    private void validateAvailablePhysicianSpecializations(String physicianSpecialization) {
+        List<String> physicianSpecializations = clientsService.getAvailableSpecializations();
+        if (physicianSpecializations.stream().noneMatch(p -> p.equalsIgnoreCase(physicianSpecialization))) {
+            throw new VisitException(VisitError.VISIT_INVALID_PHYSICIAN_SPECIALIZATION_ERROR,
+                    physicianSpecializations.toString());
+        }
+    }
+
+    public void validateIfPhysicianPresent(String physicianId) {
+        PhysicianResponseDTO physicianResponse;
         try {
-            PatientResponseDTO p = clientsService.getPatientResponseDTO(patientId);
+            physicianResponse = clientsService.getPhysicianResponseDTO(physicianId);
         } catch (FeignException e) {
+            throw new VisitException(VisitError.VISIT_INVALID_PHYSICIAN_ERROR);
+        }
+        if (StringUtils.isBlank(physicianResponse.getPhysicianId())) {
+            throw new VisitException(VisitError.VISIT_INVALID_PHYSICIAN_ERROR);
+        }
+    }
+
+    public void validateIfPatientPresent(String patientId) {
+        PatientResponseDTO patientResponse;
+        try {
+            patientResponse = clientsService.getPatientResponseDTO(patientId);
+        } catch (RuntimeException e) {
             throw new VisitException(VisitError.VISIT_INVALID_PATIENT_ERROR);
+        }
+        validateIfEmptyId(patientResponse.getPatientId());
+    }
+
+    public void validateIfReserved(VisitStatus visitStatus) {
+        if (visitStatus == VisitStatus.AVAILABLE) {
+            throw new VisitException(VisitError.VISIT_AVAILABLE_ERROR);
+        }
+    }
+
+    public void validateIfPatientsVisit(String patientId, String visitPatientId) {
+        if (!patientId.equals(visitPatientId)) {
+            throw new VisitException(VisitError.VISIT_INVALID_ID_ERROR);
+        }
+    }
+
+    public void validateIfVisitAvailable(String visitPatientId, VisitStatus visitStatus) {
+        if (StringUtils.isNotBlank(visitPatientId) || !visitStatus.equals(VisitStatus.AVAILABLE)) {
+            throw new VisitException(VisitError.VISIT_NOT_AVAILABLE_ERROR);
         }
     }
 
@@ -143,6 +193,12 @@ public class VisitValidationService {
         }
     }
 
+    private void validateIfEmptyId(String patientId) {
+        if (StringUtils.isBlank(patientId)) {
+            throw new VisitException(VisitError.VISIT_INVALID_PATIENT_ERROR);
+        }
+    }
+
     private boolean dateIsAfterOrEqual(LocalDateTime requestedVisitDate, LocalDateTime visitDateStart) {
         return !requestedVisitDate.isBefore(visitDateStart);
     }
@@ -150,4 +206,11 @@ public class VisitValidationService {
     private boolean dateIsBeforeOrEqual(LocalDateTime requestedVisitDate, LocalDateTime visitDateStart) {
         return !requestedVisitDate.isAfter(visitDateStart);
     }
+
+    private List<String> getVisitStatusList() {
+        return Arrays.stream(VisitStatus.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
+
 }

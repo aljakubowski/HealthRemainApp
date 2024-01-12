@@ -2,6 +2,7 @@ package com.alja.visit.service;
 
 import com.alja.patient.dto.PatientResponseDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
+import com.alja.visit.dto.VisitCheckResponseDTO;
 import com.alja.visit.dto.VisitResponseDTO;
 import com.alja.visit.dto.VisitSimpleResponseDTO;
 import com.alja.visit.model.VisitEntity;
@@ -40,8 +41,11 @@ public class VisitResponseService {
         return clientsService.getPhysicianResponseDTO(physicianId);
     }
 
+    public VisitCheckResponseDTO getCheckResponse(boolean hasVisits) {
+        return VisitCheckResponseDTO.builder().hasVisits(hasVisits).build();
+    }
+
     private PatientResponseDTO getPatientResponseIfRegisteredVisit(String patientId) {
         return clientsService.getPatientResponseDTO(patientId);
     }
-
 }

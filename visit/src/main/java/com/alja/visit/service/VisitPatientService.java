@@ -1,5 +1,6 @@
 package com.alja.visit.service;
 
+import com.alja.visit.dto.VisitCheckResponseDTO;
 import com.alja.visit.dto.VisitCommonFilterDTO;
 import com.alja.visit.dto.VisitResponseDTO;
 import com.alja.visit.dto.VisitSimpleResponseDTO;
@@ -30,12 +31,11 @@ public class VisitPatientService {
     private final LogService logService;
 
     //todo int test
-    //todo access from patient-panel app
 
     public List<VisitSimpleResponseDTO> getAllPatientVisits(String patientId) {
         logService.logOperation(GET_ALL_PATIENT_VISITS.logMessage, patientId);
 
-        visitValidationService.findPatientIfPresent(patientId);
+        visitValidationService.validateIfPatientPresent(patientId);
         List<VisitEntity> visits = visitRepository.findAllByPatientId(patientId);
         visitSorter.sortVisitsDefault(visits);
         return visits.stream().map(this::getVisitSimpleResponse).toList();
@@ -61,8 +61,10 @@ public class VisitPatientService {
     public VisitSimpleResponseDTO makeVisitAppointment(String patientId, String visitId) {
         logService.logOperation(APPOINTING_VISIT.logMessage, patientId, visitId);
 
-        visitValidationService.findPatientIfPresent(patientId);
+        visitValidationService.validateIfPatientPresent(patientId);
         VisitEntity visitEntity = visitValidationService.findVisitIfPresent(visitId);
+        visitValidationService.validateIfVisitAvailable(visitEntity.getPatientId(), visitEntity.getVisitStatus());
+
         visitUpdateService.appointVisit(visitEntity, patientId);
         visitRepository.save(visitEntity);
         return getVisitSimpleResponse(visitEntity);
@@ -71,11 +73,21 @@ public class VisitPatientService {
     public VisitSimpleResponseDTO cancelVisitAppointment(String patientId, String visitId) {
         logService.logOperation(CANCELING_VISIT.logMessage, patientId, visitId);
 
-        visitValidationService.findPatientIfPresent(patientId);
+        visitValidationService.validateIfPatientPresent(patientId);
         VisitEntity visitEntity = visitValidationService.findVisitIfPresent(visitId);
+        visitValidationService.validateIfPatientsVisit(patientId, visitEntity.getPatientId());
+
         visitUpdateService.cancelVisit(visitEntity);
         visitRepository.save(visitEntity);
         return getVisitSimpleResponse(visitEntity);
+    }
+
+    public VisitCheckResponseDTO checkVisit(String checkId) {
+        boolean hasVisits = true;
+        if (visitRepository.findVisitEntitiesByPhysicianId(checkId).isEmpty()) {
+            hasVisits = false;
+        }
+        return visitResponseService.getCheckResponse(hasVisits);
     }
 
     private VisitSimpleResponseDTO getVisitSimpleResponse(VisitEntity visitEntity) {

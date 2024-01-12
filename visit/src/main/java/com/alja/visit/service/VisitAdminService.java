@@ -34,7 +34,6 @@ public class VisitAdminService {
     private final LogService logService;
 
     //todo int test
-    // todo access from admin-panel app
 
     public VisitSimpleResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
         logService.logOperation(ADD_VISIT.logMessage, visitNewDTO.getVisitDate().toString());
@@ -86,7 +85,7 @@ public class VisitAdminService {
         logService.logOperation(DELETE_VISIT.logMessage, visitId);
 
         VisitEntity visitEntity = visitValidationService.findVisitIfPresent(visitId);
-
+        visitValidationService.validateIfReserved(visitEntity.getVisitStatus());
         visitRepository.delete(visitEntity);
         return getVisitSimpleResponse(visitEntity);
     }

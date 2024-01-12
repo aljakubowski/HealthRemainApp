@@ -17,39 +17,32 @@ public class VisitAdminController implements VisitAdminResource {
     private final VisitAdminService visitAdminService;
 
     @Override
-    public VisitSimpleResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
-        return visitAdminService.addNewVisit(visitNewDTO);
+    public ResponseEntity<VisitSimpleResponseDTO> addNewVisit(VisitNewDTO visitNewDTO) {
+        VisitSimpleResponseDTO visitSimpleResponseDTO = visitAdminService.addNewVisit(visitNewDTO);
+        return new ResponseEntity<>(visitSimpleResponseDTO, HttpStatus.CREATED);
     }
 
     @Override
-    public VisitResponseDTO getVisitById(String visitId) {
-        return visitAdminService.getVisitById(visitId);
-    }
-//    @Override
-//    public ResponseEntity<VisitResponseDTO> getVisitById(String visitId) {
-//        VisitResponseDTO visitResponseDTO = visitAdminService.getVisitById(visitId);
-//        System.out.println("ss");
-//        return new ResponseEntity<>(visitResponseDTO, HttpStatus.OK);
-//    }
-
-    //fixme refactor - method not needed
-//    @Override
-//    public List<VisitSimpleResponseDTO> getAllVisits() {
-//        return visitAdminService.getAllVisit();
-//    }
-
-    @Override
-    public List<VisitSimpleResponseDTO> getVisitsWithFilter(VisitFilterDTO visitFilter) {
-        return visitAdminService.getVisitsWithFilter(visitFilter);
+    public ResponseEntity<VisitResponseDTO> getVisitById(String visitId) {
+        VisitResponseDTO visitResponseDTO = visitAdminService.getVisitById(visitId);
+        return new ResponseEntity<>(visitResponseDTO, HttpStatus.OK);
     }
 
     @Override
-    public VisitSimpleResponseDTO updateVisit(String visitId, VisitUpdateDTO visitUpdateDTO) {
-        return visitAdminService.updateVisit(visitId, visitUpdateDTO);
+    public ResponseEntity<List<VisitSimpleResponseDTO>> getVisitsWithFilter(VisitFilterDTO visitFilter) {
+        List<VisitSimpleResponseDTO> visitSimpleResponsesDTO = visitAdminService.getVisitsWithFilter(visitFilter);;
+        return new ResponseEntity<>(visitSimpleResponsesDTO, HttpStatus.OK);
     }
 
     @Override
-    public VisitSimpleResponseDTO deleteVisitById(String visitId) {
-        return visitAdminService.deleteVisitById(visitId);
+    public ResponseEntity<VisitSimpleResponseDTO> updateVisit(String visitId, VisitUpdateDTO visitUpdateDTO) {
+        VisitSimpleResponseDTO visitSimpleResponseDTO = visitAdminService.updateVisit(visitId, visitUpdateDTO);;
+        return new ResponseEntity<>(visitSimpleResponseDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<VisitSimpleResponseDTO> deleteVisitById(String visitId) {
+        VisitSimpleResponseDTO visitSimpleResponseDTO = visitAdminService.deleteVisitById(visitId);
+        return new ResponseEntity<>(visitSimpleResponseDTO, HttpStatus.OK);
     }
 }

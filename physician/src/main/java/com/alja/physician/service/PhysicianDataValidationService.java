@@ -1,8 +1,8 @@
 package com.alja.physician.service;
 
+import com.alja.common.ContactDetailsDTO;
 import com.alja.errors.PhysicianError;
 import com.alja.exception.PhysicianException;
-import com.alja.common.ContactDetailsDTO;
 import com.alja.physician.model.PhysicianEntity;
 import com.alja.physician.model.repository.PhysicianRepository;
 import com.alja.physician.model.repository.PhysicianSpecializationRepository;
@@ -15,8 +15,9 @@ public class PhysicianDataValidationService {
 
     private final PhysicianRepository physicianRepository;
     private final PhysicianSpecializationRepository physicianSpecializationRepository;
+    private final ClientsService clientsService;
 
-    public PhysicianEntity findPhysicianIfPresent(String physicianId){
+    public PhysicianEntity findPhysicianIfPresent(String physicianId) {
         return physicianRepository.findPhysicianEntityByPhysicianId(physicianId)
                 .orElseThrow(() -> new PhysicianException(PhysicianError.PHYSICIAN_NOT_FOUND_ERROR));
     }
@@ -56,5 +57,11 @@ public class PhysicianDataValidationService {
                 .ifPresent(s -> {
                     throw new PhysicianException(PhysicianError.PHYSICIAN_EMAIL_ALREADY_EXISTS_ERROR);
                 });
+    }
+
+    public void validateAppointedVisits(String physicianId) {
+        if (clientsService.hasVisitsAppointed(physicianId)) {
+            throw new PhysicianException(PhysicianError.PHYSICIAN_APPOINTED_VISITS_ERROR);
+        }
     }
 }

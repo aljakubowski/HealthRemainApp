@@ -8,6 +8,7 @@ import com.alja.physician.model.Address;
 import com.alja.physician.model.ContactDetails;
 import com.alja.physician.model.PhysicianEntity;
 import com.alja.physician.model.PhysicianSpecializationEntity;
+import com.alja.visit.dto.VisitCheckResponseDTO;
 
 public class PhysicianFixtures {
 
@@ -246,6 +247,10 @@ public class PhysicianFixtures {
                 .contactDetails(contact)
                 .address(address)
                 .build();
+    }
+
+    public static VisitCheckResponseDTO getVisitCheckResponse(boolean value) {
+        return VisitCheckResponseDTO.builder().hasVisits(value).build();
     }
 
 }

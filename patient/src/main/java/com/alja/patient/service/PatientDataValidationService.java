@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -21,16 +19,6 @@ public class PatientDataValidationService {
     private final static Integer ADULT_AGE = 18;
 
     public void validateSocialSecurityNumber(String socialSecurityNumber) {
-//fixme CLEAR !!!!!!
-        List<String> p = patientRepository.findAllBySocialSecurityNumber(socialSecurityNumber);
-
-
-        Optional<PatientEntity> a = patientRepository.findPatientEntityByPatientId("if");
-
-//        List<Optional> pe = patientRepository.findPatientEntityByPatientId("ig");
-
-
-
         patientRepository.findAllBySocialSecurityNumber(
                         socialSecurityNumber).stream()
                 .filter(s -> s != null && !s.isEmpty())
@@ -40,7 +28,7 @@ public class PatientDataValidationService {
                 });
     }
 
-    public PatientEntity findPatientIfPresent(String patientId){
+    public PatientEntity findPatientIfPresent(String patientId) {
         return patientRepository.findPatientEntityByPatientId(patientId)
                 .orElseThrow(() -> new PatientException(PatientError.PATIENT_NOT_FOUND_ERROR));
     }
@@ -71,8 +59,16 @@ public class PatientDataValidationService {
     }
 
     public void validateAge(String birthDate) {
-        if (calculateAge(birthDate)<ADULT_AGE){
+        if (calculateAge(birthDate) < ADULT_AGE) {
             throw new PatientException(PatientError.PATIENT_MINOR_ERROR);
+        }
+    }
+
+    public void validateAppointedVisits(PatientEntity patientEntity) {
+        if (patientEntity.getVisitsId() != null) {
+            if (!patientEntity.getVisitsId().isEmpty()) {
+                throw new PatientException(PatientError.PATIENT_APPOINTED_VISITS_ERROR);
+            }
         }
     }
 

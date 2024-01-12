@@ -3,14 +3,15 @@ package com.alja.patient.service
 
 import com.alja.errors.PatientError
 import com.alja.exception.PatientException
+import com.alja.patient.fixtures.PatientFixtures
 import com.alja.patient.model.PatientEntity
 import com.alja.patient.model.repository.PatientRepository
 import spock.lang.Specification
 
 class PatientDataValidationServiceTest extends Specification {
 
-    PatientDataValidationService patientDataValidationService
-    PatientRepository patientRepository = Mock()
+    private PatientDataValidationService patientDataValidationService
+    private PatientRepository patientRepository = Mock()
 
     def setup() {
         patientDataValidationService = new PatientDataValidationService(
@@ -143,6 +144,34 @@ class PatientDataValidationServiceTest extends Specification {
 
         when:
             def actual = patientDataValidationService.validateAge(birthDate)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should throw an exception when patient has appointed visits'() {
+        given:
+            def visitId = "visitId"
+            def patientEntity = PatientFixtures.createPatientWithVisits(List.of(visitId))
+
+        when:
+            def actual = patientDataValidationService.validateAppointedVisits(patientEntity)
+
+        then:
+            actual = thrown(PatientException)
+
+        expect:
+            actual != null
+            actual instanceof PatientException
+            actual.message == PatientError.PATIENT_APPOINTED_VISITS_ERROR.getMessage()
+    }
+
+    def 'should not throw an exception when patient has no appointed visits'() {
+        given:
+            def patientEntity = PatientFixtures.createPatientWithVisits(List.of())
+
+        when:
+            def actual = patientDataValidationService.validateAppointedVisits(patientEntity)
 
         then:
             noExceptionThrown()

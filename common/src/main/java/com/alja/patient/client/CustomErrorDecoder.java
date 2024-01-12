@@ -1,7 +1,7 @@
 package com.alja.patient.client;
 
-import com.alja.errors.PhysicianError;
-import com.alja.exception.PhysicianException;
+import com.alja.errors.PatientError;
+import com.alja.exception.PatientException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CustomErrorDecoder implements ErrorDecoder {
-//fixme FIX ERROR HANDLING!
+    //fixme FIX ERROR HANDLING!
     private static final String ERROR_NAME = "errorName";
     private static final String EXCEPTION_NAME = "exceptionName";
 
@@ -25,8 +25,9 @@ public class CustomErrorDecoder implements ErrorDecoder {
         Map<String, String> responseValues = extractValues(responseBody);
         String errorName = responseValues.get(ERROR_NAME);
         String exceptionName = responseValues.get(EXCEPTION_NAME);
-        if (errorName.isEmpty() || exceptionName.isEmpty()){
+        if (errorName.isEmpty() || exceptionName.isEmpty()) {
             throw new RuntimeException();
+            //todo throw technical error custom? in all error decoders !
         }
         //todo error factory ? to retrieve required error
         return throwAppropriateException(methodKey, response, exceptionName, errorName);
@@ -35,8 +36,8 @@ public class CustomErrorDecoder implements ErrorDecoder {
     }
 
     private Exception throwAppropriateException(String methodKey, Response response, String exceptionName, String errorName) {
-        if (exceptionName.equals(PhysicianException.class.getSimpleName())) {
-            return new PhysicianException(PhysicianError.valueOf(errorName));
+        if (exceptionName.equals(PatientException.class.getSimpleName())) {
+            return new PatientException(PatientError.valueOf(errorName));
         }
         // todo Default behavior for other errors
         return defaultDecoder().decode(methodKey, response);

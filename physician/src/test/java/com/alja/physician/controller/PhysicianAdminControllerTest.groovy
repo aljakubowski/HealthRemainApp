@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 
-import static com.alja.physician.controller_resources.PhysiciansResource.RESOURCE_PATH
+import static com.alja.physician.controller_resources.PhysicianAdminResource.RESOURCE_PATH
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class PhysiciansControllerTest extends AppIntegrationTest {
+class PhysicianAdminControllerTest extends AppIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc

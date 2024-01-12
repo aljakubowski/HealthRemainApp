@@ -4,6 +4,8 @@ import com.alja.physician.controller_resources.PhysiciansSpecializationResource;
 import com.alja.physician.dto.PhysicianSpecializationDTO;
 import com.alja.physician.service.PhysiciansSpecializationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,22 +17,30 @@ public class PhysiciansSpecializationController implements PhysiciansSpecializat
     private final PhysiciansSpecializationService physiciansSpecializationService;
 
     @Override
-    public List<PhysicianSpecializationDTO> getAllSpecializations() {
-        return physiciansSpecializationService.getAllSpecializations();
+    public ResponseEntity<List<PhysicianSpecializationDTO>> getAllSpecializations() {
+        List<PhysicianSpecializationDTO> physicianSpecializationDTOs
+                = physiciansSpecializationService.getAllSpecializations();
+        return new ResponseEntity<>(physicianSpecializationDTOs, HttpStatus.OK);
     }
 
     @Override
-    public PhysicianSpecializationDTO addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
-        return physiciansSpecializationService.addNewSpecialization(physicianSpecializationDTO);
+    public ResponseEntity<PhysicianSpecializationDTO> addNewSpecialization(PhysicianSpecializationDTO physicianSpecializationDTO) {
+        PhysicianSpecializationDTO physicianSpecializationDTOResponse
+                = physiciansSpecializationService.addNewSpecialization(physicianSpecializationDTO);
+        return new ResponseEntity<>(physicianSpecializationDTOResponse, HttpStatus.CREATED);
     }
 
     @Override
-    public PhysicianSpecializationDTO updateSpecialization(String specializationName, String specializationNewName) {
-        return physiciansSpecializationService.updateSpecialization(specializationName, specializationNewName);
+    public ResponseEntity<PhysicianSpecializationDTO> updateSpecialization(String specializationName, String specializationNewName) {
+        PhysicianSpecializationDTO physicianSpecializationDTOResponse
+                = physiciansSpecializationService.updateSpecialization(specializationName, specializationNewName);
+        return new ResponseEntity<>(physicianSpecializationDTOResponse, HttpStatus.OK);
     }
 
     @Override
-    public PhysicianSpecializationDTO deleteSpecialization(String specializationName) {
-        return physiciansSpecializationService.deleteSpecialization(specializationName);
+    public ResponseEntity<PhysicianSpecializationDTO> deleteSpecialization(String specializationName) {
+        PhysicianSpecializationDTO physicianSpecializationDTOResponse
+                = physiciansSpecializationService.deleteSpecialization(specializationName);
+        return new ResponseEntity<>(physicianSpecializationDTOResponse, HttpStatus.OK);
     }
 }

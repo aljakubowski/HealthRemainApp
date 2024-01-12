@@ -67,4 +67,27 @@ class ClientsServiceTest extends Specification {
             ' '       | null
             null      | null
     }
+
+    def 'should get String list of available specializations'() {
+        given:
+            def specialization1 = "specialization1"
+            def specialization2 = "specialization2"
+
+            def physicianSpecializationDto1
+                    = VisitFixtures.getPhysicianSpecializationDtoWithName(specialization1)
+            def physicianSpecializationDto2
+                    = VisitFixtures.getPhysicianSpecializationDtoWithName(specialization2)
+
+            physicianClient.getAllSpecializations() >> [physicianSpecializationDto1, physicianSpecializationDto2]
+
+        when:
+            def result = clientsService.getAvailableSpecializations()
+
+        then:
+            result != null
+        result.size() == 2
+        result.get(0) == specialization1
+        result.get(1) == specialization2
+    }
+
 }

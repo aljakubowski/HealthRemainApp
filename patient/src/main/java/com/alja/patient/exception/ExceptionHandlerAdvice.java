@@ -1,12 +1,18 @@
 package com.alja.patient.exception;
 
+import com.alja.errors.ErrorResponseDto;
 import com.alja.exception.PatientException;
 import com.alja.patient.service.LogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
 
 
 @Slf4j
@@ -17,9 +23,31 @@ public class ExceptionHandlerAdvice {
     private final LogService logService;
 
     @ExceptionHandler(PatientException.class)
-    public ResponseEntity<PatientException> onPatientNotFound(PatientException exception) {
+    public ResponseEntity<ErrorResponseDto> onPatientNotFound(PatientException exception) {
         logService.logError(exception.getMessage());
-        return new ResponseEntity<>(exception, exception.getHttpStatus());
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                .message(exception.getMessage())
+                .localDateTime(exception.getLocalDateTime())
+                .httpStatus(exception.getHttpStatus())
+                .build();
+        return new ResponseEntity<>(errorResponseDto, exception.getHttpStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> onConstraintViolation(MethodArgumentNotValidException exception) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = exception.getBindingResult().getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .findFirst()
+                .get();
+        logService.logError(errorMessage);
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                .message(errorMessage)
+                .localDateTime(LocalDateTime.now())
+                .httpStatus(httpStatus)
+                .build();
+        return new ResponseEntity<>(errorResponseDto, httpStatus);
     }
 
 }

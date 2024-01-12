@@ -7,9 +7,9 @@ import com.alja.patient.dto.PatientUpdateDTO;
 import com.alja.patient.service.PatientService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -19,27 +19,26 @@ public class PatientController implements PatientResource {
     private final PatientService patientService;
 
     @Override
-    public PatientResponseDTO registerNewPatient(PatientRegisterDTO patientRegisterDTO) {
-        return patientService.registerNewPatient(patientRegisterDTO);
+    public ResponseEntity<PatientResponseDTO> registerNewPatientByPatient(PatientRegisterDTO patientRegisterDTO) {
+        PatientResponseDTO patientResponseDTO = patientService.registerNewPatient(patientRegisterDTO);
+        return new ResponseEntity<>(patientResponseDTO, HttpStatus.CREATED);
     }
 
     @Override
-    public List<PatientResponseDTO> getAllPatients() {
-        return patientService.getAllPatients();
+    public ResponseEntity<PatientResponseDTO> getPatientByIdByPatient(String patientId, String dataFormat) {
+        PatientResponseDTO patientResponseDTO = patientService.getPatientById(patientId, dataFormat);
+        return new ResponseEntity<>(patientResponseDTO, HttpStatus.OK);
     }
 
     @Override
-    public PatientResponseDTO getPatientById(String patientId, String dataFormat) {
-        return patientService.getPatientById(patientId, dataFormat);
+    public ResponseEntity<PatientResponseDTO> updatePatientByPatient(String patientId, PatientUpdateDTO patientUpdateDTO) {
+        PatientResponseDTO patientResponseDTO = patientService.updatePatient(patientId, patientUpdateDTO);
+        return new ResponseEntity<>(patientResponseDTO, HttpStatus.OK);
     }
 
     @Override
-    public PatientResponseDTO updatePatient(String patientId, PatientUpdateDTO patientUpdateDTO) {
-        return patientService.updatePatient(patientId, patientUpdateDTO);
-    }
-
-    @Override
-    public PatientResponseDTO deletePatientById(String patientId) {
-        return patientService.deletePatient(patientId);
+    public ResponseEntity<PatientResponseDTO> deletePatientByIdByPatient(String patientId) {
+        PatientResponseDTO patientResponseDTO = patientService.deletePatient(patientId);
+        return new ResponseEntity<>(patientResponseDTO, HttpStatus.OK);
     }
 }

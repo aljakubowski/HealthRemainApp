@@ -3,13 +3,13 @@ package com.alja.visit.service
 import com.alja.common.enums.VisitStatus
 import com.alja.errors.VisitError
 import com.alja.exception.VisitException
-import com.alja.patient.dto.PatientResponseDTO
 import com.alja.visit.fixtures.VisitFixtures
 import com.alja.visit.model.VisitEntity
 import com.alja.visit.model.repository.VisitRepository
 import spock.lang.Specification
 
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 
 class VisitValidationServiceTest extends Specification {
 
@@ -87,7 +87,11 @@ class VisitValidationServiceTest extends Specification {
 
     def 'should throw exception when visit status is invalid'() {
         given:
-            def invalidStatus = "invalid"
+            def invalidStatus = 'invalid'
+            def availableStatuses = Arrays.stream(VisitStatus.values())
+                    .map(Enum::name)
+                    .collect(Collectors.toList())
+            visitValidationService.getVisitStatusList() >> availableStatuses
 
         when:
             def actual = visitValidationService.validateStatus(invalidStatus)
@@ -98,7 +102,7 @@ class VisitValidationServiceTest extends Specification {
         expect:
             actual != null
             actual instanceof VisitException
-            actual.message == VisitError.VISIT_INVALID_STATUS_ERROR.getMessage()
+            actual.message == VisitError.VISIT_INVALID_STATUS_ERROR.getMessage() + availableStatuses.toString()
     }
 
     def 'should return if both dates are null'() {
@@ -139,7 +143,7 @@ class VisitValidationServiceTest extends Specification {
             def dateAfter = LocalDateTime.of(2020, 1, 1, 13, 0)
 
         when:
-            def actual = visitValidationService.validateDateRange(dateBefore, dateAfter)
+            visitValidationService.validateDateRange(dateBefore, dateAfter)
 
         then:
             noExceptionThrown()
@@ -170,9 +174,41 @@ class VisitValidationServiceTest extends Specification {
             def physicianSpecialization = 'Radiologist'
             def visitFilter
                     = VisitFixtures.createVisitFilterWithPhysicianIdAndSpecialization(physicianId, physicianSpecialization)
+            clientsService.getAvailableSpecializations() >> [physicianSpecialization]
 
         when:
-            def actual = visitValidationService.validatePhysicianIdAndSpecialization(visitFilter)
+            visitValidationService.validatePhysicianIdAndSpecialization(visitFilter)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should throw exception when not found physician specialization'() {
+        given:
+            def requestedPhysicianSpecialization = 'Radiology'
+            def physicianSpecialization = 'Radiologist'
+            clientsService.getAvailableSpecializations() >> [physicianSpecialization]
+
+        when:
+            def actual = visitValidationService.validateAvailablePhysicianSpecializations(requestedPhysicianSpecialization)
+
+        then:
+            actual = thrown(VisitException)
+
+        expect:
+            actual != null
+            actual instanceof VisitException
+            actual.message == VisitError.VISIT_INVALID_PHYSICIAN_SPECIALIZATION_ERROR.getMessage() + [physicianSpecialization]
+    }
+
+    def 'should not throw exception when not found physician specialization'() {
+        given:
+            def requestedPhysicianSpecialization = 'Radiologist'
+            def physicianSpecialization = 'Radiologist'
+            clientsService.getAvailableSpecializations() >> [physicianSpecialization]
+
+        when:
+            visitValidationService.validateAvailablePhysicianSpecializations(requestedPhysicianSpecialization)
 
         then:
             noExceptionThrown()
@@ -181,10 +217,96 @@ class VisitValidationServiceTest extends Specification {
     def 'should not throw exception when searching with existing patient id'() {
         given:
             def patientId = 'patientId'
-            clientsService.getPatientResponseDTO(patientId) >> PatientResponseDTO.builder().build()
+            def patientResponse = VisitFixtures.createPatientResponseDTOWithId(patientId)
+            clientsService.getPatientResponseDTO(patientId) >> patientResponse
 
         when:
-            def actual = visitValidationService.findPatientIfPresent(patientId)
+            visitValidationService.validateIfPatientPresent(patientId)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should throw exception when visit is not reserved'() {
+        given:
+            def visitStatus = VisitStatus.AVAILABLE
+
+        when:
+            def actual = visitValidationService.validateIfReserved(visitStatus)
+
+        then:
+            actual = thrown(VisitException)
+
+        expect:
+            actual != null
+            actual instanceof VisitException
+            actual.message == VisitError.VISIT_AVAILABLE_ERROR.getMessage()
+    }
+
+    def 'should not throw exception when visit is reserved'() {
+        given:
+            def visitStatus = VisitStatus.RESERVED
+
+        when:
+            visitValidationService.validateIfReserved(visitStatus)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should throw exception when visit not belong to patient'() {
+        given:
+            def visitId = 'visitId'
+            def visitPatientId = 'visitPatientId'
+
+        when:
+            def actual = visitValidationService.validateIfPatientsVisit(visitId, visitPatientId)
+
+        then:
+            actual = thrown(VisitException)
+
+        expect:
+            actual != null
+            actual instanceof VisitException
+            actual.message == VisitError.VISIT_INVALID_ID_ERROR.getMessage()
+    }
+
+    def 'should not throw exception when visit belong to patient'() {
+        given:
+            def visitId = 'visitId'
+            def visitPatientId = 'visitId'
+
+        when:
+            visitValidationService.validateIfPatientsVisit(visitId, visitPatientId)
+
+        then:
+            noExceptionThrown()
+    }
+
+    def 'should throw exception when visit is not available'() {
+        given:
+            def visitPatientId = 'visitPatientId'
+            def visitStatus = VisitStatus.RESERVED
+
+        when:
+            def actual = visitValidationService.validateIfVisitAvailable(visitPatientId, visitStatus)
+
+        then:
+            actual = thrown(VisitException)
+
+        expect:
+            actual != null
+            actual instanceof VisitException
+            actual.message == VisitError.VISIT_NOT_AVAILABLE_ERROR.getMessage()
+    }
+
+    def 'should not throw exception when visit is available'() {
+        given:
+            def visitPatientId = ''
+            def visitStatus = VisitStatus.AVAILABLE
+
+        when:
+            visitValidationService.validateIfVisitAvailable(visitPatientId, visitStatus)
 
         then:
             noExceptionThrown()
@@ -235,7 +357,7 @@ class VisitValidationServiceTest extends Specification {
             def testedDate = LocalDateTime.of(2100, 1, 1, 11, 30)
 
         when:
-            def actual = visitValidationService.checkIfFutureDate(testedDate)
+            visitValidationService.checkIfFutureDate(testedDate)
 
         then:
             noExceptionThrown()
@@ -262,7 +384,7 @@ class VisitValidationServiceTest extends Specification {
             def testedDate = LocalDateTime.of(2000, 1, 1, 11, 30)
 
         when:
-            def actual = visitValidationService.checkIfPastDate(testedDate)
+            visitValidationService.checkIfPastDate(testedDate)
 
         then:
             noExceptionThrown()
@@ -300,6 +422,43 @@ class VisitValidationServiceTest extends Specification {
             noExceptionThrown()
     }
 
+    def 'should throw exception if patient id is empty'() {
+        given:
+            def patientId = ''
+
+        when:
+            def actual = visitValidationService.validateIfEmptyId(patientId)
+
+        then:
+            actual = thrown(VisitException)
+
+        expect:
+            actual != null
+            actual instanceof VisitException
+            actual.message == VisitError.VISIT_INVALID_PATIENT_ERROR.getMessage()
+
+    }
+
+    def 'should not throw exception if patient id is not empty'() {
+        given:
+            def patientId = 'patientId'
+        when:
+            visitValidationService.validateIfEmptyId(patientId)
+
+        then:
+            noExceptionThrown()
+    }
+
+
+
+
+
+
+
+
+
+
+
     def 'should return true if requestedVisitDate is equal tested date in dateIsAfterOrEqual'() {
         given:
             def requestedVisitDate = LocalDateTime.of(2023, 1, 1, 10, 0)
@@ -309,7 +468,7 @@ class VisitValidationServiceTest extends Specification {
             def actual = visitValidationService.dateIsAfterOrEqual(requestedVisitDate, testedDate)
 
         then:
-            actual == true
+            actual
     }
 
     def 'should return true if requestedVisitDate is after or equal tested date'() {
@@ -321,7 +480,7 @@ class VisitValidationServiceTest extends Specification {
             def actual = visitValidationService.dateIsAfterOrEqual(requestedVisitDate, testedDate)
 
         then:
-            actual == true
+            actual
     }
 
     def 'should return false if requestedVisitDate is before tested date'() {
@@ -333,7 +492,7 @@ class VisitValidationServiceTest extends Specification {
             def actual = visitValidationService.dateIsAfterOrEqual(requestedVisitDate, testedDate)
 
         then:
-            actual == false
+            !actual
     }
 
     def 'should return true if requestedVisitDate is equal tested date in dateIsBeforeOrEqual'() {
@@ -345,7 +504,7 @@ class VisitValidationServiceTest extends Specification {
             def actual = visitValidationService.dateIsBeforeOrEqual(requestedVisitDate, testedDate)
 
         then:
-            actual == true
+            actual
     }
 
     def 'should return true if requestedVisitDate is before tested date'() {
@@ -357,7 +516,7 @@ class VisitValidationServiceTest extends Specification {
             def actual = visitValidationService.dateIsBeforeOrEqual(requestedVisitDate, testedDate)
 
         then:
-            actual == true
+            actual
     }
 
     def 'should return false if requestedVisitDate is after tested date'() {
@@ -369,7 +528,8 @@ class VisitValidationServiceTest extends Specification {
             def actual = visitValidationService.dateIsBeforeOrEqual(requestedVisitDate, testedDate)
 
         then:
-            actual == false
+            !actual
     }
 
 }
+

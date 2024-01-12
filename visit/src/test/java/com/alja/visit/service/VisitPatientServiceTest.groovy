@@ -57,7 +57,7 @@ class VisitPatientServiceTest extends Specification {
 
         then:
             1 * logService.logOperation(GET_ALL_PATIENT_VISITS.logMessage, patientId)
-            1 * visitValidationService.findPatientIfPresent(patientId)
+            1 * visitValidationService.validateIfPatientPresent(patientId)
             1 * visitRepository.findAllByPatientId(patientId) >> [visitEntity]
             1 * visitSorter.sortVisitsDefault([visitEntity])
             1 * visitResponseService.getVisitSimpleResponse(visitEntity) >> visitSimpleResponse
@@ -95,7 +95,7 @@ class VisitPatientServiceTest extends Specification {
 
         then:
             1 * logService.logOperation(APPOINTING_VISIT.logMessage, patientId, visitId)
-            1 * visitValidationService.findPatientIfPresent(patientId)
+            1 * visitValidationService.validateIfPatientPresent(patientId)
             1 * visitValidationService.findVisitIfPresent(visitId) >> visitEntity
             1 * visitUpdateService.appointVisit(visitEntity, patientId)
             1 * visitRepository.save(visitEntity)
@@ -108,7 +108,7 @@ class VisitPatientServiceTest extends Specification {
 
         then:
             1 * logService.logOperation(CANCELING_VISIT.logMessage, patientId, visitId)
-            1 * visitValidationService.findPatientIfPresent(patientId)
+            1 * visitValidationService.validateIfPatientPresent(patientId)
             1 * visitValidationService.findVisitIfPresent(visitId) >> visitEntity
             1 * visitUpdateService.cancelVisit(visitEntity)
             1 * visitRepository.save(visitEntity)

@@ -1,7 +1,10 @@
 package com.alja.visit.controller;
 
 import com.alja.visit.controller_resource.VisitPatientResource;
-import com.alja.visit.dto.*;
+import com.alja.visit.dto.VisitCheckResponseDTO;
+import com.alja.visit.dto.VisitCommonFilterDTO;
+import com.alja.visit.dto.VisitResponseDTO;
+import com.alja.visit.dto.VisitSimpleResponseDTO;
 import com.alja.visit.service.VisitPatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +40,11 @@ public class VisitPatientController implements VisitPatientResource {
     @Override
     public VisitSimpleResponseDTO cancelVisitAppointment(String patientId, String visitId) {
         return visitPatientService.cancelVisitAppointment(patientId, visitId);
+    }
+
+    @Override
+    public VisitCheckResponseDTO checkVisits(String checkId) {
+        return visitPatientService.checkVisit(checkId);
     }
 
 }

@@ -30,16 +30,20 @@ public class PatientUpdateService {
     }
 
     private void updatePatientFields(PatientEntity entityToUpdate, PatientUpdateDTO patientUpdateDTO) {
-        if (Objects.nonNull(patientUpdateDTO.getFirstName())) {
+        if (Objects.nonNull(patientUpdateDTO.getFirstName())
+                && !entityToUpdate.getFirstName().equals(patientUpdateDTO.getFirstName())) {
             entityToUpdate.setFirstName(patientUpdateDTO.getFirstName());
         }
-        if (Objects.nonNull(patientUpdateDTO.getLastName())) {
+        if (Objects.nonNull(patientUpdateDTO.getLastName())
+                && !entityToUpdate.getLastName().equals(patientUpdateDTO.getLastName())) {
             entityToUpdate.setLastName(patientUpdateDTO.getLastName());
         }
-        if (Objects.nonNull(patientUpdateDTO.getBirthDate())) {
+        if (Objects.nonNull(patientUpdateDTO.getBirthDate())
+                && !entityToUpdate.getBirthDate().equals(LocalDate.parse(patientUpdateDTO.getBirthDate()))) {
             entityToUpdate.setBirthDate(LocalDate.parse(patientUpdateDTO.getBirthDate()));
         }
-        if (Objects.nonNull(patientUpdateDTO.getSocialSecurityNumber())) {
+        if (Objects.nonNull(patientUpdateDTO.getSocialSecurityNumber())
+                && !entityToUpdate.getSocialSecurityNumber().equals(patientUpdateDTO.getSocialSecurityNumber())) {
             patientDataValidationService.validateSocialSecurityNumber(patientUpdateDTO.getSocialSecurityNumber());
             entityToUpdate.setSocialSecurityNumber(patientUpdateDTO.getSocialSecurityNumber());
         }

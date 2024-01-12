@@ -2,6 +2,7 @@ package com.alja.physician.controller_resources;
 
 import com.alja.physician.dto.PhysicianSpecializationDTO;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,18 +12,18 @@ import static com.alja.physician.controller_resources.PhysiciansSpecializationRe
 @RequestMapping(RESOURCE_PATH)
 public interface PhysiciansSpecializationResource {
 
-    String RESOURCE_PATH = "/api/v1/specialization";
+    String RESOURCE_PATH = "/api/v1/physician/admin/specialization";
 
     @GetMapping
-    List<PhysicianSpecializationDTO> getAllSpecializations();
+    ResponseEntity<List<PhysicianSpecializationDTO>> getAllSpecializations();
 
     @PostMapping
-    PhysicianSpecializationDTO addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
+    ResponseEntity<PhysicianSpecializationDTO> addNewSpecialization(@Valid @RequestBody PhysicianSpecializationDTO physicianSpecializationDTO);
 
     @PutMapping()
-    PhysicianSpecializationDTO updateSpecialization(@RequestParam("specializationName") String specializationName,
-                              @RequestParam("specializationNewName") String specializationNewName);
+    ResponseEntity<PhysicianSpecializationDTO> updateSpecialization(@RequestParam("specializationName") String specializationName,
+                                                                    @RequestParam("specializationNewName") String specializationNewName);
 
     @DeleteMapping()
-    PhysicianSpecializationDTO deleteSpecialization(@RequestParam("specializationName") String specializationName);
+    ResponseEntity<PhysicianSpecializationDTO> deleteSpecialization(@RequestParam("specializationName") String specializationName);
 }

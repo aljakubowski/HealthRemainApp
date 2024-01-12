@@ -1,7 +1,8 @@
 package com.alja.patient.service;
 
-import com.alja.common.enums.PatientDataFormat;
-import com.alja.patient.dto.*;
+import com.alja.patient.dto.PatientRegisterDTO;
+import com.alja.patient.dto.PatientResponseDTO;
+import com.alja.patient.dto.PatientUpdateDTO;
 import com.alja.patient.model.PatientEntity;
 import com.alja.patient.model.mapper.PatientMapper;
 import com.alja.patient.model.repository.PatientRepository;
@@ -14,7 +15,6 @@ import java.util.stream.Collectors;
 
 import static com.alja.patient.PatientLogs.*;
 
-
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -22,6 +22,7 @@ public class PatientService {
 
     private final PatientDataValidationService patientDataValidationService;
     private final PatientUpdateService patientUpdateService;
+    private final PatientResponseService patientResponseService;
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
     private final LogService logService;
@@ -35,7 +36,7 @@ public class PatientService {
         patientDataValidationService.validateAge(patientRegisterDTO.getBirthDate());
         PatientEntity patientEntity = patientMapper.toPatientEntity(patientRegisterDTO);
         patientRepository.save(patientEntity);
-        return getPatientResponseSimple(patientEntity);
+        return patientResponseService.getPatientResponseSimple(patientEntity);
     }
 
     public List<PatientResponseDTO> getAllPatients() {
@@ -48,67 +49,27 @@ public class PatientService {
     public PatientResponseDTO getPatientById(String patientId, String dataFormat) {
         logService.logOperation(GET_PATIENT_BY_ID.logMessage, patientId);
         PatientEntity patientEntity = patientDataValidationService.findPatientIfPresent(patientId);
-        return returnAppropriateResponse(patientEntity, dataFormat);
+        return patientResponseService.returnAppropriateResponse(patientEntity, dataFormat);
     }
 
     public PatientResponseDTO updatePatient(String PatientId, PatientUpdateDTO patientUpdateDTO) {
-        //todo response depend on update ??
         logService.logOperation(UPDATE_PATIENT.logMessage, PatientId);
         PatientEntity existingPatientEntity = patientDataValidationService.findPatientIfPresent(PatientId);
         PatientEntity updatedPatientEntity = patientUpdateService.updatePatient(existingPatientEntity, patientUpdateDTO);
         patientRepository.save(updatedPatientEntity);
-        return getPatientResponseSimple(updatedPatientEntity);
+        return patientResponseService.getPatientResponseSimple(updatedPatientEntity);
     }
 
     public PatientResponseDTO deletePatient(String patientId) {
         logService.logOperation(DELETE_PATIENT_BY_ID.logMessage, patientId);
         PatientEntity patientEntity = patientDataValidationService.findPatientIfPresent(patientId);
+        patientDataValidationService.validateAppointedVisits(patientEntity);
         patientRepository.deleteById(patientEntity.getId());
-        return getPatientResponseSimple(patientEntity);
+        return patientResponseService.getPatientResponseSimple(patientEntity);
     }
-
-    private PatientResponseDTO returnAppropriateResponse(PatientEntity patientEntity, String dataFormat) {
-        if (dataFormat == null) {
-            return getPatientResponseSimple(patientEntity);
-        }
-        if (dataFormat.equalsIgnoreCase(PatientDataFormat.DETAILS.name())) {
-            return getPatientResponseDetailed(patientEntity);
-        } else {
-            return getPatientResponseWithVisits(patientEntity);
-        }
-    }
-
 
     private PatientResponseDTO getPatientResponseSimple(PatientEntity patientEntity) {
-        return PatientResponseDTO.builder()
-                .patientId(patientEntity.getPatientId())
-                .firstName(patientEntity.getFirstName())
-                .lastName(patientEntity.getLastName())
-                .build();
-    }
-
-    private PatientResponseDetailedDTO getPatientResponseDetailed(PatientEntity patientEntity) {
-        return PatientResponseDetailedDTO.builder()
-                .patientId(patientEntity.getPatientId())
-                .firstName(patientEntity.getFirstName())
-                .lastName(patientEntity.getLastName())
-                .birthDate(patientEntity.getBirthDate().toString())
-                .age(patientDataValidationService.calculateAge(patientEntity.getBirthDate().toString()))
-                .socialSecurityNumber(patientEntity.getSocialSecurityNumber())
-                .contactDetails(patientMapper.contactDetailsToDto(patientEntity.getContactDetails()))
-                .address(patientMapper.addressToDto(patientEntity.getAddress()))
-                .registrationDate(patientEntity.getRegistrationDate())
-                .build();
-    }
-
-    private PatientResponseVisitsDTO getPatientResponseWithVisits(PatientEntity patientEntity) {
-        //// TODO: tbd: list of visits
-        return PatientResponseVisitsDTO.builder()
-                .patientId(patientEntity.getPatientId())
-                .firstName(patientEntity.getFirstName())
-                .lastName(patientEntity.getLastName())
-                .visitsId(List.of())
-                .build();
+        return patientResponseService.getPatientResponseSimple(patientEntity);
     }
 
 }

@@ -3,13 +3,15 @@ package com.alja.patient.fixtures;
 import com.alja.common.AddressDTO;
 import com.alja.common.ContactDetailsDTO;
 import com.alja.common.ContactDetailsUpdateDTO;
-import com.alja.patient.dto.PatientRegisterDTO;
-import com.alja.patient.dto.PatientUpdateDTO;
+import com.alja.patient.dto.*;
 import com.alja.patient.model.Address;
 import com.alja.patient.model.ContactDetails;
 import com.alja.patient.model.PatientEntity;
+import com.alja.physician.dto.PhysicianResponseDTO;
+import com.alja.visit.dto.VisitSimpleResponseDTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class PatientFixtures {
 
@@ -220,6 +222,78 @@ public class PatientFixtures {
                 .patientId(uuid)
                 .contactDetails(contact)
                 .address(address)
+                .build();
+    }
+
+    public static PatientEntity createPatientWithVisits(List<String> visitsId) {
+        return PatientEntity.builder()
+                .visitsId(visitsId)
+                .build();
+    }
+
+    public static PatientEntity createPatientWithFieldsAndVisits(
+            String patientId,
+            String firstName,
+            String lastName,
+            List<String> visits) {
+        return PatientEntity.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .patientId(patientId)
+                .visitsId(visits)
+                .build();
+    }
+
+    public static VisitSimpleResponseDTO createVisitSimpleResponseDTOWithVisitId(String visitId) {
+        return VisitSimpleResponseDTO.builder()
+                .visitId(visitId)
+                .build();
+    }
+
+    public static PatientResponseDTO createPatientResponseSimple(
+            String patientId,
+            String firstName,
+            String lastName) {
+        return PatientResponseDTO.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .patientId(patientId)
+                .build();
+    }
+
+    public static PatientResponseVisitsDTO createPatientResponseWithVisits(
+            String patientId,
+            String firstName,
+            String lastName,
+            List<String> visits) {
+        return PatientResponseVisitsDTO.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .patientId(patientId)
+                .visitsId(visits)
+                .build();
+    }
+    public static PatientResponseDTO createPatientResponseWithAllFieldsCustom(
+            String firstName,
+            String lastName,
+            String birthDate,
+            String socialSecurityNum,
+            String uuid,
+            String phoneNumber,
+            String email,
+            String street,
+            String houseNumber,
+            String postCode,
+            String city,
+            String country) {
+        return PatientResponseDetailedDTO.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .birthDate(birthDate)
+                .socialSecurityNumber(socialSecurityNum)
+                .patientId(uuid)
+                .contactDetails(createContactDetailsDTOCustom(phoneNumber, email))
+                .address(createAddressDTOCustom(street, houseNumber, postCode, city, country))
                 .build();
     }
 

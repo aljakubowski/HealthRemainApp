@@ -13,7 +13,8 @@ public enum PatientError {
     PATIENT_PHONE_NUMBER_ALREADY_EXISTS_ERROR(Descriptions.PATIENT_PHONE_NUMBER_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST),
     PATIENT_EMAIL_ALREADY_EXISTS_ERROR(Descriptions.PATIENT_EMAIL_ALREADY_EXISTS_ERROR, HttpStatus.BAD_REQUEST),
 
-    PATIENT_DATA_FORMAT_ERROR(Descriptions.PATIENT_DATA_FORMAT_ERROR, HttpStatus.BAD_REQUEST);
+    PATIENT_DATA_FORMAT_ERROR(Descriptions.PATIENT_DATA_FORMAT_ERROR, HttpStatus.BAD_REQUEST),
+    PATIENT_APPOINTED_VISITS_ERROR(Descriptions.PATIENT_APPOINTED_VISITS_ERROR, HttpStatus.FORBIDDEN);
 
     private final String message;
     private final HttpStatus httpStatus;
@@ -30,6 +31,7 @@ public enum PatientError {
         private static final String PATIENT_PHONE_NUMBER_ALREADY_EXISTS_ERROR = "phone number already exists";
         private static final String PATIENT_EMAIL_ALREADY_EXISTS_ERROR = "email already exists";
         private static final String PATIENT_DATA_FORMAT_ERROR = "Patient data format is wrong. Available formats: DETAILS, VISITS";
+        private static final String PATIENT_APPOINTED_VISITS_ERROR = "Patient could not be deleted because of appointed visits";
     }
 
 }

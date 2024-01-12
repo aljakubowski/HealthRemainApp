@@ -9,14 +9,16 @@ import spock.lang.Specification
 
 class PhysicianDataValidationServiceTest extends Specification {
 
-    PhysicianDataValidationService physicianDataValidationService
-    PhysicianRepository physicianRepository = Mock()
-    PhysicianSpecializationRepository physicianSpecializationRepository = Mock()
+    private PhysicianDataValidationService physicianDataValidationService
+    private PhysicianRepository physicianRepository = Mock()
+    private PhysicianSpecializationRepository physicianSpecializationRepository = Mock()
+    private ClientsService clientsService = Mock()
 
     def setup() {
         physicianDataValidationService = new PhysicianDataValidationService(
                 physicianRepository,
-                physicianSpecializationRepository)
+                physicianSpecializationRepository,
+                clientsService)
     }
 
     def 'should throw exception when physician does not exist'() {
@@ -126,5 +128,34 @@ class PhysicianDataValidationServiceTest extends Specification {
             actual != null
             actual instanceof PhysicianException
             actual.message == PhysicianError.PHYSICIAN_SPECIALIZATION_ALREADY_EXISTS_ERROR.getMessage()
+    }
+
+    def 'should throw exception when physician has visits appointed'() {
+        given:
+            def id = "id"
+            clientsService.hasVisitsAppointed(id) >> true
+
+        when:
+            def actual = physicianDataValidationService.validateAppointedVisits(id)
+
+        then:
+            actual = thrown(PhysicianException)
+
+        expect:
+            actual != null
+            actual instanceof PhysicianException
+            actual.message == PhysicianError.PHYSICIAN_APPOINTED_VISITS_ERROR.getMessage()
+    }
+
+    def 'should not throw exception when physician has no visits appointed'() {
+        given:
+            def id = "id"
+            clientsService.hasVisitsAppointed(id) >> false
+
+        when:
+            physicianDataValidationService.validateAppointedVisits(id)
+
+        then:
+            noExceptionThrown()
     }
 }

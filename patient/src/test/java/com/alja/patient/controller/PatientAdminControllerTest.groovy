@@ -18,13 +18,13 @@ import org.springframework.test.web.servlet.MockMvc
 import java.time.LocalDate
 import java.time.Period
 
-import static com.alja.patient.controller_resource.PatientResource.RESOURCE_PATH
+import static com.alja.patient.controller_resource.PatientAdminResource.RESOURCE_PATH
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest
-class PatientControllerTest extends AppIntegrationTest {
+class PatientAdminControllerTest extends AppIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc
@@ -47,7 +47,7 @@ class PatientControllerTest extends AppIntegrationTest {
     void cleanup() {
         patientRepository.deleteAll()
     }
-
+//fixme fix test
     def 'should register new Patient'() {
         given:
             def firstName = 'Michal'
@@ -198,7 +198,7 @@ class PatientControllerTest extends AppIntegrationTest {
             result.andExpect(jsonPath('$.address.city').value(city))
             result.andExpect(jsonPath('$.address.country').value(country))
     }
-
+//fixme fix test
     def 'should get Patient by id with visits'() {
         //todo update test with visits
         given:
