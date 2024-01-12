@@ -33,8 +33,6 @@ public class VisitAdminService {
     private final VisitSorter visitSorter;
     private final LogService logService;
 
-    //todo int test
-
     public VisitSimpleResponseDTO addNewVisit(VisitNewDTO visitNewDTO) {
         logService.logOperation(ADD_VISIT.logMessage, visitNewDTO.getVisitDate().toString());
 

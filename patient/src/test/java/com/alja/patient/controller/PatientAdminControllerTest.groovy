@@ -47,7 +47,7 @@ class PatientAdminControllerTest extends AppIntegrationTest {
     void cleanup() {
         patientRepository.deleteAll()
     }
-//fixme fix test
+
     def 'should register new Patient'() {
         given:
             def firstName = 'Michal'
@@ -72,7 +72,7 @@ class PatientAdminControllerTest extends AppIntegrationTest {
                     .content(objectMapper.writeValueAsString(patientRegisterDTO)))
 
         then:
-            result.andExpect(status().isOk())
+            result.andExpect(status().isCreated())
             result.andExpect(jsonPath('$.firstName').value(firstName))
             result.andExpect(jsonPath('$.lastName').value(lastName))
     }
@@ -198,9 +198,8 @@ class PatientAdminControllerTest extends AppIntegrationTest {
             result.andExpect(jsonPath('$.address.city').value(city))
             result.andExpect(jsonPath('$.address.country').value(country))
     }
-//fixme fix test
+//fixme fix test / update test with visits
     def 'should get Patient by id with visits'() {
-        //todo update test with visits
         given:
             def firstName = 'Michal'
             def lastName = 'Lato'

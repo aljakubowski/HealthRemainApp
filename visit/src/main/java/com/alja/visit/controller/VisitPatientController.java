@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 public class VisitPatientController implements VisitPatientResource {
-
+    //todo int test
     private final VisitPatientService visitPatientService;
 
     @Override

@@ -25,9 +25,9 @@ public class CustomErrorDecoder implements ErrorDecoder {
         Map<String, String> responseValues = extractValues(responseBody);
         String errorName = responseValues.get(ERROR_NAME);
         String exceptionName = responseValues.get(EXCEPTION_NAME);
-        if (errorName.isEmpty() || exceptionName.isEmpty()){
-            throw new RuntimeException();
-        }
+            if (errorName.isEmpty() || exceptionName.isEmpty()) {
+                throw new RuntimeException();
+            }
         //todo error factory ? to retrieve required error
         return throwAppropriateException(methodKey, response, exceptionName, errorName);
 

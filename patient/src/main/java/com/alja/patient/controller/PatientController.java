@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 public class PatientController implements PatientResource {
-
+//todo int test
     private final PatientService patientService;
 
     @Override

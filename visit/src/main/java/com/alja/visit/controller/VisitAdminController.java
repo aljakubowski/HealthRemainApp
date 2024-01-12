@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 public class VisitAdminController implements VisitAdminResource {
-
+    //todo int test
     private final VisitAdminService visitAdminService;
 
     @Override

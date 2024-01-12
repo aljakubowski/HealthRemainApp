@@ -30,8 +30,6 @@ public class VisitPatientService {
     private final VisitSorter visitSorter;
     private final LogService logService;
 
-    //todo int test
-
     public List<VisitSimpleResponseDTO> getAllPatientVisits(String patientId) {
         logService.logOperation(GET_ALL_PATIENT_VISITS.logMessage, patientId);
 
