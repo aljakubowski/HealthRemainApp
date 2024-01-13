@@ -38,7 +38,7 @@ class VisitPatientServiceTest extends Specification {
     def visitSimpleResponse = VisitFixtures.createVisitSimpleResponseDTO(physicianResponse, visitEntity)
     def visitResponse = VisitFixtures.createVisitResponseDTO(physicianResponse, visitEntity)
     def visitFilter
-            = VisitFixtures.createVisitFilterWithStatusAndDates(visitStatus.name(), visitStartDate, visitEndDate)
+            = VisitFixtures.createVisitFilterWithStatusAndDatesAndId(visitStatus.name(), visitStartDate, visitEndDate)
 
     void setup() {
         visitPatientService = new VisitPatientService(
@@ -78,14 +78,15 @@ class VisitPatientServiceTest extends Specification {
             1 * visitResponseService.getVisitSimpleResponse(visitEntity) >> visitSimpleResponse
     }
 
-
     def 'should get visit by id'() {
         when:
-            visitPatientService.getVisitById(visitId)
+            visitPatientService.getVisitById(patientId, visitId)
 
         then:
             1 * logService.logOperation(GET_VISIT.logMessage, visitId)
+            1 * visitValidationService.validateIfPatientPresent(patientId)
             1 * visitValidationService.findVisitIfPresent(visitId) >> visitEntity
+            1 * visitValidationService.validateIfPatientsVisit(patientId, null)
             1 * visitResponseService.getVisitResponse(visitEntity) >> visitResponse
     }
 

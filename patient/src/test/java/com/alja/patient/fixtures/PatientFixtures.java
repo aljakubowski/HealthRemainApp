@@ -3,6 +3,7 @@ package com.alja.patient.fixtures;
 import com.alja.common.AddressDTO;
 import com.alja.common.ContactDetailsDTO;
 import com.alja.common.ContactDetailsUpdateDTO;
+import com.alja.common.enums.VisitStatus;
 import com.alja.patient.dto.*;
 import com.alja.patient.model.Address;
 import com.alja.patient.model.ContactDetails;
@@ -11,6 +12,7 @@ import com.alja.physician.dto.PhysicianResponseDTO;
 import com.alja.visit.dto.VisitSimpleResponseDTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PatientFixtures {
@@ -250,6 +252,39 @@ public class PatientFixtures {
                 .build();
     }
 
+    public static VisitSimpleResponseDTO createVisitSimpleResponseDTOWithAllFields(
+            String visitId,
+            LocalDateTime visitStartDate,
+            LocalDateTime visitEndDate,
+            VisitStatus visitStatus,
+            String physicianId,
+            String firstName,
+            String lastName,
+            String physicianSpecialization
+    ) {
+        return VisitSimpleResponseDTO.builder()
+                .visitId(visitId)
+                .physicianResponseDTO(createPhysicianResponseDtoWithCustomFields(physicianId,
+                        firstName, lastName, physicianSpecialization))
+                .visitStartDate(visitStartDate)
+                .visitEndDate(visitEndDate)
+                .visitStatus(visitStatus)
+                .build();
+    }
+
+    public static PhysicianResponseDTO createPhysicianResponseDtoWithCustomFields(
+            String id,
+            String firstName,
+            String lastName,
+            String physicianSpecialization) {
+        return PhysicianResponseDTO.builder()
+                .physicianId(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .physiciansSpecialization(physicianSpecialization)
+                .build();
+    }
+
     public static PatientResponseDTO createPatientResponseSimple(
             String patientId,
             String firstName,
@@ -273,6 +308,7 @@ public class PatientFixtures {
                 .visitsId(visits)
                 .build();
     }
+
     public static PatientResponseDTO createPatientResponseWithAllFieldsCustom(
             String firstName,
             String lastName,

@@ -111,7 +111,7 @@ class VisitValidationServiceTest extends Specification {
             def visitDateTo = null
             def visitStatus = VisitStatus.AVAILABLE.name()
             def visitFilter
-                    = VisitFixtures.createVisitFilterWithStatusAndDates(visitStatus, visitDateFrom, visitDateTo)
+                    = VisitFixtures.createVisitFilterWithStatusAndDatesAndId(visitStatus, visitDateFrom, visitDateTo)
 
         when:
             visitValidationService.validateDates(visitFilter)
@@ -227,9 +227,9 @@ class VisitValidationServiceTest extends Specification {
             noExceptionThrown()
     }
 
-    def 'should throw exception when visit is not reserved'() {
+    def 'should throw exception when visit is not available'() {
         given:
-            def visitStatus = VisitStatus.AVAILABLE
+            def visitStatus = VisitStatus.RESERVED
 
         when:
             def actual = visitValidationService.validateIfReserved(visitStatus)
@@ -240,12 +240,12 @@ class VisitValidationServiceTest extends Specification {
         expect:
             actual != null
             actual instanceof VisitException
-            actual.message == VisitError.VISIT_AVAILABLE_ERROR.getMessage()
+            actual.message == VisitError.VISIT_RESERVED_ERROR.getMessage()
     }
 
-    def 'should not throw exception when visit is reserved'() {
+    def 'should not throw exception when visit is available'() {
         given:
-            def visitStatus = VisitStatus.RESERVED
+            def visitStatus = VisitStatus.AVAILABLE
 
         when:
             visitValidationService.validateIfReserved(visitStatus)
@@ -283,7 +283,7 @@ class VisitValidationServiceTest extends Specification {
             noExceptionThrown()
     }
 
-    def 'should throw exception when visit is not available'() {
+    def 'should throw exception when visit is reserved'() {
         given:
             def visitPatientId = 'visitPatientId'
             def visitStatus = VisitStatus.RESERVED
@@ -300,7 +300,7 @@ class VisitValidationServiceTest extends Specification {
             actual.message == VisitError.VISIT_NOT_AVAILABLE_ERROR.getMessage()
     }
 
-    def 'should not throw exception when visit is available'() {
+    def 'should not throw exception when visit is available or has patient'() {
         given:
             def visitPatientId = ''
             def visitStatus = VisitStatus.AVAILABLE

@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 public class VisitPatientController implements VisitPatientResource {
-    //todo int test
+
     private final VisitPatientService visitPatientService;
 
     @Override
@@ -29,7 +29,7 @@ public class VisitPatientController implements VisitPatientResource {
 
     @Override
     public VisitResponseDTO getVisitById(String patientId, String visitId) {
-        return visitPatientService.getVisitById(visitId);
+        return visitPatientService.getVisitById(patientId, visitId);
     }
 
     @Override

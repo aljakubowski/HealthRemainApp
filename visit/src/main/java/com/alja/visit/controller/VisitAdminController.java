@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 public class VisitAdminController implements VisitAdminResource {
-    //todo int test
+
     private final VisitAdminService visitAdminService;
 
     @Override
@@ -30,13 +30,15 @@ public class VisitAdminController implements VisitAdminResource {
 
     @Override
     public ResponseEntity<List<VisitSimpleResponseDTO>> getVisitsWithFilter(VisitFilterDTO visitFilter) {
-        List<VisitSimpleResponseDTO> visitSimpleResponsesDTO = visitAdminService.getVisitsWithFilter(visitFilter);;
+        List<VisitSimpleResponseDTO> visitSimpleResponsesDTO = visitAdminService.getVisitsWithFilter(visitFilter);
+        ;
         return new ResponseEntity<>(visitSimpleResponsesDTO, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<VisitSimpleResponseDTO> updateVisit(String visitId, VisitUpdateDTO visitUpdateDTO) {
-        VisitSimpleResponseDTO visitSimpleResponseDTO = visitAdminService.updateVisit(visitId, visitUpdateDTO);;
+        VisitSimpleResponseDTO visitSimpleResponseDTO = visitAdminService.updateVisit(visitId, visitUpdateDTO);
+        ;
         return new ResponseEntity<>(visitSimpleResponseDTO, HttpStatus.OK);
     }
 

@@ -49,10 +49,12 @@ public class VisitPatientService {
         return visits.stream().map(this::getVisitSimpleResponse).toList();
     }
 
-    public VisitResponseDTO getVisitById(String visitId) {
+    public VisitResponseDTO getVisitById(String patientId, String visitId) {
         logService.logOperation(GET_VISIT.logMessage, visitId);
 
+        visitValidationService.validateIfPatientPresent(patientId);
         VisitEntity visitEntity = visitValidationService.findVisitIfPresent(visitId);
+        visitValidationService.validateIfPatientsVisit(patientId, visitEntity.getPatientId());
         return getVisitResponse(visitEntity);
     }
 

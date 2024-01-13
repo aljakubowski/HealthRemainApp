@@ -13,7 +13,6 @@ import com.alja.patient.service.PatientService
 import com.alja.visit.client.VisitClient
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -22,13 +21,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Period
 
-import static com.alja.patient.controller_resource.PatientAdminResource.RESOURCE_PATH
+import static com.alja.patient.controller_resource.PatientResource.RESOURCE_PATH
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
-class PatientAdminControllerTest extends AppIntegrationTest {
+class PatientControllerTest extends AppIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc
@@ -51,25 +49,30 @@ class PatientAdminControllerTest extends AppIntegrationTest {
     @MockBean
     private VisitClient visitClient
 
+    def patientId = UUID.randomUUID().toString()
+    def firstName = 'Michal'
+    def lastName = 'Lato'
+    def birthDate = '2000-01-01'
+    def socialSecurityNum = '12345678910'
+    def phoneNumber = '123456789'
+    def email = 'jand@mymail.com'
+    def street = 'Wilcza'
+    def houseNumber = '42'
+    def postCode = '98-765'
+    def city = 'Warszawa'
+    def country = 'Polska'
+    def visitId = 'visitId'
+    def visitStartDate = LocalDateTime.of(2024, 1, 1, 12, 0)
+    def visitEndDate = LocalDateTime.of(2024, 1, 1, 12, 30)
+    def physicianId = "physicianId"
+    def physicianSpecialization = 'radiologist'
+
     void cleanup() {
         patientRepository.deleteAll()
     }
 
+
     def 'should register new Patient'() {
-        given:
-            def firstName = 'Michal'
-            def lastName = 'Lato'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-            def phoneNumber = '123456789'
-            def email = 'jand@mymail.com'
-            def street = 'Wilcza'
-            def houseNumber = '42'
-            def postCode = '98-765'
-            def city = 'Warszawa'
-            def country = 'Polska'
-
-
         when:
             PatientRegisterDTO patientRegisterDTO
                     = PatientFixtures.createPatientRegisterDTOCustom(firstName, lastName, birthDate, socialSecurityNum,
@@ -86,18 +89,6 @@ class PatientAdminControllerTest extends AppIntegrationTest {
 
     def 'should not register new Patient when phoneNumber or email already exists'() {
         given:
-            def firstName = 'Michal'
-            def lastName = 'Lato'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-            def phoneNumber = '123456789'
-            def email = 'jand@mymail.com'
-            def street = 'Wilcza'
-            def houseNumber = '42'
-            def postCode = '98-765'
-            def city = 'Warszawa'
-            def country = 'Polska'
-
             patientRepository.save(PatientFixtures.createPatientWithContactDetails(phoneNumber, email))
 
             PatientRegisterDTO patientRegisterDTO
@@ -113,34 +104,8 @@ class PatientAdminControllerTest extends AppIntegrationTest {
             result.andExpect(jsonPath('$.message').value(PatientError.PATIENT_PHONE_NUMBER_ALREADY_EXISTS_ERROR.message))
     }
 
-
-    def 'should get all Patients'() {
-        given:
-            def firstName = 'Michal'
-            def lastName = 'Lato'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-            def patientId = UUID.randomUUID() toString()
-            patientRepository.save(PatientFixtures.createPatientWithFieldsAndUuid(firstName, lastName,
-                    birthDate, socialSecurityNum, patientId))
-
-        when:
-            def result = this.mockMvc.perform(get(RESOURCE_PATH))
-
-        then:
-            result.andExpect(status().isOk())
-            result.andExpect(jsonPath('$.[0].firstName').value(firstName))
-            result.andExpect(jsonPath('$.[0].lastName').value(lastName))
-            result.andExpect(jsonPath('$.[0].patientId').value(patientId))
-    }
-
     def 'should get Patient by id'() {
         given:
-            def firstName = 'Michal'
-            def lastName = 'Lato'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-            def patientId = UUID.randomUUID().toString()
 
             patientRepository.save(PatientFixtures.createPatientWithFieldsAndUuid(firstName, lastName,
                     birthDate, socialSecurityNum, patientId))
@@ -160,19 +125,6 @@ class PatientAdminControllerTest extends AppIntegrationTest {
 
     def 'should get Patient by id with details'() {
         given:
-            def firstName = 'Michal'
-            def lastName = 'Lato'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-            def patientId = UUID.randomUUID().toString()
-            def phoneNumber = '123456789'
-            def email = 'jand@mymail.com'
-            def street = 'Wilcza'
-            def houseNumber = '42'
-            def postCode = '98-765'
-            def city = 'Warszawa'
-            def country = 'Polska'
-
             def dateNow = LocalDate.now()
             def age = Period.between(LocalDate.parse(birthDate), dateNow).getYears();
 
@@ -206,24 +158,12 @@ class PatientAdminControllerTest extends AppIntegrationTest {
             result.andExpect(jsonPath('$.address.country').value(country))
     }
 
-
     def 'should get Patient by id with visits'() {
         given:
-            def firstName = 'Michal'
-            def lastName = 'Lato'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-            def patientId = UUID.randomUUID().toString()
-            def visitId = 'visitId'
-            def visitStartDate = LocalDateTime.of(2024, 1, 1, 12, 0)
-            def visitEndDate = LocalDateTime.of(2024, 1, 1, 12, 30)
-            def physicianId = "physicianId"
-            def physicianSpecialization = 'radiologist'
-            def visitStatus = VisitStatus.RESERVED
-
             patientRepository.save(PatientFixtures.createPatientWithFieldsAndUuid(firstName, lastName,
                     birthDate, socialSecurityNum, patientId))
 
+            def visitStatus = VisitStatus.RESERVED
             def PATIENT_ID_PATH = "/" + patientId + "/dataFormat"
             def dataFormat = "VISITS"
 
@@ -246,8 +186,6 @@ class PatientAdminControllerTest extends AppIntegrationTest {
 
     def 'should not get Patient by id when not exists'() {
         given:
-            def patientId = UUID.randomUUID().toString()
-
             def PATIENT_ID_PATH = "/" + patientId + "/dataFormat"
 
         when:
@@ -261,11 +199,6 @@ class PatientAdminControllerTest extends AppIntegrationTest {
 
     def 'should update Patient'() {
         given:
-            def firstName = 'Jan'
-            def lastName = 'Dobry'
-            def birthDate = '2000-01-01'
-            def socialSecurityNum = '12345678910'
-
             def firstNameUpdated = 'John'
             def lastNameUpdated = 'Good'
             def patientId = UUID.randomUUID().toString()
@@ -294,10 +227,6 @@ class PatientAdminControllerTest extends AppIntegrationTest {
 
     def 'should delete Patient by id'() {
         given:
-            def firstName = 'Jan'
-            def lastName = 'Dobry'
-            def patientId = UUID.randomUUID().toString()
-
             patientRepository.save(PatientFixtures.createPatientWithNameAndId(firstName, lastName, patientId))
 
             def PATIENT_ID_PATH = "/" + patientId
@@ -314,8 +243,6 @@ class PatientAdminControllerTest extends AppIntegrationTest {
 
     def 'should not delete Patient by id when not exists'() {
         given:
-            def patientId = UUID.randomUUID().toString()
-
             def PATIENT_ID_PATH = "/" + patientId
 
         when:
@@ -325,4 +252,5 @@ class PatientAdminControllerTest extends AppIntegrationTest {
             result.andExpect(status().isNotFound())
             result.andExpect(jsonPath('$.message').value(PatientError.PATIENT_NOT_FOUND_ERROR.message))
     }
+
 }

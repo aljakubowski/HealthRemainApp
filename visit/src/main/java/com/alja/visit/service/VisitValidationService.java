@@ -110,14 +110,14 @@ public class VisitValidationService {
         }
     }
 
-    public void validateIfPhysicianPresent(String physicianId) {
+    private void validateIfPhysicianPresent(String physicianId) {
         PhysicianResponseDTO physicianResponse;
         try {
             physicianResponse = clientsService.getPhysicianResponseDTO(physicianId);
         } catch (FeignException e) {
             throw new VisitException(VisitError.VISIT_INVALID_PHYSICIAN_ERROR);
         }
-        if (StringUtils.isBlank(physicianResponse.getPhysicianId())) {
+        if (physicianResponse == null || StringUtils.isBlank(physicianResponse.getPhysicianId())) {
             throw new VisitException(VisitError.VISIT_INVALID_PHYSICIAN_ERROR);
         }
     }
@@ -133,8 +133,8 @@ public class VisitValidationService {
     }
 
     public void validateIfReserved(VisitStatus visitStatus) {
-        if (visitStatus == VisitStatus.AVAILABLE) {
-            throw new VisitException(VisitError.VISIT_AVAILABLE_ERROR);
+        if (visitStatus == VisitStatus.RESERVED) {
+            throw new VisitException(VisitError.VISIT_RESERVED_ERROR);
         }
     }
 

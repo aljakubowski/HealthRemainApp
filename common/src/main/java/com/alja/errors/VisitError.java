@@ -17,7 +17,7 @@ public enum VisitError {
     VISIT_INVALID_PATIENT_ERROR(Descriptions.VISIT_INVALID_PATIENT_ERROR, HttpStatus.NOT_FOUND),
     VISIT_INVALID_PHYSICIAN_ERROR(Descriptions.VISIT_INVALID_PHYSICIAN_ERROR, HttpStatus.NOT_FOUND),
     VISIT_INVALID_PHYSICIAN_SPECIALIZATION_ERROR(Descriptions.VISIT_INVALID_PHYSICIAN_SPECIALIZATION_ERROR, HttpStatus.BAD_REQUEST),
-    VISIT_AVAILABLE_ERROR(Descriptions.VISIT_AVAILABLE_ERROR, HttpStatus.BAD_REQUEST),
+    VISIT_RESERVED_ERROR(Descriptions.VISIT_RESERVED_ERROR, HttpStatus.BAD_REQUEST),
     VISIT_NOT_AVAILABLE_ERROR(Descriptions.VISIT_NOT_AVAILABLE_ERROR, HttpStatus.BAD_REQUEST),
     VISIT_INVALID_ID_ERROR(Descriptions.VISIT_INVALID_ID_ERROR, HttpStatus.NOT_FOUND);
 
@@ -41,7 +41,7 @@ public enum VisitError {
         private static final String VISIT_INVALID_PATIENT_ERROR = "Patient does not exist";
         private static final String VISIT_INVALID_PHYSICIAN_ERROR = "Physician does not exist";
         private static final String VISIT_INVALID_PHYSICIAN_SPECIALIZATION_ERROR = "Physician Specialization does not exist. Available: ";
-        private static final String VISIT_AVAILABLE_ERROR = "Visits with status Available could not be deleted.";
+        private static final String VISIT_RESERVED_ERROR = "Visits with status Reserved could not be deleted.";
         private static final String VISIT_NOT_AVAILABLE_ERROR = "Visits is not available";
         private static final String VISIT_INVALID_ID_ERROR = "There is no Visit for requested id.";
     }

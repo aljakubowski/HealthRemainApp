@@ -12,13 +12,12 @@ import com.alja.physician.service.ClientsService
 import com.alja.physician.service.PhysicianDataValidationService
 import com.alja.physician.service.PhysicianService
 import com.alja.visit.client.VisitClient
+import com.alja.visit.dto.VisitCheckResponseDTO
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import spock.mock.DetachedMockFactory
 
 import static com.alja.physician.controller_resources.PhysicianAdminResource.RESOURCE_PATH
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
@@ -49,17 +48,11 @@ class PhysicianAdminControllerTest extends AppIntegrationTest {
     private ObjectMapper objectMapper
 
     @Autowired
+    @MockBean
     private ClientsService clientsService
 
-    @TestConfiguration
-    static class Stubs {
-        DetachedMockFactory factory = new DetachedMockFactory()
-
-        @Bean(name = "visit")
-        VisitClient visitClient() {
-            factory.Mock(VisitClient)
-        }
-    }
+    @MockBean
+    private VisitClient visitClient
 
     void cleanup() {
         physicianRepository.deleteAll()
@@ -182,7 +175,7 @@ class PhysicianAdminControllerTest extends AppIntegrationTest {
             result.andExpect(jsonPath('$.message').value(PhysicianError.PHYSICIAN_NOT_FOUND_ERROR.message))
     }
 
-//fixme fix test
+
     def 'should update Physician'() {
         given:
             def firstName = 'Jan'
@@ -194,6 +187,9 @@ class PhysicianAdminControllerTest extends AppIntegrationTest {
 
             physicianSpecializationRepository.save(PhysicianFixtures.createSpecialization(physicianSpecialization))
             physicianRepository.save(PhysicianFixtures.createPhysicianWithFieldsAndUuid(firstName, lastName, physicianSpecialization, physicianId))
+
+            def visitCheckResponse = VisitCheckResponseDTO.builder().hasVisits(false).build()
+            visitClient.getAllPatientVisits(physicianId) >> visitCheckResponse
 
             def PHYSICIAN_ID_PATH = "/" + physicianId
             PhysicianUpdateDTO physicianUpdateDTO
@@ -211,7 +207,7 @@ class PhysicianAdminControllerTest extends AppIntegrationTest {
             result.andExpect(jsonPath('$.physiciansSpecialization').value(physicianSpecialization))
             result.andExpect(jsonPath('$.physicianId').value(physicianId))
     }
-//fixme fix test
+
     def 'should delete Physician by id'() {
         given:
             def firstName = 'Jan'
@@ -222,9 +218,10 @@ class PhysicianAdminControllerTest extends AppIntegrationTest {
             physicianSpecializationRepository.save(PhysicianFixtures.createSpecialization(physicianSpecialization))
             physicianRepository.save(PhysicianFixtures.createPhysicianWithFieldsAndUuid(firstName, lastName, physicianSpecialization, physicianId))
 
-            def PHYSICIAN_ID_PATH = "/" + physicianId
+            def visitCheckResponse = VisitCheckResponseDTO.builder().hasVisits(false).build()
+            visitClient.getAllPatientVisits(physicianId) >> visitCheckResponse
 
-            clientsService.hasVisitsAppointed(physicianId) >> false
+            def PHYSICIAN_ID_PATH = "/" + physicianId
 
         when:
             def result = this.mockMvc.perform(delete(RESOURCE_PATH + PHYSICIAN_ID_PATH))

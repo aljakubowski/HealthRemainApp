@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 public class PhysicianPatientController implements PhysicianPatientResource {
-    //todo int test
+
     private final PhysicianService physicianService;
     private final boolean NO_DETAILS = false;
 

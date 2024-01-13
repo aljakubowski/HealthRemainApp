@@ -19,11 +19,21 @@ public class VisitFixtures {
                 .build();
     }
 
+    public static VisitFilterDTO createVisitFilterWithStatusAndDatesAndId(String visitStatus,
+                                                                          LocalDateTime visitDateFrom,
+                                                                          LocalDateTime visitDateTo) {
+        return VisitFilterDTO.builder()
+                .patientId("id")
+                .visitStatus(visitStatus)
+                .visitDateFrom(visitDateFrom)
+                .visitDateTo(visitDateTo)
+                .build();
+    }
+
     public static VisitFilterDTO createVisitFilterWithStatusAndDates(String visitStatus,
                                                                      LocalDateTime visitDateFrom,
                                                                      LocalDateTime visitDateTo) {
         return VisitFilterDTO.builder()
-                .patientId("id")
                 .visitStatus(visitStatus)
                 .visitDateFrom(visitDateFrom)
                 .visitDateTo(visitDateTo)
@@ -74,6 +84,12 @@ public class VisitFixtures {
                 .build();
     }
 
+    public static VisitCommonFilterDTO createVisitCommonFilterWithStatusAvailable() {
+        return VisitFilterDTO.builder()
+                .visitStatus(VisitStatus.AVAILABLE.name())
+                .build();
+    }
+
     public static VisitEntity createVisitEntityWithPatientIdAndStatus(String id, VisitStatus status) {
         return VisitEntity.builder()
                 .patientId(id)
@@ -112,6 +128,21 @@ public class VisitFixtures {
                 .build();
     }
 
+    public static VisitEntity createVisitEntityWithIdAndStatus(String visitId, VisitStatus visitStatus) {
+        return VisitEntity.builder()
+                .visitId(visitId)
+                .visitStatus(visitStatus)
+                .build();
+    }
+
+    public static VisitEntity createVisitEntityWithIdAndPatientAndStatus(String visitId, String patientId, VisitStatus visitStatus) {
+        return VisitEntity.builder()
+                .visitId(visitId)
+                .patientId(patientId)
+                .visitStatus(visitStatus)
+                .build();
+    }
+
     public static VisitEntity createVisitEntityWithPatient(String patientId) {
         return VisitEntity.builder()
                 .patientId(patientId)
@@ -140,16 +171,26 @@ public class VisitFixtures {
                 .build();
     }
 
-    public static VisitEntity createVisitEntityDefault() {
+    public static VisitEntity createVisitEntityWithAllFields(String visitId,
+                                                             String physicianId,
+                                                             String specialization,
+                                                             String patientId,
+                                                             VisitStatus visitStatus,
+                                                             LocalDateTime startDate,
+                                                             LocalDateTime endDate
+    ) {
         return VisitEntity.builder()
-                .visitId("id")
-                .physicianId("physicianId")
-                .visitStartDate(LocalDateTime.now())
-                .visitEndDate(LocalDateTime.now())
-                .visitStatus(VisitStatus.AVAILABLE)
+                .visitId(visitId)
+                .physicianId(physicianId)
+                .physicianSpecialization(specialization)
+                .patientId(patientId)
+                .visitStatus(visitStatus)
+                .visitStartDate(startDate)
+                .visitEndDate(endDate)
                 .physicianRecommendations(List.of())
                 .build();
     }
+
 
     public static VisitUpdateDTO createVisitUpdateDtoWithAllFields(
             String physicianId,
@@ -161,6 +202,13 @@ public class VisitFixtures {
                 .patientId(patientId)
                 .visitStatus(visitStatus)
                 .visitDate(visitDate)
+                .build();
+    }
+
+    public static VisitUpdateDTO createVisitUpdateDtoWithStatus(
+            String visitStatus) {
+        return VisitUpdateDTO.builder()
+                .visitStatus(visitStatus)
                 .build();
     }
 
@@ -258,7 +306,7 @@ public class VisitFixtures {
                 .build();
     }
 
-    public static PhysicianSpecializationDTO getPhysicianSpecializationDtoWithName(String name){
+    public static PhysicianSpecializationDTO getPhysicianSpecializationDtoWithName(String name) {
         return PhysicianSpecializationDTO.builder().specializationName(name).build();
     }
 
