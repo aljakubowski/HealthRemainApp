@@ -1,5 +1,6 @@
 package com.alja.visit.controller;
 
+import com.alja.visit.controller_resource.VisitAdminApiDoc;
 import com.alja.visit.controller_resource.VisitAdminResource;
 import com.alja.visit.dto.*;
 import com.alja.visit.service.VisitAdminService;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-public class VisitAdminController implements VisitAdminResource {
+public class VisitAdminController implements VisitAdminResource, VisitAdminApiDoc {
 
     private final VisitAdminService visitAdminService;
 

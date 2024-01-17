@@ -1,5 +1,6 @@
 package com.alja.physician.controller;
 
+import com.alja.physician.controller_resources.PhysicianAdminApiDoc;
 import com.alja.physician.controller_resources.PhysicianAdminResource;
 import com.alja.physician.dto.PhysicianRegisterDTO;
 import com.alja.physician.dto.PhysicianResponseDTO;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-public class PhysicianAdminController implements PhysicianAdminResource {
+public class PhysicianAdminController implements PhysicianAdminResource, PhysicianAdminApiDoc {
 
     private final PhysicianService physicianService;
 

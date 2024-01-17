@@ -1,5 +1,6 @@
 package com.alja.visit.controller;
 
+import com.alja.visit.controller_resource.VisitPatientApiDoc;
 import com.alja.visit.controller_resource.VisitPatientResource;
 import com.alja.visit.dto.VisitCheckResponseDTO;
 import com.alja.visit.dto.VisitCommonFilterDTO;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-public class VisitPatientController implements VisitPatientResource {
+public class VisitPatientController implements VisitPatientResource, VisitPatientApiDoc {
 
     private final VisitPatientService visitPatientService;
 

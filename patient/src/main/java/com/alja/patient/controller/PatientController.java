@@ -1,5 +1,6 @@
 package com.alja.patient.controller;
 
+import com.alja.patient.controller_resource.PatientApiDoc;
 import com.alja.patient.controller_resource.PatientResource;
 import com.alja.patient.dto.PatientRegisterDTO;
 import com.alja.patient.dto.PatientResponseDTO;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @AllArgsConstructor
 @RestController
-public class PatientController implements PatientResource {
+public class PatientController implements PatientResource, PatientApiDoc {
 
     private final PatientService patientService;
 

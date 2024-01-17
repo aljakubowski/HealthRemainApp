@@ -1,5 +1,6 @@
 package com.alja.patient.controller;
 
+import com.alja.patient.controller_resource.PatientAdminApiDoc;
 import com.alja.patient.controller_resource.PatientAdminResource;
 import com.alja.patient.dto.PatientRegisterDTO;
 import com.alja.patient.dto.PatientResponseDTO;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @RestController
-public class PatientAdminController implements PatientAdminResource {
+public class PatientAdminController implements PatientAdminResource, PatientAdminApiDoc {
 
     private final PatientService patientService;
 
@@ -28,7 +29,7 @@ public class PatientAdminController implements PatientAdminResource {
 
     @Override
     public ResponseEntity<List<PatientResponseDTO>> getAllPatients() {
-        List<PatientResponseDTO>  patientResponseDTOS = patientService.getAllPatients();
+        List<PatientResponseDTO> patientResponseDTOS = patientService.getAllPatients();
         return new ResponseEntity<>(patientResponseDTOS, HttpStatus.OK);
     }
 
