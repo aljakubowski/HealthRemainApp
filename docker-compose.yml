@@ -1,5 +1,75 @@
 services:
 
+  apigw:
+    image: aljak/apigw:latest
+    container_name: apigw
+    ports:
+      - 8082:8082
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - eureka-server
+
+  eureka-server:
+    image: aljak/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - 8761:8761
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+
+  physician:
+    image: aljak/physician:latest
+    container_name: physician
+    ports:
+      - 8083:8083
+    networks:
+      - spring
+      - mongodb
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - eureka-server
+      - mongodb
+
+  patient:
+    image: aljak/patient:latest
+    container_name: patient
+    ports:
+      - 8086:8086
+    networks:
+      - spring
+      - mongodb
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - eureka-server
+      - mongodb
+
+  visit:
+    image: aljak/visit:latest
+    container_name: visit
+    ports:
+      - 8084:8084
+    networks:
+      - spring
+      - mongodb
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - eureka-server
+      - mongodb
+
   mongodb:
     image: mongo
     container_name: mongodb
@@ -7,6 +77,8 @@ services:
       - 27017:27017
     volumes:
       - data:/data
+    networks:
+       - mongodb
     environment:
       - MONGO_INITDB_ROOT_USERNAME=user
       - MONGO_INITDB_ROOT_PASSWORD=pass
@@ -16,6 +88,8 @@ services:
     restart: always
     ports:
       - 8081:8081
+    networks:
+      - mongodb
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=user
       - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
@@ -26,10 +100,14 @@ services:
     container_name: zipkin
     ports:
       - 9411:9411
+    networks:
+      - spring
 
 volumes:
   data: {}
 
 networks:
-  default:
-    name: mongodb_network
+  mongodb:
+    driver: bridge
+  spring:
+    driver: bridge

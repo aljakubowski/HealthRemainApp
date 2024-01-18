@@ -26,7 +26,7 @@
         <spring.boot.maven.plugin.version>3.0.6</spring.boot.maven.plugin.version>
         <spring.cloud-version>2022.0.3</spring.cloud-version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <fasterxml.jackson.version>2.13.4.1</fasterxml.jackson.version>
         <spock-core.version>1.0-groovy-2.4</spock-core.version>
         <spock-bom.version>2.3-groovy-4.0</spock-bom.version>
@@ -38,6 +38,7 @@
         <apache.commons.version>3.12.0</apache.commons.version>
         <apache.commons.collections.version>4.4</apache.commons.collections.version>
         <springdoc.version>2.2.0</springdoc.version>
+        <image>aljak/${project.artifactId}:${project.version}</image>
     </properties>
 
 
@@ -183,6 +184,8 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -224,8 +227,45 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>3.1.4</version>
+                    <configuration>
+                        <from>
+                            <image>eclipse-temurin:17@sha256:2b47a8ea946ce1e5365a1562414ed576e378b7b670cadff3fb98ebecf2890cdc</image>
+                            <platforms>
+                                <platform>
+                                    <architecture>arm64</architecture>
+                                    <os>linux</os>
+                                </platform>
+                                <platform>
+                                    <architecture>amd64</architecture>
+                                    <os>linux</os>
+                                </platform>
+                            </platforms>
+                        </from>
+                        <to>
+                            <tags>
+                                <tag>latest</tag>
+                            </tags>
+                        </to>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+
             </plugins>
         </pluginManagement>
+
     </build>
 
 </project>

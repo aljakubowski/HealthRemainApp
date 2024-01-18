@@ -1,0 +1,37 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: visit
+  data:
+    mongodb:
+      authentication-database: admin
+      username: user
+      password: pass
+      database: visit_db
+      host: mongodb
+      port: 27017
+      auto-index-creation: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+springdoc:
+  swagger-ui:
+    path: apidoc
+
+management:
+  zipkin:
+    tracing:
+      enabled: true
+      endpoint: http://zipkin:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1.0
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
