@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
-@Tag(name = "visit-i", description = "Patient API for visit control")
+@Tag(name = "patient api", description = "appointing and managing visits")
 public interface VisitPatientApiDoc {
 
 

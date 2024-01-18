@@ -10,18 +10,18 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "patient", description = "Admin API for patient control")
+@Tag(name = "admin api", description = "patient managing data")
 public interface PatientAdminApiDoc {
 
 
-    @Operation(summary = "Admin patient register")
+    @Operation(summary = "Patient create")
     ResponseEntity<PatientResponseDTO> registerNewPatient(PatientRegisterDTO patientRegisterDTO);
 
 
-    @Operation(summary = "Admin patients show all")
+    @Operation(summary = "Patients show all")
     ResponseEntity<List<PatientResponseDTO>> getAllPatients();
 
-    @Operation(summary = "Admin patients show info",
+    @Operation(summary = "Patients show info",
             parameters = {
                     @Parameter(name = "patientId", required = true),
                     @Parameter(name = "dataFormat", required = true, description = "choose data format of patient info: details or visits")})
@@ -29,12 +29,12 @@ public interface PatientAdminApiDoc {
 
 
     @Parameter(name = "patientId", required = true)
-    @Operation(summary = "Admin patient update info")
+    @Operation(summary = "Patient update info")
     ResponseEntity<PatientResponseDTO> updatePatient(String patientId, PatientUpdateDTO patientUpdateDTO);
 
 
     @Parameter(name = "patientId", required = true)
-    @Operation(summary = "Admin patient deregister")
+    @Operation(summary = "Patient delete")
     ResponseEntity<PatientResponseDTO> deletePatientById(String patientId);
 
 }

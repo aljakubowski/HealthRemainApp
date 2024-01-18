@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@Tag(name = "physician-i", description = "Patient API for physician info")
+@Tag(name = "patient api", description = "retrieving information about physicians")
 public interface PhysicianPatientApiDoc {
 
     @Operation(summary = "Physician list")

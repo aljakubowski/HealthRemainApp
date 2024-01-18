@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @OpenAPIDefinition(
-        info = @Info(title = "Patient Service API", description = "service for Patient management", version = "v1"))
+        info = @Info(title = "Patient Service API", description = "Patient registration and data management service", version = "v1"))
 @EnableFeignClients(basePackages = "com.alja.visit.client")
 @SpringBootApplication
 public class PatientApplication {

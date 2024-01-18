@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "patient", description = "Patient API for patient control")
+@Tag(name = "patient api", description = "patient registering and managing data")
 public interface PatientApiDoc {
 
     @Operation(summary = "Patient self register")

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "visit-c", description = "Admin API for visit control")
+@Tag(name = "admin api", description = "creating and managing visits")
 public interface VisitAdminApiDoc {
 
     @Operation(summary = "Visit add")

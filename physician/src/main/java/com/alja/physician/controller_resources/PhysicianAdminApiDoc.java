@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 
-@Tag(name = "physician-c", description = "Admin API for physician control")
+@Tag(name = "admin api", description = "managing physicians")
 public interface PhysicianAdminApiDoc {
 
 

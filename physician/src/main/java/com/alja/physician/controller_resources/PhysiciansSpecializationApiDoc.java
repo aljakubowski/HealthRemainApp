@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Tag(name = "physician-specialization-c", description = "Admin API for physician specialization control")
+@Tag(name = "admin api.", description = "managing physicians specialization")
 public interface PhysiciansSpecializationApiDoc {
 
 
