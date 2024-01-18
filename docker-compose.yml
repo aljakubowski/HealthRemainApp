@@ -20,6 +20,13 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=user
       - ME_CONFIG_MONGODB_ADMINPASSWORD=pass
       - ME_CONFIG_MONGODB_SERVER=mongodb
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
+
 volumes:
   data: {}
 

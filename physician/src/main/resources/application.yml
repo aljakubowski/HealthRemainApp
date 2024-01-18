@@ -23,3 +23,19 @@ eureka:
 springdoc:
   swagger-ui:
     path: apidoc
+
+management:
+  info:
+
+  zipkin:
+
+    tracing:
+      enabled: true
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
