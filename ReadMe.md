@@ -74,18 +74,10 @@ Additionally, static YAML files are available within the project files.
 - running Docker environment is required
 - directory containing files: 
 
-  - docker-compose.yml
-  - .env 
+  - [docker-compose]
+  - [.env] (example .env file) 
 
 
-example of '.env' file below:
-
-```code
-MONGO_DB_USERNAME=typeUserNameHere
-MONGO_DB_PASSWORD=typeUserPasswordHere
-MONGO_INITDB_ROOT_USERNAME=typeUserNameHere
-MONGO_INITDB_ROOT_PASSWORD=typeUserPasswordHere
-```
 
 in created directory execute:
 
@@ -163,6 +155,9 @@ Backend services supporting application:
 [physician-doc]: <http://localhost:8083/apidoc>
 [patient-doc]: <http://localhost:8086/apidoc>
 [visit-doc]: <http://localhost:8084/apidoc>
+
+[docker-compose]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/docker-compose.yml>
+[.env]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/.env>
 
 [physician-yaml]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/docs/physician-service-doc.yaml>
 [patient-yaml]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/docs/patient-service-doc.yaml>
