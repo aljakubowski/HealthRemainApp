@@ -164,9 +164,9 @@ Backend services supporting application:
 [patient-doc]: <http://localhost:8086/apidoc>
 [visit-doc]: <http://localhost:8084/apidoc>
 
-[physician-yaml]: <http://localhost:8083/apidoc>
-[patient-yaml]: <http://localhost:8086/apidoc>
-[visit-yaml]: <http://localhost:8084/apidoc>
+[physician-yaml]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/docs/physician-service-doc.yaml>
+[patient-yaml]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/docs/patient-service-doc.yaml>
+[visit-yaml]: <https://github.com/aljakubowski/HealthRemainApp/blob/master/docs/visit-service-doc.yaml>
 
 [ApiGateWay-ep]: <http://localhost:8082>   
 [MongoExpress-ep]: <http://localhost:8081> 
