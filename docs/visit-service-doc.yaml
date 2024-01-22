@@ -1,0 +1,377 @@
+openapi: 3.0.1
+info:
+  title: Visit Service API
+  description: Visit management and appointment service
+  version: v1
+servers:
+- url: http://localhost:8084
+  description: Generated server url
+tags:
+- name: patient api
+  description: appointing and managing visits
+- name: admin api
+  description: creating and managing visits
+paths:
+  /api/v1/visit/{patientId}/{visitId}:
+    get:
+      tags:
+      - patient api
+      summary: Visit get by id
+      operationId: getVisitById
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: visitId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitResponseDTO'
+    put:
+      tags:
+      - patient api
+      summary: Visit cancel
+      operationId: cancelVisitAppointment
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: visitId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitSimpleResponseDTO'
+    post:
+      tags:
+      - patient api
+      summary: Visit appoint
+      operationId: makeVisitAppointment
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: visitId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitSimpleResponseDTO'
+  /api/v1/visit/admin/{visitId}:
+    get:
+      tags:
+      - admin api
+      summary: Visit get by id
+      operationId: getVisitById_1
+      parameters:
+      - name: visitId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitResponseDTO'
+    put:
+      tags:
+      - admin api
+      summary: Visit update info
+      operationId: updateVisit
+      parameters:
+      - name: visitId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitUpdateDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitSimpleResponseDTO'
+    delete:
+      tags:
+      - admin api
+      summary: Visit delete
+      operationId: deleteVisitById
+      parameters:
+      - name: visitId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitSimpleResponseDTO'
+  /api/v1/visit/admin:
+    get:
+      tags:
+      - admin api
+      summary: Visit get by filter
+      operationId: getVisitsWithFilter
+      parameters:
+      - name: visitFilter
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/VisitFilterDTO'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VisitSimpleResponseDTO'
+    post:
+      tags:
+      - admin api
+      summary: Visit add
+      operationId: addNewVisit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitNewDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitSimpleResponseDTO'
+  /api/v1/visit:
+    get:
+      tags:
+      - patient api
+      summary: Visits get all available with filter
+      operationId: searchAvailableVisitsWithFilter
+      parameters:
+      - name: visitFilter
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/VisitCommonFilterDTO'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VisitSimpleResponseDTO'
+  /api/v1/visit/{patientId}:
+    get:
+      tags:
+      - patient api
+      summary: Visits get all reserved
+      operationId: getAllPatientVisits
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VisitSimpleResponseDTO'
+components:
+  schemas:
+    PhysicianResponseDTO:
+      type: object
+      properties:
+        physicianId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        physiciansSpecialization:
+          type: string
+    VisitSimpleResponseDTO:
+      type: object
+      properties:
+        visitId:
+          type: string
+        physicianResponseDTO:
+          $ref: '#/components/schemas/PhysicianResponseDTO'
+        visitStartDate:
+          type: string
+          format: date-time
+        visitEndDate:
+          type: string
+          format: date-time
+        visitStatus:
+          type: string
+          enum:
+          - AVAILABLE
+          - RESERVED
+          - COMPLETED
+          - UNREALIZED
+    VisitUpdateDTO:
+      type: object
+      properties:
+        physicianId:
+          type: string
+          example: "21345"
+        patientId:
+          type: string
+          example: "21345"
+        visitStatus:
+          type: string
+          description: "visit available statuses: AVAILABLE, RESERVED, COMPLETED,\
+            \ UNREALIZED"
+          example: AVAILABLE
+        visitDate:
+          type: string
+          description: "visit date in format: yyyy-MM-ddThh:MM:ss"
+          format: date-time
+        physicianRecommendations:
+          type: array
+          description: list of recommendations
+          example: supplement with vitamins
+          items:
+            type: string
+            description: list of recommendations
+            example: supplement with vitamins
+    VisitNewDTO:
+      required:
+      - physicianId
+      - visitDate
+      type: object
+      properties:
+        physicianId:
+          type: string
+          example: "21345"
+        visitDate:
+          type: string
+          description: "visit date in format: yyyy-MM-ddThh:MM:ss"
+          format: date-time
+    VisitCommonFilterDTO:
+      type: object
+      properties:
+        physicianId:
+          type: string
+          example: "21345"
+        physicianSpecialization:
+          type: string
+          example: Radiologist
+        visitDateFrom:
+          type: string
+          description: "visit date from in format: yyyy-MM-ddThh:MM:ss"
+          format: date-time
+        visitDateTo:
+          type: string
+          description: "visit date to in format: yyyy-MM-ddThh:MM:ss"
+          format: date-time
+    PatientResponseDTO:
+      type: object
+      properties:
+        patientId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    VisitResponseDTO:
+      type: object
+      properties:
+        visitId:
+          type: string
+        physicianResponseDTO:
+          $ref: '#/components/schemas/PhysicianResponseDTO'
+        patientResponseDTO:
+          $ref: '#/components/schemas/PatientResponseDTO'
+        visitStartDate:
+          type: string
+          format: date-time
+        visitEndDate:
+          type: string
+          format: date-time
+        visitStatus:
+          type: string
+          enum:
+          - AVAILABLE
+          - RESERVED
+          - COMPLETED
+          - UNREALIZED
+        physicianRecommendations:
+          type: array
+          items:
+            type: string
+    VisitFilterDTO:
+      required:
+      - visitStatus
+      type: object
+      properties:
+        physicianId:
+          type: string
+          example: "21345"
+        physicianSpecialization:
+          type: string
+          example: Radiologist
+        visitDateFrom:
+          type: string
+          description: "visit date from in format: yyyy-MM-ddThh:MM:ss"
+          format: date-time
+        visitDateTo:
+          type: string
+          description: "visit date to in format: yyyy-MM-ddThh:MM:ss"
+          format: date-time
+        patientId:
+          type: string
+          example: "21345"
+        visitStatus:
+          type: string
+          description: "visit available statuses: AVAILABLE, RESERVED, COMPLETED,\
+            \ UNREALIZED"
+          example: AVAILABLE

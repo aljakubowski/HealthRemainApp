@@ -1,0 +1,333 @@
+openapi: 3.0.1
+info:
+  title: Patient Service API
+  description: Patient registration and data management service
+  version: v1
+servers:
+- url: http://localhost:8086
+  description: Generated server url
+tags:
+- name: patient api
+  description: patient registering and managing data
+- name: admin api
+  description: patient managing data
+paths:
+  /api/v1/patient/{patientId}:
+    put:
+      tags:
+      - patient api
+      summary: Patient self update info
+      operationId: updatePatientByPatient
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientUpdateDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+    delete:
+      tags:
+      - patient api
+      summary: Patient self deregister
+      operationId: deletePatientByIdByPatient
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+  /api/v1/patient/admin/{patientId}:
+    put:
+      tags:
+      - admin api
+      summary: Patient update info
+      operationId: updatePatient
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientUpdateDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+    delete:
+      tags:
+      - admin api
+      summary: Patient delete
+      operationId: deletePatientById
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+  /api/v1/patient:
+    post:
+      tags:
+      - patient api
+      summary: Patient self register
+      operationId: registerNewPatientByPatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientRegisterDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+  /api/v1/patient/admin:
+    get:
+      tags:
+      - admin api
+      summary: Patients show all
+      operationId: getAllPatients
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PatientResponseDTO'
+    post:
+      tags:
+      - admin api
+      summary: Patient create
+      operationId: registerNewPatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientRegisterDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+  /api/v1/patient/{patientId}/dataFormat:
+    get:
+      tags:
+      - patient api
+      summary: Patient show info
+      operationId: getPatientByIdByPatient
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataFormat
+        in: query
+        description: "choose data format of patient info: details or visits"
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+  /api/v1/patient/admin/{patientId}/dataFormat:
+    get:
+      tags:
+      - admin api
+      summary: Patients show info
+      operationId: getPatientById
+      parameters:
+      - name: patientId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataFormat
+        in: query
+        description: "choose data format of patient info: details or visits"
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientResponseDTO'
+components:
+  schemas:
+    AddressDTO:
+      required:
+      - city
+      - country
+      - houseNumber
+      - postCode
+      - street
+      type: object
+      properties:
+        street:
+          maxLength: 50
+          minLength: 3
+          type: string
+          description: street name
+          example: Golden
+        houseNumber:
+          maxLength: 4
+          minLength: 1
+          type: string
+          description: house number
+          example: "71"
+        postCode:
+          pattern: "^\\d{2}-\\d{3}$"
+          type: string
+          description: post code
+          example: 01-292
+        city:
+          maxLength: 50
+          minLength: 3
+          type: string
+          description: city name
+          example: Warsaw
+        country:
+          maxLength: 50
+          minLength: 3
+          type: string
+          description: country name
+          example: Poland
+    ContactDetailsUpdateDTO:
+      type: object
+      properties:
+        phoneNumber:
+          pattern: "^\\d{9}$"
+          type: string
+          description: phone number
+          example: "123456789"
+        email:
+          type: string
+          description: email address
+          example: myemail@mail.com
+    PatientUpdateDTO:
+      type: object
+      properties:
+        firstName:
+          maxLength: 50
+          minLength: 2
+          type: string
+          example: John
+        lastName:
+          maxLength: 50
+          minLength: 2
+          type: string
+          example: Smith
+        birthDate:
+          type: string
+          description: "birth date in format: yyyy-MM-dd"
+          example: 1990-05-13
+        socialSecurityNumber:
+          pattern: "^\\d{11}$"
+          type: string
+          description: patient social security number
+          example: "12345678910"
+        contactDetails:
+          $ref: '#/components/schemas/ContactDetailsUpdateDTO'
+        address:
+          $ref: '#/components/schemas/AddressDTO'
+    PatientResponseDTO:
+      type: object
+      properties:
+        patientId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+    ContactDetailsDTO:
+      required:
+      - email
+      - phoneNumber
+      type: object
+      properties:
+        phoneNumber:
+          pattern: "^\\d{9}$"
+          type: string
+          description: phone number
+          example: "123456789"
+        email:
+          type: string
+          description: email address
+          example: myemail@mail.com
+    PatientRegisterDTO:
+      required:
+      - address
+      - birthDate
+      - contactDetails
+      - firstName
+      - lastName
+      - socialSecurityNumber
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Smith
+        birthDate:
+          type: string
+          description: "birth date in format: yyyy-MM-dd"
+          example: 1990-05-13
+        socialSecurityNumber:
+          pattern: "^\\d{11}$"
+          type: string
+          description: patient social security number
+          example: "12345678910"
+        contactDetails:
+          $ref: '#/components/schemas/ContactDetailsDTO'
+        address:
+          $ref: '#/components/schemas/AddressDTO'

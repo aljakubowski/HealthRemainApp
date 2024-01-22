@@ -1,0 +1,363 @@
+openapi: 3.0.1
+info:
+  title: Physician Service API
+  description: Physician data management and information provider service
+  version: v1
+servers:
+- url: http://localhost:8083
+  description: Generated server url
+tags:
+- name: patient api
+  description: retrieving information about physicians
+- name: admin api.
+  description: managing physicians specialization
+- name: admin api
+  description: managing physicians
+paths:
+  /api/v1/physician/admin/{physicianId}:
+    put:
+      tags:
+      - admin api
+      summary: Physician update
+      operationId: updatePhysician
+      parameters:
+      - name: physicianId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhysicianUpdateDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianResponseDTO'
+    delete:
+      tags:
+      - admin api
+      summary: Physician delete
+      operationId: deletePhysicianById
+      parameters:
+      - name: physicianId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianResponseDTO'
+  /api/v1/physician/admin/specialization:
+    get:
+      tags:
+      - admin api.
+      summary: Physician specialization list
+      operationId: getAllSpecializations
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PhysicianSpecializationDTO'
+    put:
+      tags:
+      - admin api.
+      summary: Physician specialization update
+      operationId: updateSpecialization
+      parameters:
+      - name: specializationName
+        in: query
+        description: physician specialization current name
+        required: true
+        schema:
+          type: string
+      - name: specializationNewName
+        in: query
+        description: physician specialization new name
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianSpecializationDTO'
+    post:
+      tags:
+      - admin api.
+      summary: Physician specialization add
+      operationId: addNewSpecialization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhysicianSpecializationDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianSpecializationDTO'
+    delete:
+      tags:
+      - admin api.
+      summary: Physician specialization delete
+      operationId: deleteSpecialization
+      parameters:
+      - name: specializationName
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianSpecializationDTO'
+  /api/v1/physician/admin:
+    get:
+      tags:
+      - admin api
+      summary: Physician list
+      operationId: getAllPhysicians_1
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PhysicianResponseDTO'
+    post:
+      tags:
+      - admin api
+      summary: Physician register
+      operationId: registerNewPhysician
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhysicianRegisterDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianResponseDTO'
+  /api/v1/physician:
+    get:
+      tags:
+      - patient api
+      summary: Physician list
+      operationId: getAllPhysicians
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PhysicianResponseDTO'
+  /api/v1/physician/{physicianId}:
+    get:
+      tags:
+      - patient api
+      summary: Physician get with id
+      operationId: getPhysicianById
+      parameters:
+      - name: physicianId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianResponseDTO'
+  /api/v1/physician/admin/{physicianId}/{details}:
+    get:
+      tags:
+      - admin api
+      summary: Physician get with id
+      operationId: getPhysicianById_1
+      parameters:
+      - name: physicianId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: details
+        in: path
+        description: "choose data format with details or without: true or false"
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PhysicianResponseDTO'
+components:
+  schemas:
+    AddressDTO:
+      required:
+      - city
+      - country
+      - houseNumber
+      - postCode
+      - street
+      type: object
+      properties:
+        street:
+          maxLength: 50
+          minLength: 3
+          type: string
+          description: street name
+          example: Golden
+        houseNumber:
+          maxLength: 4
+          minLength: 1
+          type: string
+          description: house number
+          example: "71"
+        postCode:
+          pattern: "^\\d{2}-\\d{3}$"
+          type: string
+          description: post code
+          example: 01-292
+        city:
+          maxLength: 50
+          minLength: 3
+          type: string
+          description: city name
+          example: Warsaw
+        country:
+          maxLength: 50
+          minLength: 3
+          type: string
+          description: country name
+          example: Poland
+    ContactDetailsUpdateDTO:
+      type: object
+      properties:
+        phoneNumber:
+          pattern: "^\\d{9}$"
+          type: string
+          description: phone number
+          example: "123456789"
+        email:
+          type: string
+          description: email address
+          example: myemail@mail.com
+    PhysicianUpdateDTO:
+      type: object
+      properties:
+        firstName:
+          maxLength: 50
+          minLength: 2
+          type: string
+          example: Mark
+        lastName:
+          maxLength: 50
+          minLength: 2
+          type: string
+          example: Johnson
+        physicianSpecialization:
+          type: string
+          description: Physician specialization
+          example: Radiologist
+        contactDetails:
+          $ref: '#/components/schemas/ContactDetailsUpdateDTO'
+        address:
+          $ref: '#/components/schemas/AddressDTO'
+    PhysicianResponseDTO:
+      type: object
+      properties:
+        physicianId:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        physiciansSpecialization:
+          type: string
+    PhysicianSpecializationDTO:
+      required:
+      - specializationName
+      type: object
+      properties:
+        specializationName:
+          maxLength: 50
+          minLength: 3
+          type: string
+          example: Radiologist
+    ContactDetailsDTO:
+      required:
+      - email
+      - phoneNumber
+      type: object
+      properties:
+        phoneNumber:
+          pattern: "^\\d{9}$"
+          type: string
+          description: phone number
+          example: "123456789"
+        email:
+          type: string
+          description: email address
+          example: myemail@mail.com
+    PhysicianRegisterDTO:
+      required:
+      - address
+      - contactDetails
+      - firstName
+      - lastName
+      - physicianSpecialization
+      type: object
+      properties:
+        firstName:
+          maxLength: 50
+          minLength: 2
+          type: string
+          example: Mark
+        lastName:
+          maxLength: 50
+          minLength: 2
+          type: string
+          example: Johnson
+        physicianSpecialization:
+          type: string
+          description: Physician specialization
+          example: Radiologist
+        contactDetails:
+          $ref: '#/components/schemas/ContactDetailsDTO'
+        address:
+          $ref: '#/components/schemas/AddressDTO'
